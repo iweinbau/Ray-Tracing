@@ -11,12 +11,18 @@ using namespace std;
 class Material {
 public:
 	Material() {
-		this->difuseColor = Vect3f();
+		this->diffuseColor = Vect3f();
 	}
-	Material(Vect3f diffuse) {
-		this->difuseColor = diffuse;
+	Material(Vect3f diffuse,float diffuseFactor) {
+		this->diffuseColor = diffuse;
+		this->diffuseFactor = diffuseFactor;
 	}
-	Vect3f difuseColor;
+	Vect3f getDiffuseColor() {
+		return diffuseColor * diffuseFactor;
+	}
+private:
+	float diffuseFactor;
+	Vect3f diffuseColor;
 };
 
 class Ray {
@@ -25,6 +31,13 @@ public:
 		this->origin = origin;
 		this->direction = direction;
 	}
+	Vect3f getOrgin() {
+		return origin;
+	}
+	Vect3f getDirection() {
+		return direction;
+	}
+private:
 	//the origin point of the ray.
 	Vect3f origin;
 	//the direction the ray is going.
@@ -34,7 +47,7 @@ public:
 class Camera {
 public:
 	//resolution in pixels.
-	int width = 600, height = 600;
+	const int width = 600, height = 600;
 	Camera(Vect3f lookfrom, Vect3f lookat, float fov) { // fov is top to bottom in degrees
 														//the aspect ration of the image.
 		float aspect = width / height;
@@ -82,17 +95,21 @@ private:
 };
 class Object {
 public:
-	Material material;
 	Vect3f position;
 	virtual bool intersect(Ray ray, Vect3f &intersection, float &t) =0;
 	virtual Vect3f getNormalAtPoint(Vect3f) = 0;
 	virtual Vect3f getPosition() = 0;
+	Material getMaterial() {
+		return material;
+	}
+protected:
+	Material material;
 };
 
 class Sphere : public Object{
 public:
 	Sphere(){}
-	Sphere(Vect3f position, float radius, Material material){
+	Sphere(Vect3f position, float radius,Material material){
 		this->position = position;
 		this->radius = radius;
 		this->material = material;
@@ -100,9 +117,9 @@ public:
 	bool intersect(Ray ray,Vect3f &instersectionPoint,float &t) {
 		float t0, t1; // solutions for t if the ray intersects 
 					  // analytic solution
-		Vect3f L = ray.origin - position;
-		float a = ray.direction.dot(ray.direction);
-		float b = 2 * ray.direction.dot(L);
+		Vect3f L = ray.getOrgin() - position;
+		float a = ray.getDirection().dot(ray.getDirection());
+		float b = 2 * ray.getDirection().dot(L);
 		float c = L.dot(L) - radius;
 		if (!solveQuadratic(a, b, c, t0, t1)) return false;
 
@@ -114,7 +131,7 @@ public:
 		}
 
 		t = t0;
-		instersectionPoint = ray.origin + ray.direction * t;
+		instersectionPoint = ray.getOrgin() + ray.getDirection() * t;
 
 		return true;
 	}
@@ -193,8 +210,8 @@ int main() {
 	Light light = Light(Vect3f(1, 1, 0), Vect3f(5, 0, 0));
 	Light light2 = Light(Vect3f(1, 0, 1), Vect3f(5, 0, 0));
 
-	Sphere sphere = Sphere(Vect3f(0, 0, 0), 3, Material(Vect3f(1, 0, 0)));
-	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0, 1, 0)));
+	Sphere sphere = Sphere(Vect3f(0, 0, 0), 3, Material(Vect3f(1, 0, 0),1));
+	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0, 1, 0),1));
 
 	//create objects.
 	list<Object*> objects;
@@ -253,7 +270,7 @@ int main() {
 
 					//calculate the pixel color.
 					//TODO: clamp the value between 0,1.
-					color = color + (*closest).material.difuseColor * intensity * (*l).getColor();
+					color = color + (*closest).getMaterial().getDiffuseColor() * intensity * (*l).getColor();
 				}
 				pixels[index++] = color;
 			}
