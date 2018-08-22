@@ -168,9 +168,9 @@ void save_to_file(char *filename, int width, int height, Vect3f *pixels)
 	ofs.open("./out.ppm", std::ios::out | std::ios::binary);
 	ofs << "P6\n" << width << " " << height << "\n255\n";
 	for (int i = 0; i < height * width; ++i) {
-		ofs << (unsigned char)(pixels[i].getX() * 255) <<
-			   (unsigned char) (pixels[i].getY() * 255) <<
-			   (unsigned char)(pixels[i].getZ() * 255);
+		ofs << (unsigned char)(min(1.0f,pixels[i].getX()) * 255) <<
+			   (unsigned char) (min(1.0f,pixels[i].getY()) * 255) <<
+			   (unsigned char)(min(1.0f,pixels[i].getZ()) * 255);
 	}
 
 	ofs.close();
@@ -190,14 +190,22 @@ int main() {
 	Vect3f* pixels = new Vect3f[size];
 
 	//World setup
-	Light light = Light(Vect3f(1, 1, 1), Vect3f(5, 0, 0));
+	Light light = Light(Vect3f(1, 1, 0), Vect3f(5, 0, 0));
+	Light light2 = Light(Vect3f(1, 0, 1), Vect3f(5, 0, 0));
 
 	Sphere sphere = Sphere(Vect3f(0, 0, 0), 3, Material(Vect3f(1, 0, 0)));
 	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0, 1, 0)));
 
+	//create objects.
 	list<Object*> objects;
 	objects.push_back(&sphere);
 	objects.push_back(&sphere2);
+
+	//create lights.
+	list<Light*> lights;
+	lights.push_back(&light);
+	lights.push_back(&light2);
+
 
 	int x, y;
 	int index = 0;
@@ -233,17 +241,21 @@ int main() {
 				//TODO: add specular light.
 				//TODO: add ambient light.
 				//TODO: maybe create texture mapping?
-				
+				Vect3f color = Vect3f();
 				//get the surface normal at the point.
 				Vect3f normal = (*closest).getNormalAtPoint((*intersection));
-				//get the light direction.
-				Vect3f lightDir = (light.getPosition() - *intersection).normalized();
-				//calculate diffuse intensity.
-				float intensity = max((float)0, normal.dot(lightDir));
+				for each (Light* l in lights)
+				{
+					//get the light direction.
+					Vect3f lightDir = ((*l).getPosition() - *intersection).normalized();
+					//calculate diffuse intensity.
+					float intensity = max((float)0, normal.dot(lightDir));
 
-				//calculate the pixel color.
-				//TODO: clamp the value between 0,1.
-				pixels[index++] =(*closest).material.difuseColor * intensity;
+					//calculate the pixel color.
+					//TODO: clamp the value between 0,1.
+					color = color + (*closest).material.difuseColor * intensity * (*l).getColor();
+				}
+				pixels[index++] = color;
 			}
 			else {
 				//no hit just set the background color;
