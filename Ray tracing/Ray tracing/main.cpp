@@ -13,16 +13,27 @@ public:
 	Material() {
 		this->diffuseColor = Vect3f();
 	}
-	Material(Vect3f diffuse,float diffuseFactor) {
+	Material(Vect3f diffuse,Vect3f specular, float shininess) {
 		this->diffuseColor = diffuse;
-		this->diffuseFactor = diffuseFactor;
+		this->diffuseFactor = 1;
+		this->specularColor = specular;
+		this->shininess = shininess;
 	}
 	Vect3f getDiffuseColor() {
 		return diffuseColor * diffuseFactor;
 	}
+	Vect3f getSpecularColor() {
+		return specularColor;
+	}
+	float getShininess() {
+		return shininess;
+	}
 private:
 	float diffuseFactor;
 	Vect3f diffuseColor;
+	float shininess;
+	Vect3f specularColor;
+
 };
 
 class Ray {
@@ -163,18 +174,23 @@ private:
 };
 class Light {
 	public:
-		Light(Vect3f color, Vect3f position) {
-			this->color = color;
+		Light(Vect3f diffuse, Vect3f specular, Vect3f position) {
+			this->diffuse = diffuse;
+			this->specular = specular;
 			this->position = position;
 		}
 		Vect3f getPosition() {
 			return position;
 		}
-		Vect3f getColor() {
-			return color;
+		Vect3f getDiffuse() {
+			return diffuse;
+		}
+		Vect3f getSpecular() {
+			return specular;
 		}
 	private:
-		Vect3f color;
+		Vect3f specular;
+		Vect3f diffuse;
 		Vect3f position;
 
 };
@@ -185,9 +201,9 @@ void save_to_file(char *filename, int width, int height, Vect3f *pixels)
 	ofs.open("./out.ppm", std::ios::out | std::ios::binary);
 	ofs << "P6\n" << width << " " << height << "\n255\n";
 	for (int i = 0; i < height * width; ++i) {
-		ofs << (unsigned char)(min(1.0f,pixels[i].getX()) * 255) <<
-			   (unsigned char) (min(1.0f,pixels[i].getY()) * 255) <<
-			   (unsigned char)(min(1.0f,pixels[i].getZ()) * 255);
+		ofs << (unsigned char)(min(max(pixels[i].getX(),0.0f), 1.0f)  * 255) <<
+			   (unsigned char)(min(max(pixels[i].getY(), 0.0f), 1.0f) * 255) <<
+			   (unsigned char)(min(max(pixels[i].getZ(), 0.0f), 1.0f) * 255);
 	}
 
 	ofs.close();
@@ -198,7 +214,7 @@ int main() {
 	cout << "Basic Ray tracing!\n";
 
 	//construct a camera 
-	Vect3f lookfrom = Vect3f(10, 0, 0);
+	Vect3f lookfrom = Vect3f(5, 7, 0);
 	Vect3f lookat = Vect3f(0, 0, 0);
 	Camera camera(lookfrom, lookat, 45);
 
@@ -207,11 +223,10 @@ int main() {
 	Vect3f* pixels = new Vect3f[size];
 
 	//World setup
-	Light light = Light(Vect3f(1, 1, 0), Vect3f(5, 0, 0));
-	Light light2 = Light(Vect3f(1, 0, 1), Vect3f(5, 0, 0));
+	Light light = Light(Vect3f(1, 1, 0),Vect3f(1,1,1) , Vect3f(5, 2, 0));
 
-	Sphere sphere = Sphere(Vect3f(0, 0, 0), 3, Material(Vect3f(1, 0, 0),1));
-	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0, 1, 0),1));
+	Sphere sphere = Sphere(Vect3f(0, 0, 0), 3, Material(Vect3f(1, 0, 0),Vect3f(1,1,1),50));
+	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0, 1, 0),Vect3f(1,1,1),50) );
 
 	//create objects.
 	list<Object*> objects;
@@ -221,7 +236,6 @@ int main() {
 	//create lights.
 	list<Light*> lights;
 	lights.push_back(&light);
-	lights.push_back(&light2);
 
 
 	int x, y;
@@ -253,7 +267,6 @@ int main() {
 			}
 			if (hit) {
 				//We hit something calculate the color of the pixel.
-				//TODO: add multiple light sources.
 				//TODO: add shadow ray,reflection ray, refraction ray and support multiple depths.
 				//TODO: add specular light.
 				//TODO: add ambient light.
@@ -263,14 +276,19 @@ int main() {
 				Vect3f normal = (*closest).getNormalAtPoint((*intersection));
 				for each (Light* l in lights)
 				{
+					//******** Diffuse *********\\
 					//get the light direction.
 					Vect3f lightDir = ((*l).getPosition() - *intersection).normalized();
 					//calculate diffuse intensity.
-					float intensity = max((float)0, normal.dot(lightDir));
-
+					float intensity = max((float)0, lightDir.dot(normal));
+					Vect3f diffuseColor = (*closest).getMaterial().getDiffuseColor() * intensity * (*l).getDiffuse();
+					//******* Specular *********\\
+					//R_i - 2 N (R_i . N)
+					Vect3f reflectedLightvector = ((normal * 2 * lightDir.dot(normal)) - lightDir).normalized();
+					Vect3f viewDir = ray.getDirection().neg();
+					Vect3f specularColor = (*closest).getMaterial().getSpecularColor() * (*l).getSpecular() * pow(reflectedLightvector.dot(viewDir),(*closest).getMaterial().getShininess());
 					//calculate the pixel color.
-					//TODO: clamp the value between 0,1.
-					color = color + (*closest).getMaterial().getDiffuseColor() * intensity * (*l).getColor();
+					color = color + diffuseColor + specularColor;
 				}
 				pixels[index++] = color;
 			}
