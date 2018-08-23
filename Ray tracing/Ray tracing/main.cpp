@@ -13,9 +13,11 @@ public:
 	Material() {
 		this->diffuseColor = Vect3f();
 	}
-	Material(Vect3f diffuse,Vect3f specular, float shininess) {
+
+	Material(Vect3f ambient, Vect3f diffuse,Vect3f specular, float shininess) {
 		this->diffuseColor = diffuse;
 		this->diffuseFactor = 1;
+		this->ambientColor = ambient;
 		this->specularColor = specular;
 		this->shininess = shininess;
 	}
@@ -25,6 +27,9 @@ public:
 	Vect3f getSpecularColor() {
 		return specularColor;
 	}
+	Vect3f getAmbientColor() {
+		return ambientColor;
+	}
 	float getShininess() {
 		return shininess;
 	}
@@ -33,7 +38,7 @@ private:
 	Vect3f diffuseColor;
 	float shininess;
 	Vect3f specularColor;
-
+	Vect3f ambientColor;
 };
 
 class Ray {
@@ -251,11 +256,12 @@ int main() {
 	Vect3f* pixels = new Vect3f[size];
 
 	//World setup
-	Light light = Light(Vect3f(1, 5, 5),Vect3f(1,1,1) , Vect3f(5, 2, 5));
+	Light light = Light(Vect3f(1, 1, 1),Vect3f(1,1,1) , Vect3f(5, 2, 5));
 
-	Sphere sphere = Sphere(Vect3f(0, 0, 0), 0.5, Material(Vect3f(1, 0, 0),Vect3f(1,1,1),50));
-	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0, 1, 0),Vect3f(1,1,1),50) );
-	Plane plane = Plane(Vect3f(0,0,-5), Vect3f(0, 0,1), Material(Vect3f(0.2, 0.2, 0.5), Vect3f(1, 1, 1), 50));
+	Sphere sphere = Sphere(Vect3f(0, 0, 0), 0.5, Material(Vect3f(0.3,0,0),Vect3f(1, 0, 0),Vect3f(1,1,1),50));
+	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0,0.3f,0), Vect3f(0, 1, 0),Vect3f(1,1,1),50) );
+	Plane plane = Plane(Vect3f(0, 0, -5), Vect3f(0, 0, 1), Material(Vect3f(0.02, 0.02, 0.02), Vect3f(0.2, 0.2, 0.2), Vect3f(0.2, 0.2, 0.2), 50));
+
 	//create objects.
 	list<Object*> objects;
 	objects.push_back(&sphere);
@@ -299,7 +305,7 @@ int main() {
 				//TODO: add shadow ray,reflection ray, refraction ray and support multiple depths.
 				//TODO: add ambient light.
 				//TODO: maybe create texture mapping?
-				Vect3f color = Vect3f();
+				Vect3f color = (*closest).getMaterial().getAmbientColor();
 				//get the surface normal at the point.
 				Vect3f normal = (*closest).getNormalAtPoint((*intersection));
 				for each (Light* l in lights)
