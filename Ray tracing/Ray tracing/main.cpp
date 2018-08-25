@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <math.h>
 #include <algorithm>
@@ -130,11 +130,16 @@ public:
 	}
 	bool intersect(Ray ray, Vect3f &intersection, float &t) {
 		// assuming vectors are all normalized
+		float t0;
 		float denom = normal.dot(ray.getDirection());
-		if (abs(denom) > 0.00000001f) {
-			Vect3f p0l0 = position - ray.getDirection();
-			t = p0l0.dot(normal) / denom;
-			return (t >= 0);
+		if (abs(denom) > 0.0001f) {
+			Vect3f diff = position - ray.getDirection();
+			t0 = diff.dot(normal) / denom;
+			if (t0 > 0.0001f) {
+				t = t0;
+				intersection = ray.getOrgin() + ray.getDirection() * t0;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -243,11 +248,83 @@ void save_to_file(char *filename, int width, int height, Vect3f *pixels)
 }
 
 
+Vect3f shade(Ray& ray, list<Object*>& objects, list<Light*>& lights, int depth) {
+	Vect3f color = Vect3f(); //set initial color to background.
+
+	float tnear = INFINITY;
+	Object* closest = NULL;
+	Vect3f* intersection = &Vect3f();
+	//flag true when we hit something from this ray.
+	bool hit = false;
+	//for each object find intersection
+	//construct ray
+	for each (Object* obj in objects)
+	{
+		//current intersection;
+		float t;
+		if ((*obj).intersect(ray, *intersection, t)) {
+			hit = true;
+			if (t < tnear) {
+				//we found a closer object.
+				closest = obj;
+				tnear = t;
+			}
+		}
+	}
+	if (hit) {
+		//set color to ambient light.
+		color = (*closest).getMaterial().getAmbientColor();
+		//set the surface normal.
+		Vect3f normal = (*closest).getNormalAtPoint((*intersection));
+		for each (Light* l in lights)
+		{
+			//get the light direction.
+			Vect3f lightDir = ((*l).getPosition() - *intersection).normalized();
+			//reflected light vector.
+			//R_i - 2 N (R_i . N)
+			Vect3f reflectedLightvector = ((normal * 2 * lightDir.dot(normal)) - lightDir).normalized();
+
+			//******* SHADOW RAY ********\\
+			//get the light direction.
+			Vect3f startPosition = *intersection + lightDir * 0.0001f;
+			Ray shadowRay(startPosition, lightDir);
+			bool hit = false;
+			for each (Object* obj in objects)
+			{
+				//if (obj == closest) continue;
+				float t;
+				if ((*obj).intersect(shadowRay, Vect3f(), t)) {
+					hit = true;
+				}
+			}
+			if (!hit) {
+				//******** Diffuse *********\\
+
+				//calculate diffuse intensity.
+				float intensity = max((float)0, lightDir.dot(normal));
+				Vect3f diffuseColor = (*closest).getMaterial().getDiffuseColor() * intensity * (*l).getDiffuse();
+				//******* Specular ********* \\
+
+				Vect3f viewDir = ray.getDirection().neg();
+				Vect3f specularColor = (*closest).getMaterial().getSpecularColor() * (*l).getSpecular() * pow(reflectedLightvector.dot(viewDir), (*closest).getMaterial().getShininess());
+				//calculate the pixel color.
+				color = color + diffuseColor + specularColor;
+			}
+		}
+		if (depth >= 0) {
+			Vect3f reflection = (ray.getDirection() - normal * 2 * normal.dot(ray.getDirection())).normalized();
+			Ray reflectionRay = Ray(*intersection + reflection * 0.0001, reflection);
+			color = color + shade(reflectionRay, objects, lights, depth - 1) * 0.5;
+		}
+	}
+	return color;
+}
+
 int main() {
 	cout << "Basic Ray tracing!\n";
 
 	//construct a camera 
-	Vect3f lookfrom = Vect3f(10, 0, 3);
+	Vect3f lookfrom = Vect3f(10, 0, 5);
 	Vect3f lookat = Vect3f(0, 0, 0);
 	Camera camera(lookfrom, lookat, 45);
 
@@ -256,17 +333,17 @@ int main() {
 	Vect3f* pixels = new Vect3f[size];
 
 	//World setup
-	Light light = Light(Vect3f(1, 1, 1),Vect3f(1,1,1) , Vect3f(5, 2, 5));
+	Light light = Light(Vect3f(1, 1, 1),Vect3f(1,1,1) , Vect3f(5, 5, 5));
 
 	Sphere sphere = Sphere(Vect3f(0, 0, 0), 0.5, Material(Vect3f(0.3,0,0),Vect3f(1, 0, 0),Vect3f(1,1,1),50));
 	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0,0.3f,0), Vect3f(0, 1, 0),Vect3f(1,1,1),50) );
-	Plane plane = Plane(Vect3f(0, 0, -5), Vect3f(0, 0, 1), Material(Vect3f(0.02, 0.02, 0.02), Vect3f(0.2, 0.2, 0.2), Vect3f(0.2, 0.2, 0.2), 50));
+	Sphere sphere3 = Sphere(Vect3f(-5, -5, 0), 10, Material(Vect3f(0.3f, 0.3f, 0), Vect3f(0.7, 1, 0), Vect3f(1, 1, 1), 50));
 
 	//create objects.
 	list<Object*> objects;
 	objects.push_back(&sphere);
 	objects.push_back(&sphere2);
-	objects.push_back(&plane);
+	objects.push_back(&sphere3);
 
 	//create lights.
 	list<Light*> lights;
@@ -275,65 +352,15 @@ int main() {
 
 	int x, y;
 	int index = 0;
-	for (x = 0; x < camera.width; x++){
-		for (y = 0; y < camera.height; y++){
+	for (x = 0; x < camera.width; x++) {
+		for (y = 0; y < camera.height; y++) {
 			//construct a ray for through this pixel.
 			Ray ray = camera.constructRay(x, y);
-			//initialization for the trace;
-			float tnear = INFINITY;
-			Object* closest = NULL;
-			Vect3f* intersection = &Vect3f();
-			//flag true when we hit something from this ray.
-			bool hit = false;
-			//for each object find intersection
-			//construct ray
-			for each (Object* obj in objects)
-			{	
-				//current intersection;
-				float t;
-				if ((*obj).intersect(ray, *intersection,t)) {
-					hit = true;
-					if (t <= tnear) {
-						//we found a closer object.
-						closest = obj;
-						tnear = t;
-					}
-				}
-			}
-			if (hit) {
-				//We hit something calculate the color of the pixel.
-				//TODO: add shadow ray,reflection ray, refraction ray and support multiple depths.
-				//TODO: add ambient light.
-				//TODO: maybe create texture mapping?
-				Vect3f color = (*closest).getMaterial().getAmbientColor();
-				//get the surface normal at the point.
-				Vect3f normal = (*closest).getNormalAtPoint((*intersection));
-				for each (Light* l in lights)
-				{
-					//******** Diffuse *********\\
-					//get the light direction.
-					Vect3f lightDir = ((*l).getPosition() - *intersection).normalized();
-					//calculate diffuse intensity.
-					float intensity = max((float)0, lightDir.dot(normal));
-					Vect3f diffuseColor = (*closest).getMaterial().getDiffuseColor() * intensity * (*l).getDiffuse();
-					//******* Specular *********\\
-					//R_i - 2 N (R_i . N)
-					Vect3f reflectedLightvector = ((normal * 2 * lightDir.dot(normal)) - lightDir).normalized();
-					Vect3f viewDir = ray.getDirection().neg();
-					Vect3f specularColor = (*closest).getMaterial().getSpecularColor() * (*l).getSpecular() * pow(reflectedLightvector.dot(viewDir),(*closest).getMaterial().getShininess());
-					//calculate the pixel color.
-					color = color + diffuseColor + specularColor;
-				}
-				pixels[index++] = color;
-			}
-			else {
-				//no hit just set the background color;
-				pixels[index++] = Vect3f();
-			}
+			pixels[index++] = shade(ray, objects, lights, 3);
 		}
 	}
+		save_to_file("test.bmp", camera.width, camera.height, pixels);
 
-	save_to_file("test.bmp", camera.width, camera.height, pixels);
+		return 0;
 
-	return 0;
 }
