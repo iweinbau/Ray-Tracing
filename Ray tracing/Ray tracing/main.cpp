@@ -13,14 +13,33 @@ public:
 	Material() {
 		this->diffuseColor = Vect3f();
 	}
-
-	Material(Vect3f ambient, Vect3f diffuse,Vect3f specular, float shininess) {
+    Material(Vect3f ambient, Vect3f diffuse,Vect3f specular, float shininess) {
+        this->diffuseColor = diffuse;
+        this->diffuseFactor = 1;
+        this->ambientColor = ambient;
+        this->specularColor = specular;
+        this->shininess = shininess;
+        this->reflection = 0;
+        this->reflective = false;
+    }
+	Material(Vect3f ambient, Vect3f diffuse,Vect3f specular, float shininess, float reflection) {
 		this->diffuseColor = diffuse;
 		this->diffuseFactor = 1;
 		this->ambientColor = ambient;
 		this->specularColor = specular;
 		this->shininess = shininess;
+        this->reflection = reflection;
+        if(reflection >= 0){
+            this->reflective = true;
+            this->reflection = reflection;
+        }else{
+            this->reflective = false;
+            this->reflection = 0;
+        }
 	}
+    bool isReflective(){
+        return reflective;
+    }
 	Vect3f getDiffuseColor() {
 		return diffuseColor * diffuseFactor;
 	}
@@ -33,12 +52,17 @@ public:
 	float getShininess() {
 		return shininess;
 	}
+    float getReflection(){
+        return reflection;
+    }
 private:
-	float diffuseFactor;
-	Vect3f diffuseColor;
-	float shininess;
-	Vect3f specularColor;
-	Vect3f ambientColor;
+    bool reflective = false;
+    float reflection = 0;
+	float diffuseFactor = 0;
+	Vect3f diffuseColor = Vect3f();
+	float shininess = 0;
+	Vect3f specularColor = Vect3f();
+    Vect3f ambientColor = Vect3f();
 };
 
 class Ray {
@@ -312,10 +336,10 @@ Vect3f shade(Ray& ray, list<Object*>& objects, list<Light*>& lights, int depth) 
 				color = color + diffuseColor + specularColor;
 			}
 		}
-		if (depth >= 0) {
+		if ((*closest).getMaterial().isReflective() && depth >= 0) {
 			Vect3f reflection = (ray.getDirection() - normal * 2 * normal.dot(ray.getDirection())).normalized();
 			Ray reflectionRay = Ray(intersection + reflection * 0.0001, reflection);
-			color = color + shade(reflectionRay, objects, lights, depth - 1) * 0.5;
+            color = color + shade(reflectionRay, objects, lights, depth - 1) * (*closest).getMaterial().getReflection();
 		}
 	}
 	return color;
@@ -336,9 +360,9 @@ int main() {
 	//World setup
 	Light light = Light(Vect3f(1, 1, 1),Vect3f(1,1,1) , Vect3f(5, 5, 5));
 
-	Sphere sphere = Sphere(Vect3f(0, 0, 0), 0.5, Material(Vect3f(0.3,0,0),Vect3f(1, 0, 0),Vect3f(1,1,1),50));
-	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0,0.3f,0), Vect3f(0, 1, 0),Vect3f(1,1,1),50) );
-	Sphere sphere3 = Sphere(Vect3f(-5, -5, 0), 10, Material(Vect3f(0.3f, 0.3f, 0), Vect3f(0.7, 1, 0), Vect3f(1, 1, 1), 50));
+	Sphere sphere = Sphere(Vect3f(0, 0, 0), 0.5, Material(Vect3f(0.3,0,0),Vect3f(1, 0, 0),Vect3f(1,1,1),50,0));
+	Sphere sphere2 = Sphere(Vect3f(0, 0, 3), 0.5, Material(Vect3f(0,0.3f,0), Vect3f(0, 1, 0),Vect3f(1,1,1),50,1));
+	Sphere sphere3 = Sphere(Vect3f(-5, -5, 0), 10, Material(Vect3f(0.3f, 0.3f, 0), Vect3f(0.7, 1, 0), Vect3f(1, 1, 1),50));
 
 	//create objects.
 	list<Object*> objects;
