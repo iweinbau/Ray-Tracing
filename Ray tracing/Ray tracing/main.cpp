@@ -84,6 +84,8 @@ private:
     Vect3f direction;
 };
 
+//Class that stores information about the camara.
+//In create camera rays from it pointing in the world based on the properties.
 class Camera {
 public:
     //resolution in pixels.
