@@ -296,10 +296,15 @@ Vect3f shade(Ray& ray, list<Object*>& objects, list<Light*>& lights, int depth) 
 		}
 	}
 	if (hit) {
+        //set the surface normal.
+        Vect3f normal = (*closest).getNormalAtPoint((intersection));
+
+        
+        //********** AMBIENT COLOR **********\\
 		//set color to ambient light.
 		color = (*closest).getMaterial().getAmbientColor();
-		//set the surface normal.
-		Vect3f normal = (*closest).getNormalAtPoint((intersection));
+        //********** SPECULAR and DIFFUSE factor for each light **********\\
+        //loop over all lights.
         for(Light* l : lights)
 		{
 			//get the light direction.
@@ -322,23 +327,28 @@ Vect3f shade(Ray& ray, list<Object*>& objects, list<Light*>& lights, int depth) 
 					hit = true;
 				}
 			}
+            //If we hit this object is in the shadow of the light. No need for further
+            //light calculations.
 			if (!hit) {
 				//******** Diffuse *********\\
-
 				//calculate diffuse intensity.
 				float intensity = max((float)0, lightDir.dot(normal));
 				Vect3f diffuseColor = (*closest).getMaterial().getDiffuseColor() * intensity * (*l).getDiffuse();
 				//******* Specular ********* \\
-
+                //calculate specular light.
 				Vect3f viewDir = ray.getDirection().neg();
 				Vect3f specularColor = (*closest).getMaterial().getSpecularColor() * (*l).getSpecular() * pow(reflectedLightvector.dot(viewDir), (*closest).getMaterial().getShininess());
+                //Combine diffuse and specular with the ambient light color.
 				//calculate the pixel color.
 				color = color + diffuseColor + specularColor;
 			}
 		}
+        //Calculate reflective color by calling shader recursively
+        //if depth is less or equal to 0 stop tracing reflection.
 		if ((*closest).getMaterial().isReflective() && depth >= 0) {
 			Vect3f reflection = (ray.getDirection() - normal * 2 * normal.dot(ray.getDirection())).normalized();
 			Ray reflectionRay = Ray(intersection + reflection * 0.0001, reflection);
+            //add the reflection ray to the current color.
             color = color + shade(reflectionRay, objects, lights, depth - 1) * (*closest).getMaterial().getReflection();
 		}
 	}
