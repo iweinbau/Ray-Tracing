@@ -3,7 +3,7 @@
 #include <math.h>
 #include <algorithm>
 #include <list>
-#include "vector3f.cpp"
+#include "vector3f.hpp"
 #define PI 3.14159265
 
 using namespace std;

@@ -1,3 +1,6 @@
+#ifndef vector3f
+#define vector3f
+
 #include "math.h"
 #include <iostream>
 using namespace std;
@@ -87,3 +90,4 @@ public:
     }
 };
 
+#endif
