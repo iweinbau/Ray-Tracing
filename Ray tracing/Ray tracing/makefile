@@ -1,3 +1,3 @@
 all: 
-	g++ main.cpp vector3f.cpp -o raytracer
+	g++ main.cpp -o raytracer
 
