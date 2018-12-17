@@ -96,16 +96,16 @@ void save_to_file(char *filename, int width, int height, Vect3 *pixels)
     ofs.open("./out.ppm", std::ios::out | std::ios::binary);
     ofs << "P6\n" << width << " " << height << "\n255\n";
     for (int i = 0; i < height * width; ++i) {
-        ofs << (unsigned char)(min(std::max(pixels[i].x_,0.0), 1.0)  * 255) <<
-        (unsigned char)(min(max(pixels[i].y_, 0.0), 1.0) * 255) <<
-        (unsigned char)(min(max(pixels[i].z_, 0.0), 1.0) * 255);
+        ofs << (unsigned char)(std::min(std::max(pixels[i].x_,0.0), 1.0)  * 255) <<
+        (unsigned char)(std::min(std::max(pixels[i].y_, 0.0), 1.0) * 255) <<
+        (unsigned char)(std::min(std::max(pixels[i].z_, 0.0), 1.0) * 255);
     }
     
     ofs.close();
 }
 
 
-Vect3 shade(Ray ray, list<Sphere> objects, Light l, int depth) {
+Vect3 shade(Ray ray, std::list<Sphere> objects, std::list<Light> lights, int depth) {
 	Vect3 color = Vect3(); //set initial color to background.
     
     
@@ -131,61 +131,67 @@ Vect3 shade(Ray ray, list<Sphere> objects, Light l, int depth) {
 	if (hit) {
         
         Vect3 surfaceNormal = closest.getNormalAtPoint(intersection);
-        Vect3 lightDir = (l.getPosition() - intersection).normalize();
-
+        
+        
         //********** AMBIENT COLOR ********** \\
-		//set color to ambient light.
-		color = closest.material_.ambientColor;
+        //set color to ambient light.
+        color = closest.material_.ambientColor;
         
-        //********* CAST SHADOW RAY ********** \\
-        //cast shadow ray to check if the object is in shadow.
-        Ray shadowray(intersection + surfaceNormal * 0.0001,lightDir);
+        //Calculate reflective color by calling shader recursively
+        //if depth is less or equal to 0 stop tracing reflection.
+        if (closest.material_.reflective && depth > 0) {
+            Vect3 reflection = ray.direction_ - ( surfaceNormal * 2 * ray.direction_.dot(surfaceNormal));
+            Ray reflectionRay = Ray(intersection, reflection);
+            //add the reflection ray to the current color.
+            color = color + shade(reflectionRay, objects, lights, depth - 1) * closest.material_.reflection;
+        }
         
-        hit = false;
-        double maxt = (l.getPosition() - intersection).length();
-        for(Sphere obj : objects){
-            if (obj.hit(shadowray, intersection, t)) {
-                if(t < maxt){
-                    hit = true;
-                    break;
+        for(Light l : lights){
+            Vect3 lightDir = (l.getPosition() - intersection).normalize();
+
+            //********* CAST SHADOW RAY ********** \\
+            //cast shadow ray to check if the object is in shadow.
+            Ray shadowray(intersection + surfaceNormal * 0.0001,lightDir);
+            
+            hit = false;
+            double maxt = (l.getPosition() - intersection).length();
+            for(Sphere obj : objects){
+                if (obj.hit(shadowray, intersection, t)) {
+                    if(t < maxt){
+                        hit = true;
+                        break;
+                    }
                 }
             }
-        }
-        // if we hit again this object is in shadow no need to caluculate specular and diffuse.
-        //********** SPECULAR and DIFFUSE factor for each light ********** \\
-        //calculate the diffuse and specular color
-        if(!hit){
-            Vect3 tmp = Vect3();
+            // if we hit again this object is in shadow no need to caluculate specular and diffuse.
+            //********** SPECULAR and DIFFUSE factor for each light ********** \\
+            //calculate the diffuse and specular color
+            if(!hit){
+                Vect3 tmp = Vect3();
                 Vect3 viewDir = (ray.origin_ - intersection).normalize();
                 //DIFFUSE COLOR
-                double intensity = max((double)0, lightDir.dot(surfaceNormal));
+                double intensity = std::max((double)0, lightDir.dot(surfaceNormal));
                 Vect3 diffuse= closest.material_.diffuseColor * intensity * l.getDiffuse();
-            
+                
                 //SPECULAE COLOR;
                 Vect3 H = (lightDir + viewDir).normalize();
                 // Intensity of specular light
                 double NdotH = surfaceNormal.dot(H);
                 intensity = pow(NdotH,closest.material_.shininess);
                 Vect3 specular = closest.material_.specularColor * l.getSpecular() * intensity;
-            
+                
                 //TOTAL COLOR:
                 //USING BLING-PHONG
                 color = color + diffuse + specular;
-        }
-        //Calculate reflective color by calling shader recursively
-        //if depth is less or equal to 0 stop tracing reflection.
-        if (closest.material_.reflection && depth >= 0) {
-            Vect3 reflection = (ray.direction_ - surfaceNormal * 2 * surfaceNormal.dot(ray.direction_)).normalize();
-            Ray reflectionRay = Ray(intersection + reflection * 0.0001, reflection);
-            //add the reflection ray to the current color.
-            color = color + shade(reflectionRay, objects, l, depth - 1) * closest.material_.reflection;
+            }
+            
         }
     }
     return color;
 }
 
 int main() {
-	cout << "Basic Ray tracing!\n";
+    std::cout << "Basic Ray tracing!\n";
 
 	//construct a camera 
 	Vect3 lookfrom = Vect3(0, 0, 10);
@@ -197,27 +203,29 @@ int main() {
 	Vect3* pixels = new Vect3[size];
 
 	//World setup
-	Light light = Light(Vect3(1, 1,1),Vect3(1,1,1) , Vect3(0,0, 5));
+	Light light = Light(Vect3(0.5, 0.5,0.5),Vect3(0.5,0.5,0.5) , Vect3(10,0, 5));
+    Light light2 = Light(Vect3(1, 1,1),Vect3(1,1,1) , Vect3(-5,0, 5));
+
 
     // Red sphere
-	Sphere sphere(Vect3(-2, 3, -4), 2, material(Vect3(0.3,0,0),Vect3(1, 0, 0),Vect3(1,1,1),50,2));
+	Sphere sphere(Vect3(-2, 2, -4), 2, material(Vect3(0.3,0,0),Vect3(1, 0, 0),Vect3(1,1,1),50,100));
     //
-    Sphere sphere2(Vect3(0, -2, -5), 2, material(Vect3(0,0.3,0),Vect3(0, 1, 0),Vect3(1,1,1),30,2));
+    Sphere sphere2(Vect3(0, -2, -5), 2, material(Vect3(0,0.3,0),Vect3(0, 1, 0),Vect3(1,1,1),30,100));
     
     //
-    Sphere sphere3(Vect3(2, -2, -30), 10, material(Vect3(0.3,0.3,0.3),Vect3(0.5, 0.5, 0.5),Vect3(1,1,1),30,2));
+    Sphere sphere3(Vect3(5, 5, -30), 10, material(Vect3(0.3,0.3,0.3),Vect3(0.8, 0.8, 0.8),Vect3(1,1,1),30,100));
     
 	//create objects.
-	list<Sphere> objects;
+    std::list<Sphere> objects;
 	objects.push_back(sphere2);
     objects.push_back(sphere3);
     objects.push_back(sphere);
-    //objects.push_back(&sphere3);
-
 
 	//create lights.
-	list<Light> lights;
+    std::list<Light> lights;
 	lights.push_back(light);
+    lights.push_back(light2);
+
 
 
 	int x, y;
@@ -226,7 +234,7 @@ int main() {
 		for (y = 0; y < camera.width; y++) {
 			//construct a ray for through this pixel.
 			Ray ray = camera.constructRay(x,y);
-			pixels[index++] = shade(ray,objects, light, 2);
+			pixels[index++] = shade(ray,objects, lights, 3);
 		}
 	}
     save_to_file("test.bmp", camera.width, camera.height, pixels);

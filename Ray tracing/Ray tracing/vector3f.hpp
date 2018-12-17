@@ -4,8 +4,6 @@
 #include "math.h"
 #include <iostream>
 #include <algorithm>
-using namespace std;
-
 
 class Vect3 {
 public:
@@ -55,7 +53,7 @@ public:
     
     void print()
     {
-        cout << x_ << '/' << y_ << '/' << z_<< endl;
+        std::cout << x_ << '/' << y_ << '/' << z_<< std::endl;
     }
 };
 
