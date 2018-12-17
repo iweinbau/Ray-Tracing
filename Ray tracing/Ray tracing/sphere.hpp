@@ -9,43 +9,42 @@
 #ifndef sphere_h
 #define sphere_h
 
-class Phong;
+class Material;
 
-#include "material.hpp"
 #include "vector3f.hpp"
+#include "Object.hpp"
 #include "ray.hpp"
 
-class Sphere{
+class Sphere : public Object{
 public:
-    double kEpsilon = 0.001;
+    const double kEpsilon = 0.001;
     double radius_;
-    Vect3 center_;
-    Phong* shader_;
     
-    Sphere()
+    Sphere():Object()
     {}
     
-    Sphere(Vect3 position, double radius,Phong* material):
-    center_(position), shader_(material),radius_(radius)
+    Sphere(Vect3 position, double radius, Material* material):
+    Object(position,material),radius_(radius)
     {}
     
     Sphere(Sphere const& sphere):
-    radius_(sphere.radius_),center_(sphere.center_),shader_(sphere.shader_)
+    Object(sphere.position,sphere.shader_),
+    radius_(sphere.radius_)
     {}
     
     Sphere& operator= (Sphere const& sphere){
         if(this == &sphere)
             return (*this);
         
-        center_ = sphere.center_;
+        Object::operator=(sphere);
+        
         radius_ = sphere.radius_;
-        shader_ = sphere.shader_;
         return (*this);
     }
     
     bool hit(Ray& ray, Vect3& intersection, double& tmin){
         double t;
-        Vect3    temp     = ray.origin_ - center_;
+        Vect3    temp     = ray.origin_ - position;
         double         a         = ray.direction_.dot(ray.direction_);
         double         b         = 2 * temp.dot(ray.direction_);
         double         c         = temp.dot(temp) - radius_ * radius_;
@@ -77,7 +76,7 @@ public:
     }
     
     Vect3 getNormalAtPoint(Vect3 point) {
-        return (point - center_).normalize();
+        return (point - position).normalize();
     }
 };
 #endif /* sphere_h */

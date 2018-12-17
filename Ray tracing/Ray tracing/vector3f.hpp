@@ -69,6 +69,11 @@ Vect3 operator * (const Vect3 & v1, const Vect3 &v2){
     return Vect3(v1.x_ * v2.x_, v1.y_ * v2.y_,v1.z_ * v2.z_);
 }
 
+Vect3 operator / (const Vect3 & v1, double const& s) {
+    return Vect3(v1.x_ / s, v1.y_ / s,v1.z_ / s);
+}
+
+
 Vect3 operator * (const Vect3 & v1, double const& s) {
     return Vect3(v1.x_ * s, v1.y_ * s,v1.z_ * s);
 }

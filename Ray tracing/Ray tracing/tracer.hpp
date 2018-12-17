@@ -16,7 +16,7 @@ public:
     ~tracer()
     {}
     
-    Vect3 trace(Ray ray, std::list<Sphere> objects, std::list<Light> lights, int depth) {
+    Vect3 trace(Ray ray, std::list<Object*> objects, std::list<Light> lights, int depth) {
 
         Vect3 color = Vect3(); //set initial color to background.
 
@@ -25,16 +25,16 @@ public:
         Hitinfo hitinfo;
         hitinfo.direction = ray.direction_;
         
-        Sphere closest;
+        Object* closest = nullptr;
         Vect3 intersection;
         
         bool hit = false;
-        for(Sphere obj : objects){
-            if (obj.hit(ray, intersection, t)) {
+        for(Object* obj : objects){
+            if (obj->hit(ray, intersection, t)) {
                 if (t < tmin) {
                     //we found a closer object.
                     hitinfo.point = intersection;
-                    hitinfo.normal = obj.getNormalAtPoint(intersection);
+                    hitinfo.normal = obj->getNormalAtPoint(intersection);
                     closest = obj;
                     tmin = t;
                     hit = true;
@@ -43,7 +43,7 @@ public:
         }
         
         if (hit) {
-            return closest.shader_->shade(hitinfo, objects, lights,depth);
+            return closest->shader_->shade(hitinfo, objects, lights,depth);
         }
         return color;
     }

@@ -16,6 +16,11 @@ public:
     Reflective():Phong()
     {}
     
+    Reflective(Reflective const& refl):
+    Phong(refl.ambient,refl.diffuse,refl.specular),
+    reflective(refl.reflective)
+    {}
+    
     Reflective(Lambertian ambient, Lambertian diffuse, Specular specular,double reflective):
     Phong(ambient,diffuse,specular),
     reflective(reflective)
@@ -35,8 +40,8 @@ public:
         return (*this);
     }
     
-    Vect3 shade(Hitinfo const& hitinfo,std::list<Sphere> objects,std::list<Light> lights,int depth){
-        Vect3 color = Phong::shade(hitinfo, objects, lights,depth);
+    Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light> lights,int depth){
+        Vect3 color = Vect3();
         if(depth > 0){
             Vect3 reflection = hitinfo.direction - ( hitinfo.normal * 2 * hitinfo.direction.dot(hitinfo.normal));
             Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal * 0.0001, reflection);
@@ -44,7 +49,8 @@ public:
             //add the reflection ray to the current color.
             color = color + tr.trace(reflectionRay, objects, lights,depth-1) * reflective;
         }
-        return color;
+        return color + Phong::shade(hitinfo, objects, lights,depth);
+;
     }
     tracer tr;
     

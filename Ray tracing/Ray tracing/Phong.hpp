@@ -9,29 +9,34 @@
 #ifndef Phong_h
 #define Phong_h
 
-#include <iostream>
+#include "Material.hpp"
 #include "sphere.hpp"
-#include "material.hpp"
 #include "Lambertian.hpp"
 #include "Specular.hpp"
-#include "Hitinfo.hpp"
-#include "Light.hpp"
 
-class Phong{
+class Phong:public Material{
 public:
-    Phong()
+    Phong():Material()
     {}
     
     Phong(Lambertian ambient, Lambertian diffuse, Specular specular):
+    Material(),
     ambient(ambient),
     diffuse(diffuse),
     specular(specular)
     {}
     
+    Phong(Phong const& phong):
+    Material(),
+    ambient(phong.ambient),
+    diffuse(phong.diffuse),
+    specular(phong.specular)
+    {}
+    
     ~Phong()
     {}
     
-    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Sphere> objects,std::list<Light> lights,int depth){
+    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light> lights,int depth){
         
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
@@ -48,8 +53,8 @@ public:
             double t;
             double maxt = (l.getPosition() - hitinfo.point).length();
             Vect3 tmp;
-            for(Sphere obj : objects){
-                if (obj.hit(shadowray,tmp, t)) {
+            for(Object* obj : objects){
+                if (obj->hit(shadowray,tmp, t)) {
                     if(t < maxt){
                         hit = true;
                         break;
@@ -69,6 +74,8 @@ public:
     {
         if(this == &phong)
             return (*this);
+        
+        Material::operator=(phong);
         
         diffuse = phong.diffuse;
         ambient = phong.ambient;
