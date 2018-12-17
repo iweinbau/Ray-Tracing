@@ -35,11 +35,11 @@ public:
         return Vect3(x_ /mag, y_ / mag, z_ /mag);
     }
     
-    Vect3 neg() {
+    Vect3 neg() const{
         return Vect3(-x_,-y_,-z_);
     }
     
-    double dot(Vect3 other) {
+    double dot(Vect3 const& other) const {
         return(x_ * other.x_ + y_ * other.y_ + z_ * other.z_);
     }
     

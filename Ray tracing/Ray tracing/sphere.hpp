@@ -9,6 +9,8 @@
 #ifndef sphere_h
 #define sphere_h
 
+class Phong;
+
 #include "material.hpp"
 #include "vector3f.hpp"
 #include "ray.hpp"
@@ -18,17 +20,17 @@ public:
     double kEpsilon = 0.001;
     double radius_;
     Vect3 center_;
-    material material_;
+    Phong* shader_;
     
     Sphere()
     {}
     
-    Sphere(Vect3 position, double radius,material material):
-    center_(position), material_(material),radius_(radius)
+    Sphere(Vect3 position, double radius,Phong* material):
+    center_(position), shader_(material),radius_(radius)
     {}
     
     Sphere(Sphere const& sphere):
-    radius_(sphere.radius_),center_(sphere.center_),material_(sphere.material_)
+    radius_(sphere.radius_),center_(sphere.center_),shader_(sphere.shader_)
     {}
     
     Sphere& operator= (Sphere const& sphere){
@@ -37,7 +39,7 @@ public:
         
         center_ = sphere.center_;
         radius_ = sphere.radius_;
-        material_ = sphere.material_;
+        shader_ = sphere.shader_;
         return (*this);
     }
     
