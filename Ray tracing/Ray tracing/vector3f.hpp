@@ -3,91 +3,74 @@
 
 #include "math.h"
 #include <iostream>
-using namespace std;
+#include <algorithm>
 
-
-class Vect3f {
-private:
-    float x;
-    float y;
-    float z;
-    
+class Vect3 {
 public:
-    Vect3f()
-    {
-        x = 0;
-        y = 0;
-        z = 0;
+    double x_;
+    double y_;
+    double z_;
+    
+    Vect3():x_(0),y_(0),z_(0)
+    {}
+    
+    Vect3(double x, double y, double z):x_(x),y_(y),z_(z)
+    {}
+    
+    Vect3(Vect3 const &v):x_(v.x_),y_(v.y_),z_(v.z_)
+    {}
+    
+    ~Vect3(){}
+    Vect3& operator= (Vect3 const& v){
+        x_ = v.x_; y_ = v.y_; z_=v.z_;
+        return(*this);
     }
     
-    Vect3f(float x, float y, float z)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
+    double length() {
+        return (sqrt(x_ * x_ + y_ * y_ + z_ * z_));
     }
     
-    Vect3f(Vect3f const &v)
-    {
-        this->x = v.x;
-        this->y = v.y;
-        this->z = v.z;
+    Vect3 normalize() {
+        double mag = length();
+        return Vect3(x_ /mag, y_ / mag, z_ /mag);
     }
     
-    float getX() { return x; }
-    float getY() { return y; }
-    float getZ() { return z; }
-    
-    float length() {
-        return sqrt((x * x) + (y * y) + (z * z));
+    Vect3 neg() {
+        return Vect3(-x_,-y_,-z_);
     }
     
-    Vect3f normalized() {
-        float mag = length();
+    double dot(Vect3 other) {
+        return(x_ * other.x_ + y_ * other.y_ + z_ * other.z_);
+    }
+    
+    Vect3 cross(Vect3 other) {
+        double x = y_ * other.z_ - z_ * other.y_;
+        double y = z_ * other.x_ - x_ * other.z_;
+        double z = x_ * other.y_ - y_ * other.x_;
         
-        return Vect3f(x / mag, y / mag, z / mag);
-    }
-    
-    Vect3f neg() {
-        return Vect3f(-x, -y, -z);
-    }
-    
-    float dot(Vect3f other) {
-        return x * other.getX() + y * other.getY() + z * other.getZ();
-    }
-    
-    Vect3f cross(Vect3f other) {
-        float x_ = y * other.getZ() - z * other.getY();
-        float y_ = z * other.getX() - x * other.getZ();
-        float z_ = x * other.getY() - y * other.getX();
-        
-        return Vect3f(x_, y_, z_);
-    }
-    
-    Vect3f operator + (const Vect3f &other) {
-        return Vect3f(x + other.x, y + other.y, z + other.z);
-    }
-    
-    Vect3f operator - (const Vect3f &other) {
-        return Vect3f(x - other.x, y - other.y, z - other.z);
-    }
-    
-    Vect3f operator * (const Vect3f &other) {
-        return Vect3f(x * other.x, y * other.y, z * other.z);
-    }
-    
-    Vect3f operator * (const float &other) {
-        return Vect3f(x * other, y * other, z * other);
-    }
-    
-    Vect3f operator / (const Vect3f &other) {
-        return Vect3f(x / other.x, y / other.y, z / other.z);
+        return Vect3(x, y, z);
     }
     
     void print()
     {
-        cout << x << '/' << y << '/' << z << endl;
+        std::cout << x_ << '/' << y_ << '/' << z_<< std::endl;
     }
 };
+
+Vect3 operator + (const Vect3 & v1, const Vect3 &v2) {
+    return Vect3(v1.x_ + v2.x_, v1.y_ + v2.y_, v1.z_ + v2.z_);
+}
+
+Vect3 operator - (const Vect3 & v1, const Vect3 &v2){
+    return Vect3(v1.x_ - v2.x_, v1.y_ - v2.y_, v1.z_ - v2.z_);
+}
+
+Vect3 operator * (const Vect3 & v1, const Vect3 &v2){
+    return Vect3(v1.x_ * v2.x_, v1.y_ * v2.y_,v1.z_ * v2.z_);
+}
+
+Vect3 operator * (const Vect3 & v1, double const& s) {
+    return Vect3(v1.x_ * s, v1.y_ * s,v1.z_ * s);
+}
 
 #endif
