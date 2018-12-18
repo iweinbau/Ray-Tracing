@@ -10,7 +10,7 @@
 #define Material_h
 
 #include "Hitinfo.hpp"
-#include "Light.hpp"
+#include "../Light/Light.hpp"
 #include <iostream>
 
 class Material{

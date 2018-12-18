@@ -10,9 +10,9 @@
 #define Phong_h
 
 #include "Material.hpp"
-#include "sphere.hpp"
-#include "Lambertian.hpp"
-#include "Specular.hpp"
+#include "../Objects/sphere.hpp"
+#include "../BRDF/Lambertian.hpp"
+#include "../BRDF/Specular.hpp"
 
 class Phong:public Material{
 public:

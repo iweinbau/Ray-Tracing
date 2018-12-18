@@ -8,14 +8,14 @@
 
 #include "vector3f.hpp"
 #include "ray.hpp"
-#include "sphere.hpp"
-#include "Object.hpp"
-#include "Plane.hpp"
-#include "Phong.hpp"
-#include "Reflective.hpp"
-#include "Light.hpp"
+#include "./Objects/sphere.hpp"
+#include "./Objects/Object.hpp"
+#include "./Objects/Plane.hpp"
+#include "./Material/Phong.hpp"
+#include "./Material/Reflective.hpp"
+#include "./Light/Light.hpp"
 #include "tracer.hpp"
-#include "Matte.hpp"
+#include "./Material/Matte.hpp"
 #include "Hitinfo.hpp"
 
 #define PI 3.14159265
@@ -25,7 +25,7 @@
 class Camera {
 public:
     //resolution in pixels.
-    const int width = 600, height = 600;
+    const int width = 800, height = 800;
     Camera(Vect3 lookfrom, Vect3 lookat, double fovy):
     eye_(lookfrom),
     lookat_(lookat),
@@ -104,16 +104,15 @@ int main() {
 	Vect3* pixels = new Vect3[size];
 
 	//World setup
-	Light light = Light(Vect3(0.5, 0.5,0.5),Vect3(0.5,0.5,0.5) , Vect3(10,0, 5));
-    Light light2 = Light(Vect3(1, 1,1),Vect3(1,1,1) , Vect3(-5,0, 5));
+	Light light = Light(Vect3(0.5, 0.5,0.5),Vect3(0.5,0.5,0.5) , Vect3(3,0, -10));
+    Light light2 = Light(Vect3(0.8, 0.8,0.8),Vect3(0.8,0.8,0.8) , Vect3(-5,0, 5));
 
     Reflective phong(
                 Lambertian(1,Vect3(0.3,0.3,0.3)),
                 Lambertian(1,Vect3(0.4,0.4,0.4)),
-                Specular(100,Vect3(1,1,1)),2);
+                Specular(200,Vect3(0.6,0.6,0.6)),2);
 
-    // Red sphere
-	Sphere sphere(Vect3(-3, 2, -4), 2, &phong);
+	Sphere sphere(Vect3(0, 0, 0), 3, &phong);
     
     Phong phong2(
                 Lambertian(1,Vect3(0.0,0.3,0)),
@@ -121,33 +120,40 @@ int main() {
                 Specular(30,Vect3(1,1,1)));
 
     //
-    Sphere sphere2(Vect3(0, -2, -5), 2, &phong2);
+    Sphere sphere2(Vect3(-3, -2, -5), 2, &phong2);
     
-    Matte phong3(
-                 Lambertian(1,Vect3(0.3,0.3,0.3)),
-                 Lambertian(1,Vect3(0.8,0.8,0.8)));
+    Phong phong3(
+                 Lambertian(1,Vect3(0.3,0,0)),
+                 Lambertian(1,Vect3(0.8,0,0)),
+                 Specular(30,Vect3(1,1,1)));
     
     //
     Sphere sphere3(Vect3(5, 5, -10), 3,&phong3);
     
-    Matte planem(
+    Phong planem(
                      Lambertian(1,Vect3(0.3,0.3,0.3)),
-                     Lambertian(1,Vect3(0.5,0.5,0.5)));
-    Matte planeb(
+                     Lambertian(1,Vect3(0.5,0.5,0.5)),
+                     Specular(200,Vect3(1,1,1)));
+    Phong planeb(
                  Lambertian(1,Vect3(0.2,0.2,0.2)),
-                 Lambertian(1,Vect3(0.4,0.4,0.4)));
+                 Lambertian(1,Vect3(0.4,0.4,0.4)),
+                 Specular(200,Vect3(1,1,1)));
     
-    Matte planel(
+    Phong planel(
                  Lambertian(1,Vect3(0.3,0,0)),
-                 Lambertian(1,Vect3(0.5,0,0)));
-    Matte planer(
+                 Lambertian(1,Vect3(0.5,0,0)),
+                Specular(200,Vect3(1,1,1)));
+    Phong planer(
                  Lambertian(1,Vect3(0,0.3,0)),
-                 Lambertian(1,Vect3(0,0.5,0)));
+                 Lambertian(1,Vect3(0,0.5,0)),
+                 Specular(200,Vect3(1,1,1)));
     
     Plane planeback(Vect3(0, 0, -20), Vect3(0,0,1),&planem);
     Plane planeleft(Vect3(-20, 0, 0), Vect3(1,0,0),&planel);
     Plane planeright(Vect3(20, 0, 0), Vect3(-1,0,0),&planer);
-    Plane planebottom(Vect3(0, -10, 0), Vect3(0,1,0),&planeb);
+    Plane planebottom(Vect3(0, -10, 0), Vect3(0,1,0),&planem);
+    Plane planetop(Vect3(0, 20, 0), Vect3(0,-1,0),&planem);
+
 
 
 
@@ -161,8 +167,8 @@ int main() {
     objects.push_back(&planeleft);
     objects.push_back(&planeright);
     objects.push_back(&planebottom);
-
-
+    objects.push_back(&planetop);
+    
 
 	//create lights.
     std::list<Light> lights;

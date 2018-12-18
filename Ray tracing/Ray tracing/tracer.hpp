@@ -17,7 +17,11 @@ public:
     {}
     
     Vect3 trace(Ray ray, std::list<Object*> objects, std::list<Light> lights, int depth) {
-
+        
+        if(depth <= 0){
+            return Vect3(1,1,1);
+        }
+        
         Vect3 color = Vect3(); //set initial color to background.
 
         double tmin = INFINITY;

@@ -41,16 +41,10 @@ public:
     }
     
     Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light> lights,int depth){
-        Vect3 color = Vect3();
-        if(depth > 0){
-            Vect3 reflection = hitinfo.direction - ( hitinfo.normal * 2 * hitinfo.direction.dot(hitinfo.normal));
-            Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal * 0.0001, reflection);
-            
-            //add the reflection ray to the current color.
-            color = color + tr.trace(reflectionRay, objects, lights,depth-1) * reflective;
-        }
-        return color + Phong::shade(hitinfo, objects, lights,depth);
-;
+        Vect3 reflection = hitinfo.direction - ( hitinfo.normal * 2 * hitinfo.direction.dot(hitinfo.normal));
+        Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
+        Vect3 color = tr.trace(reflectionRay, objects, lights,depth-1) * reflective;
+        return color * Phong::shade(hitinfo, objects, lights,depth);
     }
     tracer tr;
     
