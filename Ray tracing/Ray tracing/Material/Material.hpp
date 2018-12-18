@@ -31,7 +31,7 @@ public:
         
         return (*this);
     }
-    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light> lights,int depth) = 0;
+    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light*> lights,int depth) = 0;
     
 };
 

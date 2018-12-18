@@ -16,15 +16,17 @@ public:
     Hitinfo()
     {}
     
-    Hitinfo(Vect3& normal, Vect3& point, Vect3& direction):
+    Hitinfo(Vect3& normal, Vect3& point, Vect3& direction,double distance):
     normal(normal),
     point(point),
-    direction(direction)
+    direction(direction),
+    d(distance)
     {}
     
     ~Hitinfo()
     {}
     
+    double d;
     Vect3 normal;
     Vect3 point;
     Vect3 direction;

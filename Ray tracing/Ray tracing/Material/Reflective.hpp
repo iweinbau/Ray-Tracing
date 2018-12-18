@@ -40,7 +40,7 @@ public:
         return (*this);
     }
     
-    Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light> lights,int depth){
+    Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light*> lights,int depth){
         Vect3 reflection = hitinfo.direction - ( hitinfo.normal * 2 * hitinfo.direction.dot(hitinfo.normal));
         Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
         Vect3 color = tr.trace(reflectionRay, objects, lights,depth-1) * reflective;

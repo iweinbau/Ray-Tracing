@@ -16,7 +16,7 @@ public:
     ~tracer()
     {}
     
-    Vect3 trace(Ray ray, std::list<Object*> objects, std::list<Light> lights, int depth) {
+    Vect3 trace(Ray ray, std::list<Object*> objects, std::list<Light*> lights, int depth) {
         
         if(depth <= 0){
             return Vect3(1,1,1);
@@ -24,10 +24,10 @@ public:
         
         Vect3 color = Vect3(); //set initial color to background.
 
-        double tmin = INFINITY;
         double t;
         Hitinfo hitinfo;
         hitinfo.direction = ray.direction_;
+        hitinfo.d = INFINITY;
         
         Object* closest = nullptr;
         Vect3 intersection;
@@ -35,12 +35,12 @@ public:
         bool hit = false;
         for(Object* obj : objects){
             if (obj->hit(ray, intersection, t)) {
-                if (t < tmin) {
+                if (t < hitinfo.d) {
                     //we found a closer object.
                     hitinfo.point = intersection;
                     hitinfo.normal = obj->getNormalAtPoint(intersection);
+                    hitinfo.d = t;
                     closest = obj;
-                    tmin = t;
                     hit = true;
                 }
             }

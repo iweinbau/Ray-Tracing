@@ -30,14 +30,14 @@ public:
     ~Matte()
     {}
     
-    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light> lights,int depth){
+    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light*> lights,int depth){
         
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
         Vect3 color = ambient.color();
         
-        for(Light l : lights){
-            Vect3 lightDir = (l.getPosition() - hitinfo.point).normalize();
+        for(Light* l : lights){
+            Vect3 lightDir = (l->getPosition() - hitinfo.point).normalize();
             
             //********* CAST SHADOW RAY ********** \\
             //cast shadow ray to check if the object is in shadow.
@@ -45,7 +45,7 @@ public:
             
             bool hit = false;
             double t;
-            double maxt = (l.getPosition() - hitinfo.point).length();
+            double maxt = (l->getPosition() - hitinfo.point).length();
             Vect3 tmp;
             for(Object* obj : objects){
                 if (obj->hit(shadowray,tmp, t)) {
@@ -56,7 +56,7 @@ public:
                 }
             }
             if(!hit){
-                Vect3 df = diffuse.sample(hitinfo,lightDir) * l.getDiffuse();
+                Vect3 df = diffuse.sample(hitinfo,lightDir) * l->getIntensity(hitinfo.d);
                 color = color + df;
             }
         }

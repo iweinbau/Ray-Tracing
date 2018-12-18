@@ -14,6 +14,7 @@
 #include "./Material/Phong.hpp"
 #include "./Material/Reflective.hpp"
 #include "./Light/Light.hpp"
+#include "./Light/pointLight.hpp"
 #include "tracer.hpp"
 #include "./Material/Matte.hpp"
 #include "Hitinfo.hpp"
@@ -104,15 +105,15 @@ int main() {
 	Vect3* pixels = new Vect3[size];
 
 	//World setup
-	Light light = Light(Vect3(0.5, 0.5,0.5),Vect3(0.5,0.5,0.5) , Vect3(3,0, -10));
-    Light light2 = Light(Vect3(0.8, 0.8,0.8),Vect3(0.8,0.8,0.8) , Vect3(-5,0, 5));
+	//PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
+    Light light2(Vect3(0.8, 0.8,0.8), Vect3(-5,0, 5),1);
 
     Reflective phong(
                 Lambertian(1,Vect3(0.3,0.3,0.3)),
                 Lambertian(1,Vect3(0.4,0.4,0.4)),
                 Specular(200,Vect3(0.6,0.6,0.6)),2);
 
-	Sphere sphere(Vect3(0, 0, 0), 3, &phong);
+	Sphere sphere(Vect3(3, 0, 0), 3, &phong);
     
     Phong phong2(
                 Lambertian(1,Vect3(0.0,0.3,0)),
@@ -171,9 +172,9 @@ int main() {
     
 
 	//create lights.
-    std::list<Light> lights;
-	lights.push_back(light);
-    lights.push_back(light2);
+    std::list<Light*> lights;
+	//lights.push_back(&light);
+    lights.push_back(&light2);
 
 	int x, y;
 	int index = 0;

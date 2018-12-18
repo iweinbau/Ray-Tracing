@@ -13,25 +13,39 @@
 
 class Light {
 public:
-    Light(Vect3 diffuse, Vect3 specular, Vect3 position):
-    diffuse_(diffuse),
-    specular_(specular),
-    position_(position)
+    Light(Vect3 color,Vect3 position,double i):
+    color_(color),
+    position_(position),
+    i_(i)
     {}
+    
+    Light(Light const& l):
+    color_(l.color_),
+    i_(l.i_)
+    {}
+    
+    Light& operator= (Light const& l){
+        if(this == &l)
+            return (*this);
+        
+        color_ = l.color_;
+        i_ = l.i_;
+        return (*this);
+    }
+    
     Vect3 getPosition() {
         return position_;
     }
-    Vect3 getDiffuse() {
-        return diffuse_;
-    }
-    Vect3 getSpecular() {
-        return specular_;
-    }
-private:
-    Vect3 specular_;
-    Vect3 diffuse_;
-    Vect3 position_;
     
+    virtual Vect3 getIntensity(double d){
+        return color_ * i_;
+    };
+    
+private:
+    Vect3 position_;
+protected:
+    Vect3 color_;
+    double i_;
 };
 
 #endif /* Light_h */
