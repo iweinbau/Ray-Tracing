@@ -10,6 +10,7 @@
 #define Reflective_h
 
 #include "tracer.hpp"
+#include "../BRDF/Glossy.hpp"
 
 class Reflective:public Phong{
 public:
@@ -18,12 +19,12 @@ public:
     
     Reflective(Reflective const& refl):
     Phong(refl.ambient,refl.diffuse,refl.specular),
-    reflective(refl.reflective)
+    glossy(refl.glossy)
     {}
     
-    Reflective(Lambertian ambient, Lambertian diffuse, Specular specular,double reflective):
+    Reflective(Lambertian ambient, Lambertian diffuse, Specular specular,Glossy glossy):
     Phong(ambient,diffuse,specular),
-    reflective(reflective)
+    glossy(glossy)
     {}
     
     ~Reflective()
@@ -36,20 +37,25 @@ public:
             return (*this);
         
         Reflective::operator=(r);
-        reflective = r.reflective;
+        glossy = r.glossy;
         return (*this);
     }
     
     Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light*> lights,int depth){
-        Vect3 reflection = hitinfo.direction - ( hitinfo.normal * 2 * hitinfo.direction.dot(hitinfo.normal));
-        Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
-        Vect3 color = tr.trace(reflectionRay, objects, lights,depth-1) * reflective;
-        return color * Phong::shade(hitinfo, objects, lights,depth);
+        Vect3 color = Phong::shade(hitinfo, objects, lights,depth);
+        for (int i=0; i<samples; i++) {
+            Vect3 reflection;
+            Vect3 reflectance = glossy.sample_(hitinfo,reflection);
+            Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
+            color = color + (tr.trace(reflectionRay, objects, lights,depth-1));
+        }
+        return color/samples;
     }
     tracer tr;
     
 private:
     int depth = 2;
-    double reflective;
+    int samples = 50;
+    Glossy glossy;
 };
 #endif /* Reflective_h */

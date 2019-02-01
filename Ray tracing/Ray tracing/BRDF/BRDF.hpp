@@ -28,6 +28,7 @@ public:
         //Just return black
         return Vect3();
     }
+    
     virtual Vect3 color()
     {
         //Just return black

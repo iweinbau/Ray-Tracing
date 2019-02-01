@@ -22,6 +22,7 @@ public:
     Specular(double factor, Vect3 color): ks(factor), cs(color)
     {}
 
+    //No sampling used here. Used the formula of Bling-Phong light model
     Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld){
         Vect3 H = (ld + hitinfo.direction.neg()).normalize();
         // Intensity of specular light

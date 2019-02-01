@@ -111,7 +111,8 @@ int main() {
     Reflective phong(
                 Lambertian(1,Vect3(0.3,0.3,0.3)),
                 Lambertian(1,Vect3(0.4,0.4,0.4)),
-                Specular(200,Vect3(0.6,0.6,0.6)),2);
+                Specular(200,Vect3(0.6,0.6,0.6)),
+                Glossy(0.9,1,Vect3(0.4,0.4,0.4)));
 
 	Sphere sphere(Vect3(3, 0, 0), 3, &phong);
     
