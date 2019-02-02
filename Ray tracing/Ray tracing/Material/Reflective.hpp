@@ -47,7 +47,7 @@ public:
             Vect3 reflection;
             Vect3 reflectance = glossy.sample_(hitinfo,reflection);
             Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
-            color = color + (tr.trace(reflectionRay, objects, lights,depth-1));
+            color = color + (tr.trace(reflectionRay, objects, lights,depth-1)*reflectance);
         }
         return color/samples;
     }
@@ -55,7 +55,7 @@ public:
     
 private:
     int depth = 2;
-    int samples = 50;
+    int samples = 5;
     Glossy glossy;
 };
 #endif /* Reflective_h */

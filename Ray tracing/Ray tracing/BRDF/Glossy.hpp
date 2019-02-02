@@ -43,15 +43,25 @@ public:
         std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
         std::uniform_real_distribution<> dis(0.0, 1.0);
         
-        double espilon1 = dis(gen);
-        double espilon2 = dis(gen);
-
-        double uu = - e/2 + espilon1;
-        double vv = -e/2 + espilon2;
+        //From raytracing from the ground up.
+        double x = dis(gen);
+        double y = dis(gen);
         
-        out = r + u * uu + v * vv;// reflected ray direction
+        double cos_phi = cos(2.0 * PI * x);
+        double sin_phi = sin(2.0 * PI * x);
+        double cos_theta = pow((1.0 - y), 1.0 / (e + 1.0));
+        double sin_theta = sqrt (1.0 - cos_theta * cos_theta);
         
-        return cs * ks;
+        double pu = sin_theta * cos_phi;
+        double pv = sin_theta * sin_phi;
+        double pw = cos_theta;
+        
+        out = u * pu + v * pv + w * pw;
+        
+        if (hitinfo.normal.dot(out) < 0.0)                         // reflected ray is below tangent plane
+            out = u * - pu + v * -pv + w * pw;
+    
+        return cs * ks ;
         
     }
     
@@ -75,6 +85,7 @@ public:
     }
     
 private:
+    double e = 1;
     double ks;
     Vect3 cs;
 };

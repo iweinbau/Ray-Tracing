@@ -6,6 +6,9 @@
 #include <utility>
 #include <list>
 
+#define PI 3.14159265
+
+
 #include "vector3f.hpp"
 #include "ray.hpp"
 #include "./Objects/sphere.hpp"
@@ -18,8 +21,6 @@
 #include "tracer.hpp"
 #include "./Material/Matte.hpp"
 #include "Hitinfo.hpp"
-
-#define PI 3.14159265
 
 //Class that stores information about the camara.
 //In create camera rays from it pointing in the world based on the properties.
@@ -112,7 +113,7 @@ int main() {
                 Lambertian(1,Vect3(0.3,0.3,0.3)),
                 Lambertian(1,Vect3(0.4,0.4,0.4)),
                 Specular(200,Vect3(0.6,0.6,0.6)),
-                Glossy(0.9,1,Vect3(0.4,0.4,0.4)));
+                Glossy(0.9,10000,Vect3(1,1,1)));
 
 	Sphere sphere(Vect3(3, 0, 0), 3, &phong);
     
