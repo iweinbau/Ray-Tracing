@@ -9,7 +9,7 @@
 #ifndef Plane_h
 #define Plane_h
 
-#include "vector3f.hpp"
+#include "../vector3f.hpp"
 
 class Plane : public Object {
 public:

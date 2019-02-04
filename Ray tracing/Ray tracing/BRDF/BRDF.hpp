@@ -9,8 +9,8 @@
 #ifndef BRDF_h
 #define BRDF_h
 
-#include "vector3f.hpp"
-#include "Hitinfo.hpp"
+#include "../vector3f.hpp"
+#include "../Hitinfo.hpp"
 
 class BRDF{
 public:
@@ -28,6 +28,7 @@ public:
         //Just return black
         return Vect3();
     }
+    
     virtual Vect3 color()
     {
         //Just return black

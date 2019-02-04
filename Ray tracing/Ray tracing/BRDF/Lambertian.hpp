@@ -28,7 +28,7 @@ public:
         return cd * kd;
         
     }
-    
+    // No sampling here just use the Bling-Phong light model
     Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld){
         double intensity = std::max((double)0, ld.dot(hitinfo.normal));
         return cd * kd * intensity;

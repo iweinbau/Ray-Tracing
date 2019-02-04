@@ -11,9 +11,9 @@
 
 class Material;
 
-#include "vector3f.hpp"
+#include "../vector3f.hpp"
 #include "Object.hpp"
-#include "ray.hpp"
+#include "../ray.hpp"
 
 class Sphere : public Object{
 public:

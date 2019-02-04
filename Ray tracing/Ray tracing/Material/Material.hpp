@@ -9,9 +9,10 @@
 #ifndef Material_h
 #define Material_h
 
-#include "Hitinfo.hpp"
-#include "Light.hpp"
+#include "../Hitinfo.hpp"
+#include "../Light/Light.hpp"
 #include <iostream>
+#include <vector>
 
 class Material{
 public:
@@ -31,7 +32,7 @@ public:
         
         return (*this);
     }
-    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light> lights,int depth) = 0;
+    virtual Vect3 shade(Hitinfo const& hitinfo,std::vector<Object*> const& objects,std::vector<Light*> const& lights,int depth) = 0;
     
 };
 

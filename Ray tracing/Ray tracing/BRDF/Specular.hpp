@@ -13,21 +13,27 @@
 
 class Specular:BRDF{
 public:
-    Specular(): ks(0.0), cs()
+    Specular(): ks(1),e(0), cs()
     {}
     
     ~Specular()
     {}
     
-    Specular(double factor, Vect3 color): ks(factor), cs(color)
+    Specular(double factor, double exp, Vect3 color): ks(factor),e(exp),cs(color)
+    {}
+    
+    Specular(double factor, Vect3 color): ks(factor),e(0),cs(color)
     {}
 
-    Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld){
-        Vect3 H = (ld + hitinfo.direction.neg()).normalize();
-        // Intensity of specular light
-        double NdotH = hitinfo.normal.dot(H);
-        double intensity = pow(NdotH,ks);
-        return cs * intensity;
+    //No sampling used here. Used the formula of Bling-Phong light model
+    Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out){
+        
+        out = ld.neg() + (hitinfo.normal * ld.dot(hitinfo.normal) * 2);
+        
+//        Vect3 H = (ld + hitinfo.direction.neg()).normalize();
+//        // Intensity of specular light
+        double RdotV = std::max(0.0,out.dot(hitinfo.direction.neg()));
+        return cs * ks * pow(RdotV,e);
     }
     
     Vect3 color()
@@ -52,6 +58,7 @@ public:
     
 private:
     double ks;
+    double e;
     Vect3 cs;
 };
 
