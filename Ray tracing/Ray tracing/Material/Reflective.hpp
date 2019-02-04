@@ -9,7 +9,7 @@
 #ifndef Reflective_h
 #define Reflective_h
 
-#include "tracer.hpp"
+#include "../tracer.hpp"
 #include "../BRDF/Glossy.hpp"
 
 class Reflective:public Phong{
@@ -41,7 +41,7 @@ public:
         return (*this);
     }
     
-    Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light*> lights,int depth){
+    Vect3 shade(Hitinfo const& hitinfo,std::vector<Object*> const& objects,std::vector<Light*> const& lights,int depth){
         Vect3 color = Phong::shade(hitinfo, objects, lights,depth);
         for (int i=0; i<samples; i++) {
             Vect3 reflection;
@@ -54,8 +54,7 @@ public:
     tracer tr;
     
 private:
-    int depth = 2;
-    int samples = 5;
+    static const int samples = 50;
     Glossy glossy;
 };
 #endif /* Reflective_h */

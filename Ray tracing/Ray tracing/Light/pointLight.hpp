@@ -10,6 +10,7 @@
 #define pointLight_h
 
 #include "Light.hpp"
+#include "../Hitinfo.hpp"
 #define PI 3.14159265
 
 
@@ -31,9 +32,8 @@ public:
         return (*this);
     }
     
-    virtual Vect3 getIntensity(double distance){
-        return (color_ * i_) / (4 * PI * distance * distance);
+    Vect3 virtual getIntensity(Hitinfo const& hitinfo){
+        return (color_ * i_) / (hitinfo.d * hitinfo.d);
     }
 };
-
 #endif /* pointLight_h */

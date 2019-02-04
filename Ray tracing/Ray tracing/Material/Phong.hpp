@@ -36,7 +36,7 @@ public:
     ~Phong()
     {}
     
-    virtual Vect3 shade(Hitinfo const& hitinfo,std::list<Object*> objects,std::list<Light*> lights,int depth){
+    virtual Vect3 shade(Hitinfo const& hitinfo,std::vector<Object*> const& objects,std::vector<Light*> const& lights,int depth){
         
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
@@ -62,8 +62,9 @@ public:
                 }
             }
             if(!hit){
-                Vect3 df = diffuse.sample(hitinfo,lightDir)  * l->getIntensity(hitinfo.d);
-                Vect3 sp = specular.sample(hitinfo,lightDir) * l->getIntensity(hitinfo.d);
+                Vect3 df = diffuse.sample(hitinfo,lightDir)  * l->getIntensity(hitinfo);
+                Vect3 specularV;
+                Vect3 sp = specular.sample(hitinfo,lightDir,specularV) * l->getIntensity(hitinfo);
                 color = color + df + sp;
             }
         }

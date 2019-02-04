@@ -9,7 +9,7 @@
 #ifndef Light_h
 #define Light_h
 
-#include "vector3f.hpp"
+#include "../vector3f.hpp"
 
 class Light {
 public:
@@ -37,7 +37,7 @@ public:
         return position_;
     }
     
-    virtual Vect3 getIntensity(double d){
+    Vect3 virtual getIntensity(Hitinfo const& hitinfo){
         return color_ * i_;
     };
     

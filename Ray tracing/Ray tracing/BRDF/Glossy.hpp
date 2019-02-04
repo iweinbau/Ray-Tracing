@@ -85,7 +85,7 @@ public:
     }
     
 private:
-    double e = 1;
+    double e;
     double ks;
     Vect3 cs;
 };

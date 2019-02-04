@@ -9,6 +9,8 @@
 #ifndef tracer_h
 #define tracer_h
 
+#include <vector>
+
 class tracer{
 public:
     tracer()
@@ -16,7 +18,7 @@ public:
     ~tracer()
     {}
     
-    Vect3 trace(Ray ray, std::list<Object*> objects, std::list<Light*> lights, int depth) {
+    Vect3 trace(Ray ray, std::vector<Object*> const& objects, std::vector<Light*> const& lights, int depth) {
         
         if(depth <= 0){
             return Vect3(1,1,1);

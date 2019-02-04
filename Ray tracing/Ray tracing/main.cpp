@@ -16,6 +16,7 @@
 #include "./Objects/Plane.hpp"
 #include "./Material/Phong.hpp"
 #include "./Material/Reflective.hpp"
+#include "./Material/Mirror.hpp"
 #include "./Light/Light.hpp"
 #include "./Light/pointLight.hpp"
 #include "tracer.hpp"
@@ -27,7 +28,8 @@
 class Camera {
 public:
     //resolution in pixels.
-    const int width = 800, height = 800;
+    static const int width = 800, height = 800;
+    static const int num_samples = 5;
     Camera(Vect3 lookfrom, Vect3 lookat, double fovy):
     eye_(lookfrom),
     lookat_(lookat),
@@ -55,11 +57,18 @@ public:
         
     }
     Ray constructRay(int i, int j) {
+        std::random_device rd;  //Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+        std::uniform_real_distribution<> dis(0.0, 1.0);
+        
+        //From raytracing from the ground up.
+        double x = dis(gen);
+        double y = dis(gen);
         //calculate the ray.
-        return Ray(eye_,(upper_corner_ + n * j * (horizontal_/double(width)) + v.neg() * i * (vertical_/double(height))) - eye_);
+        return Ray(eye_,(upper_corner_ + (n * (j+x) * (horizontal_/double(width))) + (v.neg() * (i+y) * (vertical_/double(height)))) - eye_);
     }
 private:
-    double distance_ = 1;
+    const double distance_ = 1;
     //the position of the camera;
     Vect3 eye_;
     Vect3 up_;
@@ -77,7 +86,7 @@ private:
     Vect3 u, v, n;
 };
 
-void save_to_file(char *filename, int width, int height, Vect3 *pixels)
+void save_to_file(char const* filename, int width, int height, Vect3 const* pixels)
 {
     // save frame buffer to file
     std::ofstream ofs;
@@ -110,46 +119,46 @@ int main() {
     Light light2(Vect3(0.8, 0.8,0.8), Vect3(-5,0, 5),1);
 
     Reflective phong(
-                Lambertian(1,Vect3(0.3,0.3,0.3)),
-                Lambertian(1,Vect3(0.4,0.4,0.4)),
-                Specular(200,Vect3(0.6,0.6,0.6)),
-                Glossy(0.9,10000,Vect3(1,1,1)));
+                Lambertian(0.25,Vect3(0.3,0.3,0.3)),
+                Lambertian(0.6,Vect3(0.4,0.4,0.4)),
+                Specular(0.2,5,Vect3(0.6,0.6,0.6)),
+                Glossy(0.9,50,Vect3(1,1,1)));
 
 	Sphere sphere(Vect3(3, 0, 0), 3, &phong);
     
     Phong phong2(
                 Lambertian(1,Vect3(0.0,0.3,0)),
-                Lambertian(1,Vect3(0,1,0)),
-                Specular(30,Vect3(1,1,1)));
+                Lambertian(0.6,Vect3(0,1,0)),
+                Specular(0.2,5,Vect3(1,1,1)));
 
     //
     Sphere sphere2(Vect3(-3, -2, -5), 2, &phong2);
     
     Phong phong3(
-                 Lambertian(1,Vect3(0.3,0,0)),
-                 Lambertian(1,Vect3(0.8,0,0)),
-                 Specular(30,Vect3(1,1,1)));
+                 Lambertian(0.25,Vect3(0.3,0,0)),
+                 Lambertian(0.6,Vect3(0.8,0,0)),
+                 Specular(0.2,5,Vect3(1,1,1)));
     
     //
     Sphere sphere3(Vect3(5, 5, -10), 3,&phong3);
     
     Phong planem(
-                     Lambertian(1,Vect3(0.3,0.3,0.3)),
-                     Lambertian(1,Vect3(0.5,0.5,0.5)),
-                     Specular(200,Vect3(1,1,1)));
+                     Lambertian(0.25,Vect3(0.8,0.8,0.8)),
+                     Lambertian(0.6,Vect3(0.8,0.8,0.8)),
+                     Specular(0.2,5,Vect3(1,1,1)));
     Phong planeb(
-                 Lambertian(1,Vect3(0.2,0.2,0.2)),
-                 Lambertian(1,Vect3(0.4,0.4,0.4)),
-                 Specular(200,Vect3(1,1,1)));
+                 Lambertian(0.25,Vect3(0.8,0.8,0.8)),
+                 Lambertian(0.6,Vect3(0.8,0.8,0.8)),
+                 Specular(0.2,1,Vect3(1,1,1)));
     
     Phong planel(
-                 Lambertian(1,Vect3(0.3,0,0)),
-                 Lambertian(1,Vect3(0.5,0,0)),
-                Specular(200,Vect3(1,1,1)));
+                 Lambertian(0.25,Vect3(0.8,0,0)),
+                 Lambertian(0.6,Vect3(0.8,0,0)),
+                 Specular(0.2,5,Vect3(1,1,1)));
     Phong planer(
-                 Lambertian(1,Vect3(0,0.3,0)),
-                 Lambertian(1,Vect3(0,0.5,0)),
-                 Specular(200,Vect3(1,1,1)));
+                 Lambertian(0.25,Vect3(0,0.8,0)),
+                 Lambertian(0.5,Vect3(0,0.8,0)),
+                 Specular(0.2,5,Vect3(1,1,1)));
     
     Plane planeback(Vect3(0, 0, -20), Vect3(0,0,1),&planem);
     Plane planeleft(Vect3(-20, 0, 0), Vect3(1,0,0),&planel);
@@ -162,7 +171,7 @@ int main() {
 
     
 	//create objects.
-    std::list<Object*> objects;
+    std::vector<Object*> objects;
     objects.push_back(&sphere3);
 	objects.push_back(&sphere2);
     objects.push_back(&sphere);
@@ -174,7 +183,7 @@ int main() {
     
 
 	//create lights.
-    std::list<Light*> lights;
+    std::vector<Light*> lights;
 	//lights.push_back(&light);
     lights.push_back(&light2);
 
@@ -183,10 +192,14 @@ int main() {
 	for (x = 0; x < camera.height; x++) {
 		for (y = 0; y < camera.width; y++) {
 			//construct a ray for through this pixel.
-			Ray ray = camera.constructRay(x,y);
-            pixels[index++] = tr.trace(ray,objects, lights, 2);
+            Vect3 color;
+            for(int n = 0; n < camera.num_samples;n++){
+                Ray ray = camera.constructRay(x,y);
+                color = color + tr.trace(ray,objects, lights, 2);
+            }
+            pixels[index++] = color/(double)(camera.num_samples);
 		}
 	}
-    save_to_file("test.bmp", camera.width, camera.height, pixels);
+    save_to_file("test.ppm", camera.width, camera.height, pixels);
     return 0;
 }
