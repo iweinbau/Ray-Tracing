@@ -54,7 +54,7 @@ public:
     tracer tr;
     
 private:
-    static const int samples = 50;
+    static const int samples = 20;
     Glossy glossy;
 };
 #endif /* Reflective_h */

@@ -29,7 +29,7 @@ class Camera {
 public:
     //resolution in pixels.
     static const int width = 800, height = 800;
-    static const int num_samples = 5;
+    static const int num_samples = 10;
     Camera(Vect3 lookfrom, Vect3 lookat, double fovy):
     eye_(lookfrom),
     lookat_(lookat),
@@ -116,13 +116,13 @@ int main() {
 
 	//World setup
 	//PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
-    Light light2(Vect3(0.8, 0.8,0.8), Vect3(-5,0, 5),1);
+    Light light2(Vect3(0.8, 0.8,0.8), Vect3(-5,0, 5),3);
 
     Reflective phong(
                 Lambertian(0.25,Vect3(0.3,0.3,0.3)),
                 Lambertian(0.6,Vect3(0.4,0.4,0.4)),
                 Specular(0.2,5,Vect3(0.6,0.6,0.6)),
-                Glossy(0.9,50,Vect3(1,1,1)));
+                Glossy(0.9,10,Vect3(1,1,1)));
 
 	Sphere sphere(Vect3(3, 0, 0), 3, &phong);
     

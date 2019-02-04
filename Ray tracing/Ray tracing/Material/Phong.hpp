@@ -62,10 +62,10 @@ public:
                 }
             }
             if(!hit){
-                Vect3 df = diffuse.sample(hitinfo,lightDir)  * l->getIntensity(hitinfo);
                 Vect3 specularV;
-                Vect3 sp = specular.sample(hitinfo,lightDir,specularV) * l->getIntensity(hitinfo);
-                color = color + df + sp;
+                Vect3 sp = specular.sample(hitinfo,lightDir,specularV);
+                Vect3 df = (diffuse.sample(hitinfo,lightDir)+ sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * l->getIntensity(hitinfo);
+                color = color + df;
             }
         }
         return color;

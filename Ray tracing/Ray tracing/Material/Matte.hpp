@@ -56,7 +56,7 @@ public:
                 }
             }
             if(!hit){
-                Vect3 df = diffuse.sample(hitinfo,lightDir) * l->getIntensity(hitinfo);
+                Vect3 df = diffuse.sample(hitinfo,lightDir) * std::max(0.0,hitinfo.normal.dot(lightDir)) * l->getIntensity(hitinfo);
                 color = color + df;
             }
         }
