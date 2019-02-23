@@ -13,7 +13,6 @@
 
 class Plane : public Object {
 public:
-    const double kEpsilon = 0.001;
     Plane():
     Object()
     {}

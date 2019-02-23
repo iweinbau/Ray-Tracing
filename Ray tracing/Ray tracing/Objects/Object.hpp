@@ -9,10 +9,14 @@
 #ifndef Object_h
 #define Object_h
 
+#include "../vector3f.hpp"
+#include "../ray.hpp"
+
 class Material;
 
 class Object{
 public:
+    const double kEpsilon = 0.00001;
     Object():
     position(Vect3())
     {}

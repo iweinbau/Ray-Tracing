@@ -1,3 +1,3 @@
 all: 
-	g++ main.cpp -o raytracer
+	g++ ./Objects/Triangle.cpp main.cpp -o raytracer
 

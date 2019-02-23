@@ -12,6 +12,7 @@
 #include "vector3f.hpp"
 #include "ray.hpp"
 #include "./Objects/sphere.hpp"
+#include "./Objects/Triangle.hpp"
 #include "./Objects/Object.hpp"
 #include "./Objects/Plane.hpp"
 #include "./Material/Phong.hpp"
@@ -29,7 +30,7 @@ class Camera {
 public:
     //resolution in pixels.
     static const int width = 800, height = 800;
-    static const int num_samples = 10;
+    static const int num_samples = 1;
     Camera(Vect3 lookfrom, Vect3 lookat, double fovy):
     eye_(lookfrom),
     lookat_(lookat),
@@ -106,7 +107,7 @@ int main() {
     tracer tr;
 
     //construct a camera
-	Vect3 lookfrom = Vect3(0, 0, 10);
+	Vect3 lookfrom = Vect3(0, 0, 2);
 	Vect3 lookat = Vect3(0, 0, 0);
 	Camera camera(lookfrom, lookat, 90);
 
@@ -167,19 +168,20 @@ int main() {
     Plane planetop(Vect3(0, 20, 0), Vect3(0,-1,0),&planem);
 
 
-
+    Triangle tri(Vect3(0,1,0), Vect3(-1,0,0),Vect3(1,0,0),&phong2);
 
     
 	//create objects.
     std::vector<Object*> objects;
-    objects.push_back(&sphere3);
-	objects.push_back(&sphere2);
-    objects.push_back(&sphere);
-    objects.push_back(&planeback);
-    objects.push_back(&planeleft);
-    objects.push_back(&planeright);
-    objects.push_back(&planebottom);
-    objects.push_back(&planetop);
+    objects.push_back(&tri);
+//    objects.push_back(&sphere3);
+//    objects.push_back(&sphere2);
+//    objects.push_back(&sphere);
+//    objects.push_back(&planeback);
+//    objects.push_back(&planeleft);
+//    objects.push_back(&planeright);
+//    objects.push_back(&planebottom);
+//    objects.push_back(&planetop);
     
 
 	//create lights.
