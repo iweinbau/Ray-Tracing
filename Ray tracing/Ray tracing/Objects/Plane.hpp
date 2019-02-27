@@ -9,7 +9,9 @@
 #ifndef Plane_h
 #define Plane_h
 
-#include "../vector3f.hpp"
+#include "../Utils/Vect3.hpp"
+#include "Object.hpp"
+
 
 class Plane : public Object {
 public:
@@ -29,7 +31,7 @@ public:
     normal(plane.normal)
     {}
     
-    virtual bool hit(Ray& ray, Vect3& intersection, double& tmin){
+    virtual bool hit(Ray const& ray, Vect3& intersection, double& tmin){
         float t = (position - ray.origin_).dot(normal) / (ray.direction_.dot(normal));
         
         if (t > kEpsilon) {

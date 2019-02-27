@@ -10,6 +10,7 @@
 #define Lambertian_h
 
 #include "BRDF.hpp"
+#include "../Utils/Constants.hpp"
 
 class Lambertian:BRDF{
 public:

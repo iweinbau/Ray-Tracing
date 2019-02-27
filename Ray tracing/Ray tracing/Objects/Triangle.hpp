@@ -10,15 +10,16 @@
 #define Triangle_h
 
 #include "Object.hpp"
-#include "../vector3f.hpp"
-#include "../ray.hpp"
+#include "../Utils/Vect3.hpp"
+#include "../Utils/ray.hpp"
+
 
 class Triangle: public Object{
 public:
     Triangle();
-    Triangle(Vect3 const& v0,Vect3 const& v1, Vect3 const& v2,Material* material);
+    Triangle(Vect3 v0,Vect3 v1, Vect3 v2,Material* material);
     ~Triangle();
-    bool hit(Ray& ray, Vect3& intersection, double& tmin);
+    bool hit(Ray const& ray, Vect3& intersection, double& tmin);
     Vect3 getNormalAtPoint(Vect3 point);
 private:
     Vect3 _v0,_v1,_v2;

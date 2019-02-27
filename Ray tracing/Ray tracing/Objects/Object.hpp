@@ -9,10 +9,10 @@
 #ifndef Object_h
 #define Object_h
 
-#include "../vector3f.hpp"
-#include "../ray.hpp"
-
 class Material;
+
+#include "../Utils/Vect3.hpp"
+#include "../Utils/ray.hpp"
 
 class Object{
 public:
@@ -40,7 +40,7 @@ public:
         return (*this);
     }
     
-    virtual bool hit(Ray& ray, Vect3& intersection, double& tmin) = 0;
+    virtual bool hit(Ray const& ray, Vect3& intersection, double& tmin) = 0;
     
     virtual Vect3 getNormalAtPoint(Vect3 point) = 0;
     

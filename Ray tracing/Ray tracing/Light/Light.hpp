@@ -9,7 +9,8 @@
 #ifndef Light_h
 #define Light_h
 
-#include "../vector3f.hpp"
+#include "../Utils/Vect3.hpp"
+#include "../Utils/Hitinfo.hpp"
 
 class Light {
 public:
