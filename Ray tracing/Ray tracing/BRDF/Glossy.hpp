@@ -12,6 +12,10 @@
 #include <random>
 #include <iostream>
 
+#include "../Utils/Constants.hpp"
+#include "../BRDF/BRDF.hpp"
+
+
 class Glossy:BRDF{
 public:
     Glossy(): ks(1.0),cs(1,1,1)

@@ -11,6 +11,9 @@
 
 #include "../tracer.hpp"
 #include "../BRDF/Glossy.hpp"
+#include "../Material/Phong.hpp"
+
+#include "../Builder/World.hpp"
 
 class Reflective:public Phong{
 public:
@@ -41,20 +44,20 @@ public:
         return (*this);
     }
     
-    Vect3 shade(Hitinfo const& hitinfo,std::vector<Object*> const& objects,std::vector<Light*> const& lights,int depth){
-        Vect3 color = Phong::shade(hitinfo, objects, lights,depth);
+    Vect3 shade(Hitinfo const& hitinfo,World world,int depth){
+        Vect3 color = Phong::shade(hitinfo,world,depth);
         for (int i=0; i<samples; i++) {
             Vect3 reflection;
             Vect3 reflectance = glossy.sample_(hitinfo,reflection);
             Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
-            color = color + (tr.trace(reflectionRay, objects, lights,depth-1)*reflectance);
+            color = color + (tr.trace(reflectionRay,world,depth-1)*reflectance);
         }
         return color/samples;
     }
     tracer tr;
     
 private:
-    static const int samples = 50;
+    static const int samples = 20;
     Glossy glossy;
 };
 #endif /* Reflective_h */

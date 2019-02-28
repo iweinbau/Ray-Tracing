@@ -11,6 +11,8 @@
 
 #include "../tracer.hpp"
 #include "../BRDF/Specular.hpp"
+#include "Phong.hpp"
+
 
 class Mirror:public Phong{
 public:
@@ -41,12 +43,12 @@ public:
         return (*this);
     }
     
-    Vect3 shade(Hitinfo const& hitinfo,std::vector<Object*> const& objects,std::vector<Light*> const& lights,int depth){
-        Vect3 color = Phong::shade(hitinfo, objects, lights,depth);
+    Vect3 shade(Hitinfo const& hitinfo,World world,int depth){
+        Vect3 color = Phong::shade(hitinfo,world,depth);
         Vect3 reflection;
         specular.sample(hitinfo, hitinfo.direction.neg(), reflection);
         Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal* 0.001, reflection);
-        color = color + (tr.trace(reflectionRay, objects, lights,depth-1)*specular.color());
+        color = color + (tr.trace(reflectionRay,world,depth-1)*specular.color());
         return color;
     }
     tracer tr;

@@ -9,7 +9,8 @@
 #ifndef tracer_h
 #define tracer_h
 
-#include <vector>
+#include "./Material/Material.hpp"
+#include "./Builder/World.hpp"
 
 class tracer{
 public:
@@ -18,7 +19,7 @@ public:
     ~tracer()
     {}
     
-    Vect3 trace(Ray ray, std::vector<Object*> const& objects, std::vector<Light*> const& lights, int depth) {
+    Vect3 trace(Ray const& ray,World const& world,int depth) {
         
         if(depth <= 0){
             return Vect3(1,1,1);
@@ -35,7 +36,8 @@ public:
         Vect3 intersection;
         
         bool hit = false;
-        for(Object* obj : objects){
+        
+        for(Object* obj : world.objects){
             if (obj->hit(ray, intersection, t)) {
                 if (t < hitinfo.d) {
                     //we found a closer object.
@@ -49,7 +51,7 @@ public:
         }
         
         if (hit) {
-            return closest->shader_->shade(hitinfo, objects, lights,depth);
+            return closest->shader_->shade(hitinfo,world,depth);
         }
         return color;
     }

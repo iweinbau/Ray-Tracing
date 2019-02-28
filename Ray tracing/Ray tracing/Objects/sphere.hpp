@@ -11,9 +11,10 @@
 
 class Material;
 
-#include "../vector3f.hpp"
+#include "../Utils/Vect3.hpp"
 #include "Object.hpp"
-#include "../ray.hpp"
+#include "../Utils/ray.hpp"
+
 
 class Sphere : public Object{
 public:
@@ -42,7 +43,7 @@ public:
         return (*this);
     }
     
-    bool hit(Ray& ray, Vect3& intersection, double& tmin){
+    bool hit(Ray const& ray, Vect3& intersection, double& tmin){
         double t;
         Vect3    temp     = ray.origin_ - position;
         double         a         = ray.direction_.dot(ray.direction_);

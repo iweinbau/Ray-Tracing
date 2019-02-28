@@ -8,7 +8,7 @@
 #ifndef Hitinfo_h
 #define Hitinfo_h
 
-#include "vector3f.hpp"
+#include "./Vect3.hpp"
 
 
 class Hitinfo{

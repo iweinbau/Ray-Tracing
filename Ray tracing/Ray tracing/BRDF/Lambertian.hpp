@@ -10,6 +10,7 @@
 #define Lambertian_h
 
 #include "BRDF.hpp"
+#include "../Utils/Constants.hpp"
 
 class Lambertian:BRDF{
 public:
@@ -30,8 +31,7 @@ public:
     }
     // No sampling here just use the Bling-Phong light model
     Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld){
-        double intensity = std::max((double)0, ld.dot(hitinfo.normal));
-        return cd * kd * intensity;
+        return cd * kd * (1/PI);
     }
     
     Lambertian& operator= (Lambertian const& lam)

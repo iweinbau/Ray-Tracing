@@ -10,7 +10,7 @@
 #define pointLight_h
 
 #include "Light.hpp"
-#include "../Hitinfo.hpp"
+#include "../Utils/Hitinfo.hpp"
 #define PI 3.14159265
 
 

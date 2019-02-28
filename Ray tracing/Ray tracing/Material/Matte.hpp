@@ -10,6 +10,7 @@
 #define Matte_h
 
 #include "Material.hpp"
+ 
 class Matte: public Material{
 public:
     Matte():Material()
@@ -30,13 +31,13 @@ public:
     ~Matte()
     {}
     
-    virtual Vect3 shade(Hitinfo const& hitinfo,std::vector<Object*> const& objects,std::vector<Light*> const& lights,int depth){
+    virtual Vect3 shade(Hitinfo const& hitinfo,World world,int depth){
         
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
         Vect3 color = ambient.color();
         
-        for(Light* l : lights){
+        for(Light* l : world.lights){
             Vect3 lightDir = (l->getPosition() - hitinfo.point).normalize();
             
             //********* CAST SHADOW RAY ********** \\
@@ -47,7 +48,7 @@ public:
             double t;
             double maxt = (l->getPosition() - hitinfo.point).length();
             Vect3 tmp;
-            for(Object* obj : objects){
+            for(Object* obj : world.objects){
                 if (obj->hit(shadowray,tmp, t)) {
                     if(t < maxt){
                         hit = true;
@@ -56,7 +57,7 @@ public:
                 }
             }
             if(!hit){
-                Vect3 df = diffuse.sample(hitinfo,lightDir) * l->getIntensity(hitinfo);
+                Vect3 df = diffuse.sample(hitinfo,lightDir) * std::max(0.0,hitinfo.normal.dot(lightDir)) * l->getIntensity(hitinfo);
                 color = color + df;
             }
         }

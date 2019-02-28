@@ -9,8 +9,8 @@
 #ifndef BRDF_h
 #define BRDF_h
 
-#include "../vector3f.hpp"
-#include "../Hitinfo.hpp"
+#include "../Utils/Vect3.hpp"
+#include "../Utils/Hitinfo.hpp"
 
 class BRDF{
 public:
