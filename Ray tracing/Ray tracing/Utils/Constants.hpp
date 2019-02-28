@@ -11,6 +11,8 @@
 
 #define PI 3.14159265
 
+#define NUM_THREADS 10
+#define NUM_CHUNCKS 10
 
 
 #endif /* Constants_h */
