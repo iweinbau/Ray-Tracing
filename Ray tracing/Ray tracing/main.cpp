@@ -36,7 +36,7 @@ void save_to_file(std::string filename, int width, int height, Vect3 const* pixe
         (unsigned char)(std::min(std::max(pixels[i].y_, 0.0), 1.0) * 255) <<
         (unsigned char)(std::min(std::max(pixels[i].z_, 0.0), 1.0) * 255);
     }
-    
+
     ofs.close();
 }
 
@@ -67,20 +67,20 @@ int main() {
 	//image setup
 	const int size = camera.width * camera.height;
 	Vect3* pixels = new Vect3[size];
-    
+
     World builder;
-    
+
     builder.buildWorld();
-    
-    
+
+
     ThreadPool th_pool(NUM_THREADS);
     th_pool.init();
-    
+
     int chunck_width = camera.width/NUM_CHUNCKS;
     int chunck_height = camera.height/NUM_CHUNCKS;
-    
+
     std::vector<std::future<void>> res;
-    
+
     //create work for each chunk.
     for(int i=0;i<NUM_CHUNCKS;i++){
         for(int j=0;j<NUM_CHUNCKS;j++){
@@ -93,13 +93,13 @@ int main() {
                                     std::ref(pixels)));
         }
     }
-    
+
     for (int t=0; t<res.size(); t++) {
         res[t].get();
     }
-    
+
     th_pool.shutdown();
 
-    save_to_file("test", camera.width, camera.height, pixels);
+    save_to_file("out", camera.width, camera.height, pixels);
     return 0;
 }
