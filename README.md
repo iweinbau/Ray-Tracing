@@ -36,6 +36,9 @@ Removing the pixelated effect of sharp edges. For this I used per pixel sampling
 I provided a simple make file that compiles the code to an executable.
 
  1. Run `make` this creates a raytracer executable
- 2. Then run `./raytracer` to run the program
- 3. The output will be in an out.ppm file.
+ 
+ ### Command line options
+ There are 2 ways of rendering an immage. The first way is render the complete image. Then use `./raytracer NUM_THREADS` where NUM_THREADS is replaces with the number of threads. An other way is rendering a part of the image. Then you can specify the start pixel en en pixel as follow. `./raytracer NUM_THREADS start_width end_width start_height end_height`.
+ 
+The output will be in an out.ppm file.
 

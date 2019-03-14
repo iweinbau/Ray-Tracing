@@ -18,7 +18,7 @@ class Camera {
 public:
     //resolution in pixels.
     static const int width = 800, height = 800;
-    static const int num_samples = 1;
+    static const int num_samples = 10;
     Camera(Vect3 lookfrom, Vect3 lookat, double fovy);
     Camera();
     ~Camera();
@@ -37,7 +37,7 @@ public:
     v(c.v),
     n(c.n)
     {}
-    
+
     Camera& operator= (Camera const& c)
     {
         eye_ = c.eye_;

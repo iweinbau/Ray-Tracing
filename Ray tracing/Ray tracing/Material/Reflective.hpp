@@ -19,31 +19,31 @@ class Reflective:public Phong{
 public:
     Reflective():Phong()
     {}
-    
+
     Reflective(Reflective const& refl):
     Phong(refl.ambient,refl.diffuse,refl.specular),
     glossy(refl.glossy)
     {}
-    
+
     Reflective(Lambertian ambient, Lambertian diffuse, Specular specular,Glossy glossy):
     Phong(ambient,diffuse,specular),
     glossy(glossy)
     {}
-    
+
     ~Reflective()
     {}
-    
-    
+
+
     Reflective& operator= (Reflective const& r)
     {
         if(this == &r)
             return (*this);
-        
+
         Reflective::operator=(r);
         glossy = r.glossy;
         return (*this);
     }
-    
+
     Vect3 shade(Hitinfo const& hitinfo,World world,int depth){
         Vect3 color = Phong::shade(hitinfo,world,depth);
         for (int i=0; i<samples; i++) {
@@ -55,9 +55,9 @@ public:
         return color/samples;
     }
     tracer tr;
-    
+
 private:
-    static const int samples = 20;
+    static const int samples = 50;
     Glossy glossy;
 };
 #endif /* Reflective_h */
