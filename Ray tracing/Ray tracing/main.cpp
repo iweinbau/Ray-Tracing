@@ -65,6 +65,11 @@ int main(int argc, char* argv[]) {
     std::cout << "Give first arugment NUM_THREADS" << std::endl;
     return -1;
   }
+
+    if( argc <= 2){
+        std::cout << "Give second argument output file" << std::endl;
+        return -1;
+    }
   //variables for timing.
   auto start = std::chrono::high_resolution_clock::now();;
   auto end = std::chrono::high_resolution_clock::now();
@@ -79,13 +84,15 @@ int main(int argc, char* argv[]) {
 
   //get num thread from command line argument.
   int NUM_THREADS = std::stoi(argv[1]);
+    //get file name.
+    std::string _outFile = argv[2];
   //thread setup.
   ThreadPool th_pool(NUM_THREADS);
   th_pool.init();
 
   std::cout << "Basic Ray tracing!\n";
   // render hole image.
-  if( argc == 2 ){
+  if( argc == 3 ){
     int image_width = camera.width;
     int image_height = camera.height;
     //image setup
@@ -126,14 +133,16 @@ int main(int argc, char* argv[]) {
     std::cout << "Closing threads..."<<std::endl;
     th_pool.shutdown();
     std::cout << "Writing to image..."<<std::endl;
-    save_to_file("out", image_width, image_height, pixels);
+    save_to_file(_outFile, image_width, image_height, pixels);
+    std::cout << "Done!" << std::endl;
+      
   }else{
     //render only a part of the image.
     //define command line arugments.
-    int start_width = std::stoi(argv[2]);
-    int end_width = std::stoi(argv[3]);
-    int start_height = std::stoi(argv[4]);
-    int end_height = std::stoi(argv[5]);
+    int start_width = std::stoi(argv[3]);
+    int end_width = std::stoi(argv[4]);
+    int start_height = std::stoi(argv[5]);
+    int end_height = std::stoi(argv[6]);     
 
     int image_width=(end_width - start_width);
     int image_height=(end_height - start_height);
@@ -175,7 +184,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Closing threads..."<<std::endl;
     th_pool.shutdown();
     std::cout << "Writing to image..."<<std::endl;
-    save_to_file("out", image_width, image_height, pixels);
+    save_to_file(_outFile, image_width, image_height, pixels);
   }
   std::cout << "Done!"<<std::endl;
   return 0;
