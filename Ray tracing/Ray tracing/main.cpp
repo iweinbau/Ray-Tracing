@@ -22,6 +22,9 @@
 #include "tracer.hpp"
 #include "./Utils/Hitinfo.hpp"
 
+#include "./Builder/World.hpp"
+#include "./Builder/TriangleWorld.hpp"
+
 
 #include "./ThreadPool/ThreadPool.h"
 
@@ -79,7 +82,7 @@ int main(int argc, char* argv[]) {
 	Vect3 lookat = Vect3(0, 0, 0);
 	Camera camera(lookfrom, lookat, 90);
 
-  World builder;
+  TriangleWorld builder;
   builder.buildWorld();
 
   //get num thread from command line argument.
@@ -133,9 +136,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Closing threads..."<<std::endl;
     th_pool.shutdown();
     std::cout << "Writing to image..."<<std::endl;
-    save_to_file(_outFile, image_width, image_height, pixels);
-    std::cout << "Done!" << std::endl;
-      
+    save_to_file(_outFile, image_width, image_height, pixels);      
   }else{
     //render only a part of the image.
     //define command line arugments.
