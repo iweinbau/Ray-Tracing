@@ -38,7 +38,7 @@ I provided a simple make file that compiles the code to an executable.
  1. Run `make` this creates a raytracer executable
  
  ### Command line options
- There are 2 ways of rendering an immage. The first way is render the complete image. Then use `./raytracer NUM_THREADS` where NUM_THREADS is replaces with the number of threads. An other way is rendering a part of the image. Then you can specify the start pixel and end pixel as follows: `./raytracer NUM_THREADS start_width end_width start_height end_height`.
+ There are 2 ways of rendering an immage. The first way is render the complete image. Then use `./raytracer OUT_FILE_NAME NUM_THREADS` where NUM_THREADS is replaces with the number of threads and  OUT_FILE_NAME the output file without exention. An other way is rendering a part of the image. Then you can specify the start pixel and end pixel as follows: `./raytracer NUM_THREADS OUT_FILE_NAME start_width end_width start_height end_height`.
  
-The output will be in an out.ppm file.
+The output will be the OUT_FILE_NAME.ppm
 
