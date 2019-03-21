@@ -22,6 +22,9 @@
 #include "tracer.hpp"
 #include "./Utils/Hitinfo.hpp"
 
+#include "./Builder/World.hpp"
+#include "./Builder/TriangleWorld.hpp"
+
 
 #include "./ThreadPool/ThreadPool.h"
 
@@ -31,7 +34,7 @@ void save_to_file(std::string filename, int width, int height, Vect3 const* pixe
     std::ofstream ofs;
     ofs.open(filename.append(".ppm"), std::ios::out | std::ios::binary);
     ofs << "P6\n" << width << " " << height << "\n255\n";
-    for (int i = 0; i < height * width; ++i) {
+    for (int i = 0; i < height * width; i++) {
         ofs << (unsigned char)(std::min(std::max(pixels[i].x_,0.0), 1.0)  * 255) <<
         (unsigned char)(std::min(std::max(pixels[i].y_, 0.0), 1.0) * 255) <<
         (unsigned char)(std::min(std::max(pixels[i].z_, 0.0), 1.0) * 255);
@@ -47,15 +50,15 @@ void mul_render(int start_width, int start_height,
                 int width_offset=0, int height_offset=0){
     tracer tr;
     int x, y;
-    for (x = start_width; x < end_width; x++) {
-        for (y = start_height; y < end_height; y++) {
+    for (y = start_height; y < end_height; y++) {
+        for (x = start_width; x < end_width; x++) {
             //construct a ray for through this pixel.
             Vect3 color;
             for(int n = 0; n < camera.num_samples;n++){
-                Ray ray= camera.constructRay(x,y);
+                Ray ray= camera.constructRay(y,x);
                 color = color + tr.trace(ray,world, 2);
             }
-            pixels[height*(x-width_offset) +(y-height_offset)] = color/(double)(camera.num_samples);
+            pixels[width*(y-height_offset) +(x-width_offset)] = color/(double)(camera.num_samples);
         }
     }
 }
@@ -134,8 +137,6 @@ int main(int argc, char* argv[]) {
     th_pool.shutdown();
     std::cout << "Writing to image..."<<std::endl;
     save_to_file(_outFile, image_width, image_height, pixels);
-    std::cout << "Done!" << std::endl;
-      
   }else{
     //render only a part of the image.
     //define command line arugments.

@@ -17,7 +17,7 @@ class World{
 public:
     World();
     ~World();
-    void buildWorld();
+    virtual void buildWorld();
     void add_object(Object* obj);
     void add_Light(Light* l);
     
