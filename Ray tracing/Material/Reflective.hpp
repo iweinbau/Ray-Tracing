@@ -46,18 +46,17 @@ public:
 
     Vect3 shade(Hitinfo const& hitinfo,World world,int depth){
         Vect3 color = Phong::shade(hitinfo,world,depth);
-        for (int i=0; i<samples; i++) {
+        for (int i=0; i<NUM_SAMPLES; i++) {
             Vect3 reflection;
             Vect3 reflectance = glossy.sample_(hitinfo,reflection);
             Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
             color = color + (tr.trace(reflectionRay,world,depth-1)*reflectance);
         }
-        return color/samples;
+        return color/NUM_SAMPLES;
     }
     tracer tr;
 
 private:
-    static const int samples = 50;
     Glossy glossy;
 };
 #endif /* Reflective_h */
