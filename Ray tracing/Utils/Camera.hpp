@@ -18,7 +18,7 @@ class Camera {
 public:
     //resolution in pixels.
     static const int width = 800, height = 800;
-    Camera(Vect3 lookfrom, Vect3 lookat, double fovy);
+    Camera(Point3 lookfrom, Vect3 lookat, double fovy);
     Camera();
     ~Camera();
     Ray constructRay(int i, int j);
@@ -56,7 +56,7 @@ public:
 private:
     const double distance_ = 1;
     //the position of the camera;
-    Vect3 eye_;
+    Point3 eye_;
     Vect3 up_;
     Vect3 lookat_;
     Vect3 direction_;

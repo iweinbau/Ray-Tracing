@@ -77,8 +77,8 @@ int main(int argc, char* argv[]) {
   auto end = std::chrono::high_resolution_clock::now();
 
     //construct a camera
-	Vect3 lookfrom = Vect3(0, 0, 10);
-	Vect3 lookat = Vect3(0, 0, 0);
+	Point3 lookfrom(0, 0, 10);
+	Vect3 lookat(0, 0, 0);
 	Camera camera(lookfrom, lookat, 90);
 
   World builder;

@@ -16,7 +16,7 @@ Camera::~Camera(){};
 
 //Constructor
 Camera::Camera(){};
-Camera::Camera(Vect3 lookfrom, Vect3 lookat, double fovy):
+Camera::Camera(Point3 lookfrom, Vect3 lookat, double fovy):
 eye_(lookfrom),
 lookat_(lookat),
 fovy_(fovy),

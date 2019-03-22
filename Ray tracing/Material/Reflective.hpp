@@ -48,7 +48,7 @@ public:
         Vect3 color = Phong::shade(hitinfo,world,depth);
         Vect3 reflection;
         Vect3 reflectance = glossy.sample_(hitinfo,reflection);
-        Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal, reflection);
+        Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal)*0.0001, reflection);
         color = color + (tr.trace(reflectionRay,world,depth-1)*reflectance);
         return color;
     }

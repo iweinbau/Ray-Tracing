@@ -29,14 +29,14 @@ public:
     
     //perfect reflection
     Vect3 sample(Hitinfo const& hitinfo,Vect3& r){
-        r = hitinfo.direction - ( hitinfo.normal * 2 * hitinfo.direction.dot(hitinfo.normal));
+        r = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
         return cs * ks;
     }
     
     //glossy reflection.
     Vect3 sample_(Hitinfo const& hitinfo,Vect3& out){
         
-        Vect3 r = hitinfo.direction - ( hitinfo.normal * 2 * hitinfo.direction.dot(hitinfo.normal));
+        Vect3 r = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
         
         Vect3 w = r;
         Vect3 u = Vect3(0.00424, 1, 0.00764).cross(w);

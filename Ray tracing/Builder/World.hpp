@@ -10,6 +10,8 @@
 #define World_h
 
 #include <vector>
+#include "../Utils/Vect3.hpp"
+#include "../Utils/Normal.hpp"
 #include "../Objects/Object.hpp"
 #include "../Light/Light.hpp"
 

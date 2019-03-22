@@ -12,18 +12,20 @@
 #include "Object.hpp"
 #include "../Utils/Vect3.hpp"
 #include "../Utils/ray.hpp"
+#include "../Utils/Normal.hpp"
+
 
 
 class Triangle: public Object{
 public:
     Triangle();
-    Triangle(Vect3 v0,Vect3 v1, Vect3 v2,Material* material);
+    Triangle(Point3 v0,Point3 v1, Point3 v2,Material* material);
+    Triangle(Point3 v0,Point3 v1, Point3 v2);
     ~Triangle();
-    bool hit(Ray const& ray, Vect3& intersection, double& tmin);
-    Vect3 getNormalAtPoint(Vect3 point);
+    bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
 private:
-    Vect3 _v0,_v1,_v2;
-    Vect3 _normal;
+    Point3 _v0,_v1,_v2;
+    Normal _normal;
 };
 
 #endif /* Triangle_h */

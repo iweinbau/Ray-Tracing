@@ -9,20 +9,29 @@
 #include "Triangle.hpp"
 #include "../Utils/Vect3.hpp"
 #include "../Utils/ray.hpp"
+#include "../Utils/Normal.hpp"
+
 
 
 Triangle::Triangle(){
     
 }
-Triangle::Triangle(Vect3 v0,Vect3  v1, Vect3  v2,Material* material):Object((v0+v1+v2)/3,material),
+Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2,Material* material):Object((v0+v1+v2)/3,material),
 _v0(v0),
 _v1(v1),
 _v2(v2),
-_normal((v1-v0).cross(v2-v0).normalize())
+_normal((Vect3(v1-v0)).cross(v2-v0).normalize())
+{}
+
+Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2):Object((v0+v1+v2)/3),
+_v0(v0),
+_v1(v1),
+_v2(v2),
+_normal((Vect3(v1-v0)).cross(v2-v0).normalize())
 {}
 Triangle::~Triangle(){}
 
-bool Triangle::hit(Ray const& ray, Vect3& intersection, double& tmin){
+bool Triangle::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
     double a = _v0.x_ - _v1.x_, b = _v0.x_ - _v2.x_, c = ray.direction_.x_, d = _v0.x_ - ray.origin_.x_;
     double e = _v0.y_ - _v1.y_, f = _v0.y_ - _v2.y_, g = ray.direction_.y_, h = _v0.y_ - ray.origin_.y_;
     double i = _v0.z_ - _v1.z_, j = _v0.z_ - _v2.z_, k = ray.direction_.z_, l = _v0.z_ - ray.origin_.z_;
@@ -56,9 +65,7 @@ bool Triangle::hit(Ray const& ray, Vect3& intersection, double& tmin){
     
     tmin                 = t;
     intersection     = ray.origin_ + ray.direction_ *t;
+    normal = _normal;
     
     return (true);
-}
-Vect3 Triangle::getNormalAtPoint(Vect3 point){
-    return _normal;
 }

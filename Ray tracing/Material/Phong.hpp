@@ -50,14 +50,15 @@ public:
             
             //********* CAST SHADOW RAY ********** \\
             //cast shadow ray to check if the object is in shadow.
-            Ray shadowray(hitinfo.point + hitinfo.normal * 0.0001,lightDir);
+            Ray shadowray(hitinfo.point + Vect3(hitinfo.normal) * 0.0001,lightDir);
             
             bool hit = false;
             double t;
             double maxt = (l->getPosition() - hitinfo.point).length();
-            Vect3 tmp;
+            Point3 tmp;
+            Normal tmp2;
             for(Object* obj : world.objects){
-                if (obj->hit(shadowray,tmp, t)) {
+                if (obj->hit(shadowray,tmp, t,tmp2)) {
                     if(t < maxt){
                         hit = true;
                         break;
