@@ -43,7 +43,8 @@ bool Instance::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& no
     
     if(object->hit(inv_ray, intersection, tmin,normal)){
         intersection = ray.origin_ + ray.direction_ * tmin;
-        normal.normalize();
+        normal = invTransform * normal;
+        normal = normal.normalize();
         return true;
     }
     return false;
