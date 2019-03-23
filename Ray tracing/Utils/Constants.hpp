@@ -10,8 +10,8 @@
 #define Constants_h
 
 #define PI 3.14159265
-#define NUM_SAMPLES 10
-#define NUM_CHUNCKS 5
+#define NUM_SAMPLES 1
+#define NUM_CHUNCKS 10
 
 
 #endif /* Constants_h */

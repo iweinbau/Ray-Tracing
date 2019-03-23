@@ -46,7 +46,7 @@ void World::buildWorld(){
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 
     Instance* s = new Instance(sphere,phong);
-    s->scale(Vect3(1,3,1));
+    s->scale(Vect3(3));
     s->translate(Vect3(3, 0, 0));
     
     Instance* s2 = new Instance(sphere,phong2);

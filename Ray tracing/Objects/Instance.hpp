@@ -10,8 +10,7 @@
 #define Instance_hpp
 
 #include "Object.hpp"
-#include "../Utils/Matrix.hpp"
-#include "../Utils/Normal.hpp"
+#include "../Utils/Transform.hpp"
 class Instance : public Object{
 public:
     Instance();
@@ -22,7 +21,7 @@ public:
     void scale(Vect3 const& scale);
 private:
     Object* object;
-    Matrix4 invTransform;
+    Transform transform;
 };
 
 #endif /* Instance_hpp */
