@@ -32,6 +32,10 @@ Also see Fig 1 for a comparison.
 
 Removing the pixelated effect of sharp edges. For this I used per pixel sampling, cast multiple rays randomly spread in each pixel. This doesn't give us the best result, because rays can group together, but it's easy to understand.
 
+## Transforming
+
+There is support for transforming objects using a transformation matrix. This is used in combination with instancing (resusing objects with diffrent transfomations), This limit memory usage. 
+
 ## Running the code
 I provided a simple make file that compiles the code to an executable.
 
