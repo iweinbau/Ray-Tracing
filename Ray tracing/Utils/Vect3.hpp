@@ -5,51 +5,41 @@
 #include <iostream>
 #include <algorithm>
 
+class Point3;
+class Normal;
+
 class Vect3 {
 public:
     double x_;
     double y_;
     double z_;
     
-    Vect3():x_(0),y_(0),z_(0)
-    {}
+    Vect3();
     
-    Vect3(double x, double y, double z):x_(x),y_(y),z_(z)
-    {}
+    Vect3(double x, double y, double z);
     
-    Vect3(Vect3 const &v):x_(v.x_),y_(v.y_),z_(v.z_)
-    {}
+    Vect3(double x);
+
     
-    ~Vect3(){}
-    Vect3& operator= (Vect3 const& v){
-        x_ = v.x_; y_ = v.y_; z_=v.z_;
-        return(*this);
-    }
+    Vect3(Vect3 const &v);
     
-    double length() {
-        return (sqrt(x_ * x_ + y_ * y_ + z_ * z_));
-    }
+    Vect3(Point3 const& p);
     
-    Vect3 normalize() {
-        double mag = length();
-        return Vect3(x_ /mag, y_ / mag, z_ /mag);
-    }
+    Vect3(Normal const& p);
+
     
-    Vect3 neg() const{
-        return Vect3(-x_,-y_,-z_);
-    }
+    ~Vect3();
+    Vect3& operator= (Vect3 const& v);
     
-    double dot(Vect3 const& other) const {
-        return(x_ * other.x_ + y_ * other.y_ + z_ * other.z_);
-    }
+    double length();
     
-    Vect3 cross(Vect3 other) {
-        double x = y_ * other.z_ - z_ * other.y_;
-        double y = z_ * other.x_ - x_ * other.z_;
-        double z = x_ * other.y_ - y_ * other.x_;
-        
-        return Vect3(x, y, z);
-    }
+    Vect3 normalize();
+    
+    Vect3 neg() const;
+    
+    double dot(Vect3 const& other)const;
+    
+    Vect3 cross(Vect3 other);
     
     void print()
     {

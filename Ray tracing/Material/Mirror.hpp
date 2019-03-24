@@ -47,7 +47,7 @@ public:
         Vect3 color = Phong::shade(hitinfo,world,depth);
         Vect3 reflection;
         specular.sample(hitinfo, hitinfo.direction.neg(), reflection);
-        Ray reflectionRay = Ray(hitinfo.point + hitinfo.normal* 0.001, reflection);
+        Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal) * 0.001, reflection);
         color = color + (tr.trace(reflectionRay,world,depth-1)*specular.color());
         return color;
     }

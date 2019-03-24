@@ -33,16 +33,17 @@ public:
         hitinfo.d = INFINITY;
         
         Object* closest = nullptr;
-        Vect3 intersection;
+        Point3 intersection;
+        Normal normal;
         
         bool hit = false;
         
         for(Object* obj : world.objects){
-            if (obj->hit(ray, intersection, t)) {
+            if (obj->hit(ray, intersection, t, normal)) {
                 if (t < hitinfo.d) {
                     //we found a closer object.
                     hitinfo.point = intersection;
-                    hitinfo.normal = obj->getNormalAtPoint(intersection);
+                    hitinfo.normal = normal;
                     hitinfo.d = t;
                     closest = obj;
                     hit = true;

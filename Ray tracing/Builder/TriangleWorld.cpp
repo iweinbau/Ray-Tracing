@@ -11,6 +11,7 @@
 #include "./TriangleWorld.hpp"
 #include "../Objects/Triangle.hpp"
 #include "../Material/Phong.hpp"
+#include "../Objects/Instance.hpp"
 
 void TriangleWorld::buildWorld(){
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
@@ -25,8 +26,11 @@ void TriangleWorld::buildWorld(){
     
     //    Triangle(Vect3 v0,Vect3 v1, Vect3 v2,Material* material);
     // Triangle vertices are defined counter clock wise.
-    Triangle* tri = new Triangle(Vect3(0, 2, 3), Vect3(-2, 0, 3),Vect3(2, 0, 3), phong);
+    Triangle* tri = new Triangle(Point3(0, 2, 3), Point3(-2, 0, 3),Point3(2, 0, 3));
     
-    add_object(tri);
+    Instance* instance = new Instance(tri,phong);
+    instance->translate(Vect3(3,0,0));
+    
+    add_object(instance);
     
 }

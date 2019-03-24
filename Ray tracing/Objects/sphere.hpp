@@ -12,6 +12,7 @@
 class Material;
 
 #include "../Utils/Vect3.hpp"
+#include "../Utils/Normal.hpp"
 #include "Object.hpp"
 #include "../Utils/ray.hpp"
 
@@ -24,8 +25,12 @@ public:
     Sphere():Object()
     {}
     
-    Sphere(Vect3 position, double radius, Material* material):
+    Sphere(Point3 position, double radius, Material* material):
     Object(position,material),radius_(radius)
+    {}
+    
+    Sphere(Point3 position, double radius):
+    Object(position),radius_(radius)
     {}
     
     Sphere(Sphere const& sphere):
@@ -43,7 +48,7 @@ public:
         return (*this);
     }
     
-    bool hit(Ray const& ray, Vect3& intersection, double& tmin){
+    bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
         double t;
         Vect3    temp     = ray.origin_ - position;
         double         a         = ray.direction_.dot(ray.direction_);
@@ -61,6 +66,7 @@ public:
             if (t > kEpsilon) {
                 tmin = t;
                 intersection = ray.origin_ + (ray.direction_ * t);
+                normal = Normal(Vect3(intersection - position).normalize());
                 return (true);
             }
             
@@ -69,6 +75,7 @@ public:
             if (t > kEpsilon) {
                 tmin = t;
                 intersection = ray.origin_ + (ray.direction_ * t);
+                normal = Normal(Vect3(intersection - position).normalize());
                 return (true);
             }
         }
@@ -76,8 +83,5 @@ public:
         return (false);
     }
     
-    Vect3 getNormalAtPoint(Vect3 point) {
-        return (point - position).normalize();
-    }
 };
 #endif /* sphere_h */

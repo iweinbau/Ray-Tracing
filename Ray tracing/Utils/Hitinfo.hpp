@@ -8,15 +8,13 @@
 #ifndef Hitinfo_h
 #define Hitinfo_h
 
-#include "./Vect3.hpp"
-
-
+#include "Vect3.hpp"
 class Hitinfo{
 public:
     Hitinfo()
     {}
     
-    Hitinfo(Vect3& normal, Vect3& point, Vect3& direction,double distance):
+    Hitinfo(Vect3& normal, Point3& point, Vect3& direction,double distance):
     normal(normal),
     point(point),
     direction(direction),
@@ -28,7 +26,7 @@ public:
     
     double d;
     Vect3 normal;
-    Vect3 point;
+    Point3 point;
     Vect3 direction;
     
 };

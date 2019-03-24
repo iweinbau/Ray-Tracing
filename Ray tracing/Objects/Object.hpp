@@ -12,17 +12,29 @@
 class Material;
 
 #include "../Utils/Vect3.hpp"
+#include "../Utils/Point3.hpp"
 #include "../Utils/ray.hpp"
+#include "../Utils/Normal.hpp"
+
 
 class Object{
 public:
     const double kEpsilon = 0.00001;
     Object():
-    position(Vect3())
+    position(Point3())
     {}
     
-    Object(Vect3 position,Material* material):
+    Object(Point3 position):
+    position(position)
+    {}
+    
+    Object(Point3 position,Material* material):
     position(position),
+    shader_(material)
+    {}
+    
+    Object(Material* material):
+    position(),
     shader_(material)
     {}
 
@@ -40,13 +52,15 @@ public:
         return (*this);
     }
     
-    virtual bool hit(Ray const& ray, Vect3& intersection, double& tmin) = 0;
+    Material* getShader(){
+        return shader_;
+    }
     
-    virtual Vect3 getNormalAtPoint(Vect3 point) = 0;
-    
+    virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal) = 0;
+        
 public:
     Material* shader_;
-    Vect3 position;
+    Point3 position;
     
 };
 

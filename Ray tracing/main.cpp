@@ -21,6 +21,7 @@
 #include "./Light/pointLight.hpp"
 #include "tracer.hpp"
 #include "./Utils/Hitinfo.hpp"
+#include "./pngWriter/lodepng.h"
 
 #include "./Builder/World.hpp"
 #include "./Builder/TriangleWorld.hpp"
@@ -30,17 +31,15 @@
 
 void save_to_file(std::string filename, int width, int height, Vect3 const* pixels)
 {
-    // save frame buffer to file
-    std::ofstream ofs;
-    ofs.open(filename.append(".ppm"), std::ios::out | std::ios::binary);
-    ofs << "P6\n" << width << " " << height << "\n255\n";
-    for (int i = 0; i < height * width; i++) {
-        ofs << (unsigned char)(std::min(std::max(pixels[i].x_,0.0), 1.0)  * 255) <<
-        (unsigned char)(std::min(std::max(pixels[i].y_, 0.0), 1.0) * 255) <<
-        (unsigned char)(std::min(std::max(pixels[i].z_, 0.0), 1.0) * 255);
-    }
-
-    ofs.close();
+  std::vector<unsigned char> image;
+  image.resize(width * height * 4);
+  for (unsigned i = 0; i < height * width; i++) {
+    image[i * 4 +0] = std::min(std::max(pixels[i].x_,0.0), 1.0)  * 255;
+    image[i * 4 +1] = std::min(std::max(pixels[i].y_,0.0), 1.0)  * 255;
+    image[i * 4 +2] = std::min(std::max(pixels[i].z_,0.0), 1.0)  * 255;
+    image[i * 4 +3] = 255;
+  }
+  lodepng::encode(filename.append(".png"),image,width,height);
 }
 
 
@@ -54,11 +53,11 @@ void mul_render(int start_width, int start_height,
         for (x = start_width; x < end_width; x++) {
             //construct a ray for through this pixel.
             Vect3 color;
-            for(int n = 0; n < camera.num_samples;n++){
+            for(int n = 0; n < NUM_SAMPLES;n++){
                 Ray ray= camera.constructRay(y,x);
                 color = color + tr.trace(ray,world, 2);
             }
-            pixels[width*(y-height_offset) +(x-width_offset)] = color/(double)(camera.num_samples);
+            pixels[width*(y-height_offset) +(x-width_offset)] = color/(double)(NUM_SAMPLES);
         }
     }
 }
@@ -78,8 +77,8 @@ int main(int argc, char* argv[]) {
   auto end = std::chrono::high_resolution_clock::now();
 
     //construct a camera
-	Vect3 lookfrom = Vect3(0, 0, 10);
-	Vect3 lookat = Vect3(0, 0, 0);
+	Point3 lookfrom(0, 0, 10);
+	Vect3 lookat(0, 0, 0);
 	Camera camera(lookfrom, lookat, 90);
 
   World builder;
@@ -143,7 +142,7 @@ int main(int argc, char* argv[]) {
     int start_width = std::stoi(argv[3]);
     int end_width = std::stoi(argv[4]);
     int start_height = std::stoi(argv[5]);
-    int end_height = std::stoi(argv[6]);     
+    int end_height = std::stoi(argv[6]);
 
     int image_width=(end_width - start_width);
     int image_height=(end_height - start_height);

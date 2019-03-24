@@ -9,9 +9,11 @@
 #ifndef ray_h
 #define ray_h
 
+#include "Point3.hpp"
+
 class Ray {
 public:
-    Ray(Vect3 origin, Vect3 direction):origin_(origin), direction_(direction)
+    Ray(Point3 origin, Vect3 direction):origin_(origin), direction_(direction)
     {}
     
     Ray(Ray const& ray):origin_(ray.origin_),direction_(ray.direction_)
@@ -28,7 +30,7 @@ public:
     {}
     
     //the origin point of the ray.
-    Vect3 origin_;
+    Point3 origin_;
     //the direction the ray is going.
     Vect3 direction_;
 };
