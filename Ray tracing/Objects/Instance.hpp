@@ -19,6 +19,9 @@ public:
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
     void translate(Vect3 const& vect);
     void scale(Vect3 const& scale);
+    void rotateX(double d);
+    void rotateY(double d);
+    void rotateZ(double d);
 private:
     Object* object;
     Transform transform;

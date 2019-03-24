@@ -50,7 +50,7 @@ void World::buildWorld(){
     s->translate(Vect3(3, 0, 0));
     
     Instance* s2 = new Instance(sphere,phong2);
-    s2->scale(Vect3(2));
+    s2->scale(Vect3(2,3,2));
     s2->translate(Vect3(-3, -2, -5));
     
     Instance* s3 = new Instance(sphere,phong3);
