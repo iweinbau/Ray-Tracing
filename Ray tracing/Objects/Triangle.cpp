@@ -71,5 +71,6 @@ bool Triangle::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& no
 }
 
 Box Triangle::caluclateBoundingBox(){
-  return Box();
+    return Box(Point3(std::min(std::min(_v0.x_,_v1.x_),_v2.x_),std::min(std::min(_v0.y_,_v1.y_),_v2.y_),std::min(std::min(_v0.z_,_v1.z_),_v2.z_)),
+        Point3(std::max(std::max(_v0.x_,_v1.x_),_v2.x_),std::max(std::max(_v0.y_,_v1.y_),_v2.y_),std::max(std::max(_v0.z_,_v1.z_),_v2.z_)));
 };
