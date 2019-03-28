@@ -20,34 +20,37 @@ public:
     Plane():
     Object()
     {}
-    
+
     Plane(Point3 position, Normal normal,Material* shader):
     Object(position,shader),
     normal_(normal.normalize()){}
-    
+
     Plane(Point3 position, Normal normal):
     Object(position),
     normal_(normal.normalize()){}
-    
+
     Plane(Plane const& plane):
     Object(plane.position,plane.shader_),
     normal_(plane.normal_)
     {}
-    
+
     virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
         float t = (Vect3(position - ray.origin_)).dot(normal_) / (ray.direction_.dot(normal_));
-        
+
         if (t > kEpsilon) {
             tmin = t;
             intersection = ray.origin_ + (ray.direction_ * t);
             normal = normal_;
             return (true);
         }
-        
+
         return(false);
     };
-    
-    
+    Box caluclateBoundingBox(){
+      return Box();
+    };
+
+
 public:
     Normal normal_;
 };

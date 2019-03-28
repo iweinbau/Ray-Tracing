@@ -19,35 +19,34 @@ class Material;
 
 class Sphere : public Object{
 public:
-    const double kEpsilon = 0.001;
     double radius_;
-    
+
     Sphere():Object()
     {}
-    
+
     Sphere(Point3 position, double radius, Material* material):
     Object(position,material),radius_(radius)
     {}
-    
+
     Sphere(Point3 position, double radius):
     Object(position),radius_(radius)
     {}
-    
+
     Sphere(Sphere const& sphere):
     Object(sphere.position,sphere.shader_),
     radius_(sphere.radius_)
     {}
-    
+
     Sphere& operator= (Sphere const& sphere){
         if(this == &sphere)
             return (*this);
-        
+
         Object::operator=(sphere);
-        
+
         radius_ = sphere.radius_;
         return (*this);
     }
-    
+
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
         double t;
         Vect3    temp     = ray.origin_ - position;
@@ -55,23 +54,23 @@ public:
         double         b         = 2 * temp.dot(ray.direction_);
         double         c         = temp.dot(temp) - radius_ * radius_;
         double         disc    = b * b - 4.0 * a * c;
-        
+
         if (disc < 0.0)
             return(false);
         else {
             double e = sqrt(disc);
             double denom = 2.0 * a;
             t = (-b - e) / denom;    // smaller root
-            
+
             if (t > kEpsilon) {
                 tmin = t;
                 intersection = ray.origin_ + (ray.direction_ * t);
                 normal = Normal(Vect3(intersection - position).normalize());
                 return (true);
             }
-            
+
             t = (-b + e) / denom;    // larger root
-            
+
             if (t > kEpsilon) {
                 tmin = t;
                 intersection = ray.origin_ + (ray.direction_ * t);
@@ -79,9 +78,13 @@ public:
                 return (true);
             }
         }
-        
+
         return (false);
     }
-    
+
+    Box caluclateBoundingBox(){
+      return Box(Point3(position - radius_), Point3(position + radius_));
+    };
+
 };
 #endif /* sphere_h */

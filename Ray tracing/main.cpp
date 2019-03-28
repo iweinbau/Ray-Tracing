@@ -6,6 +6,7 @@
 #include <utility>
 #include <functional>
 
+#include "./Utils/Constants.hpp"
 #include "./Utils/Camera.hpp"
 #include "./Utils/Vect3.hpp"
 #include "./Utils/ray.hpp"

@@ -41,7 +41,7 @@ bool Instance::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& no
     Ray inv_ray(ray);
     inv_ray.direction_ = transform.globalToLocal(ray.direction_);
     inv_ray.origin_ = transform.globalToLocal(ray.origin_);
-    
+
     if(object->hit(inv_ray, intersection, tmin,normal)){
         intersection = transform.localToGlobal(intersection);
         normal = transform.localToGlobal(normal);
@@ -51,4 +51,6 @@ bool Instance::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& no
     return false;
 }
 
-
+Box Instance::caluclateBoundingBox(){
+  return object->caluclateBoundingBox();
+};

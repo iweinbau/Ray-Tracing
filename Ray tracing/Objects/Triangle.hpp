@@ -21,6 +21,7 @@ public:
     Triangle();
     Triangle(Point3 v0,Point3 v1, Point3 v2,Material* material);
     Triangle(Point3 v0,Point3 v1, Point3 v2);
+    Box caluclateBoundingBox();
     ~Triangle();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
 private:
