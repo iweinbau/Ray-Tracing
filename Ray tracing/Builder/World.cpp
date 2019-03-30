@@ -18,6 +18,8 @@
 #include "../Objects/Plane.hpp"
 #include "../Objects/Instance.hpp"
 
+#include "../Light/pointLight.hpp"
+
 
 //Constructor
 World::World(){}
@@ -27,7 +29,7 @@ void World::buildWorld(){
     //World setup
     
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
-    Light* light2 = new Light(Vect3(0.8, 0.8,0.8), Vect3(-5,0, 5),3);
+    PointLight* light2 = new PointLight(Vect3(0.8, 0.8,0.8), Vect3(-5,0, 5),3);
     
     Reflective* phong = new Reflective(
                      Lambertian(0.25,Vect3(0.3,0.3,0.3)),

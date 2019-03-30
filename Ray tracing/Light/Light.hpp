@@ -39,7 +39,7 @@ public:
     }
     
     Vect3 virtual getIntensity(Hitinfo const& hitinfo){
-        return color_ * i_;
+        return Vect3();
     };
     
 private:

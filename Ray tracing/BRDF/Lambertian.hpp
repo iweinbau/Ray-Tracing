@@ -25,10 +25,10 @@ public:
     
     Vect3 color()
     {
-        //Just return black
         return cd * kd;
         
     }
+    
     // No sampling here just use the Bling-Phong light model
     Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld){
         return cd * kd * (1/PI);

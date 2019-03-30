@@ -30,14 +30,16 @@
 
 #include "./ThreadPool/ThreadPool.h"
 
+double g = 1.8;
+
 void save_to_file(std::string filename, int width, int height, Vect3 const* pixels)
 {
   std::vector<unsigned char> image;
   image.resize(width * height * 4);
   for (unsigned i = 0; i < height * width; i++) {
-    image[i * 4 +0] = std::min(std::max(pixels[i].x_,0.0), 1.0)  * 255;
-    image[i * 4 +1] = std::min(std::max(pixels[i].y_,0.0), 1.0)  * 255;
-    image[i * 4 +2] = std::min(std::max(pixels[i].z_,0.0), 1.0)  * 255;
+      image[i * 4 +0] = std::pow(std::min(std::max(pixels[i].x_,0.0), 1.0),1.0/g)  * 255;
+    image[i * 4 +1] = std::pow(std::min(std::max(pixels[i].y_,0.0), 1.0),1.0/g)  * 255;
+    image[i * 4 +2] = std::pow(std::min(std::max(pixels[i].z_,0.0), 1.0),1.0/g)  * 255;
     image[i * 4 +3] = 255;
   }
   lodepng::encode(filename.append(".png"),image,width,height);
