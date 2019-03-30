@@ -11,5 +11,6 @@ public:
   Box();
   ~Box();
   bool hit(Ray const& ray);
+    Point3 * getVertices(Point3 v[8]);
 };
 #endif
