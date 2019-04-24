@@ -33,7 +33,8 @@ public:
     }
     
     Vect3 virtual getIntensity(Hitinfo const& hitinfo){
-        return (color_ * i_);
+        double attenuation = 1 / (hitinfo.d * hitinfo.d);
+        return (color_ * i_ * attenuation);
     }
 };
 #endif /* pointLight_h */

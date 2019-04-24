@@ -34,7 +34,7 @@ public:
     }
     
     //glossy reflection.
-    Vect3 sample_(Hitinfo const& hitinfo,Vect3& out){
+    Vect3 sample_(Hitinfo const& hitinfo,Vect3& out,double& pdf){
         
         Vect3 r = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
         
@@ -64,8 +64,12 @@ public:
         
         if (hitinfo.normal.dot(out) < 0.0)                         // reflected ray is below tangent plane
             out = u * - pu + v * -pv + w * pw;
+        
+        pdf = 1;
     
-        return cs * ks ;
+        double lobe = std::pow(r.dot(out),e);
+        pdf = lobe * hitinfo.normal.dot(out);
+        return cs * ks * lobe;
         
     }
     

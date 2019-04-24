@@ -47,7 +47,6 @@ public:
         
         for(Light* l : world.lights){
             Vect3 lightDir = (l->getPosition() - hitinfo.point).normalize();
-            
             //********* CAST SHADOW RAY ********** \\
             //cast shadow ray to check if the object is in shadow.
             Ray shadowray(hitinfo.point + Vect3(hitinfo.normal) * 0.0001,lightDir);
@@ -55,21 +54,24 @@ public:
             bool hit = false;
             double t;
             double maxt = (l->getPosition() - hitinfo.point).length();
-            Point3 tmp;
-            Normal tmp2;
+            Point3 intersection;
+            Normal normal;
             for(Object* obj : world.objects){
-                if (obj->hit(shadowray,tmp, t,tmp2)) {
+                if (obj->hit(shadowray,intersection, t,normal)) {
                     if(t < maxt){
+                        //we found a closer object.
                         hit = true;
                         break;
                     }
                 }
             }
             if(!hit){
+                Hitinfo lightHit;
+                lightHit.d = maxt;
                 Vect3 specularV;
                 Vect3 sp = specular.sample(hitinfo,lightDir,specularV);
-                Vect3 df = (diffuse.sample(hitinfo,lightDir)+ sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * l->getIntensity(hitinfo);
-                color = color + df;
+                Vect3 df = diffuse.sample(hitinfo,lightDir);
+                color = color + (df + sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * l->getIntensity(lightHit);
             }
         }
         return color;

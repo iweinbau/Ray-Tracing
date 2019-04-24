@@ -29,13 +29,13 @@ void World::buildWorld(){
     //World setup
     
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
-    PointLight* light2 = new PointLight(Vect3(0.8, 0.8,0.8), Vect3(-5,0, 5),3);
+    PointLight* light2 = new PointLight(Vect3(1), Vect3(-1,0,0),10);
     
     Reflective* phong = new Reflective(
                      Lambertian(0.25,Vect3(0.3,0.3,0.3)),
                      Lambertian(0.6,Vect3(0.4,0.4,0.4)),
                      Specular(0.2,5,Vect3(0.6,0.6,0.6)),
-                     Glossy(0.9,10,Vect3(1,1,1)));
+                     Glossy(0.9,1000,Vect3(1,1,1)));
     Phong* phong2 = new Phong(
                               Lambertian(1,Vect3(0.0,0.3,0)),
                               Lambertian(0.6,Vect3(0,1,0)),
@@ -78,11 +78,11 @@ void World::buildWorld(){
                  Lambertian(0.5,Vect3(0,0.8,0)),
                  Specular(0.2,5,Vect3(1,1,1)));
     
-    Plane* planeback = new Plane(Point3(0, 0, -20), Normal(0,0,1),planem);
-    Plane* planeleft = new Plane(Point3(-20, 0, 0), Normal(1,0,0),planel);
-    Plane* planeright = new Plane(Point3(20, 0, 0), Normal(-1,0,0),planer);
-    Plane* planebottom = new Plane(Point3(0, -10, 0), Normal(0,1,0),planeb);
-    Plane* planetop =  new Plane(Point3(0, 20, 0), Normal(0,-1,0),planem);
+    Plane* planeback = new Plane(Point3(0, 0, -5), Normal(0,0,1),planem);
+    Plane* planeleft = new Plane(Point3(-5, 0, 0), Normal(1,0,0),planel);
+    Plane* planeright = new Plane(Point3(5, 0, 0), Normal(-1,0,0),planer);
+    Plane* planebottom = new Plane(Point3(0, -5, 0), Normal(0,1,0),planeb);
+    Plane* planetop =  new Plane(Point3(0, 5, 0), Normal(0,-1,0),planem);
     
     
     add_object(s3);
