@@ -13,34 +13,34 @@ public:
     double x_;
     double y_;
     double z_;
-    
+
     Vect3();
-    
+
     Vect3(double x, double y, double z);
-    
+
     Vect3(double x);
 
-    
+
     Vect3(Vect3 const &v);
-    
+
     Vect3(Point3 const& p);
-    
+
     Vect3(Normal const& p);
 
-    
+
     ~Vect3();
     Vect3& operator= (Vect3 const& v);
-    
+
     double length();
-    
+
     Vect3 normalize();
-    
+
     Vect3 neg() const;
-    
+
     double dot(Vect3 const& other)const;
-    
+
     Vect3 cross(Vect3 other);
-    
+
     void print()
     {
         std::cout << x_ << '/' << y_ << '/' << z_<< std::endl;

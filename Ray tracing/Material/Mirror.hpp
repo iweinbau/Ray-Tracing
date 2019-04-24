@@ -18,32 +18,32 @@ class Mirror:public Phong{
 public:
     Mirror():Phong()
     {}
-    
+
     Mirror(Mirror const& mirror):
     Phong(mirror.ambient,mirror.diffuse,mirror.specular),
     specular(mirror.specular)
     {}
-    
+
     Mirror(Lambertian ambient, Lambertian diffuse, Specular specular,Specular reflection):
     Phong(ambient,diffuse,specular),
     specular(reflection)
     {}
-    
+
     ~Mirror()
     {}
-    
-    
+
+
     Mirror& operator= (Mirror const& r)
     {
         if(this == &r)
             return (*this);
-        
+
         Phong::operator=(r);
         specular = r.specular;
         return (*this);
     }
-    
-    Vect3 shade(Hitinfo const& hitinfo,World world,int depth){
+
+    Vect3 shade(Hitinfo const& hitinfo,World const& world,int depth){
         Vect3 color = Phong::shade(hitinfo,world,depth);
         Vect3 reflection;
         specular.sample(hitinfo, hitinfo.direction.neg(), reflection);
@@ -52,7 +52,7 @@ public:
         return color;
     }
     tracer tr;
-    
+
 private:
     Specular specular;
 };
