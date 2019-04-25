@@ -30,7 +30,7 @@
 
 #include "./ThreadPool/ThreadPool.h"
 
-double g = 1.8;
+double g = 1;
 
 void save_to_file(std::string filename, int width, int height, Vect3 const* pixels)
 {

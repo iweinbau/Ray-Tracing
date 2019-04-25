@@ -13,6 +13,7 @@
 #include "../Utils/Hitinfo.hpp"
 
 class World;
+class Ray;
 class Light {
 public:
     Light(Vect3 color,double i):
