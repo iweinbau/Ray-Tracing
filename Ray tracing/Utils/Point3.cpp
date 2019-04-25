@@ -13,6 +13,9 @@
 Point3::Point3():x_(0),y_(0),z_(0)
 {}
 
+Point3::Point3(Vect3 vect):x_(vect.x_),y_(vect.y_),z_(vect.z_)
+{}
+
 Point3::Point3(double x, double y, double z):x_(x),y_(y),z_(z)
 {}
 

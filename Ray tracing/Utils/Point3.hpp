@@ -16,23 +16,26 @@ public:
     double x_;
     double y_;
     double z_;
-    
+
     Point3();
+
+    Point3(Vect3);
+    
     Point3(double x, double y, double z);
-    
+
     Point3(Point3 const &v);
-    
+
     ~Point3();
-    
+
     Point3& operator= (Point3 const& v);
-    
+
     Point3 neg() const;
-    
+
     void print()
     {
         std::cout << x_ << '/' << y_ << '/' << z_<< std::endl;
     }
-    
+
 };
 
 inline Point3 operator + (const Point3 & v1, const Vect3& v2) {

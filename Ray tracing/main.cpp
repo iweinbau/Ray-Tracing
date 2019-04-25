@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
 	Vect3 lookat(0, 0, 0);
 	Camera camera(lookfrom, lookat, 90);
 
-  World builder;
+  TriangleWorld builder;
   builder.buildWorld();
 
   //get num thread from command line argument.

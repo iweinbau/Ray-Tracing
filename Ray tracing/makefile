@@ -1,2 +1,2 @@
 all:
-	g++ ./Light/Directional.cpp ./Objects/Triangle.cpp ./Objects/Instance.cpp ./Objects/Box.cpp ./Utils/Camera.cpp ./Utils/Vect3.cpp ./Utils/Matrix.cpp ./Utils/Transform.cpp ./Utils/Normal.cpp ./Utils/Point3.cpp ./Builder/TriangleWorld.cpp ./Builder/World.cpp ./pngWriter/lodepng.cpp main.cpp -pthread -O3 -std=c++11 -o raytracer
+	g++ ./Light/Directional.cpp ./Objects/Triangle.cpp ./Objects/Instance.cpp ./Objects/Box.cpp ./Utils/Camera.cpp ./Utils/Vect3.cpp ./Utils/Matrix.cpp ./Utils/Transform.cpp ./Utils/Normal.cpp ./Utils/Point3.cpp ./Builder/TriangleWorld.cpp ./Builder/World.cpp ./pngWriter/lodepng.cpp ./3D-Model-Parser/OBJ-Loader/Mesh/Mesh.cpp ./3D-Model-Parser/OBJ-Loader/Loader/OBJLoader.cpp main.cpp -pthread -O3 -std=c++11 -o raytracer
