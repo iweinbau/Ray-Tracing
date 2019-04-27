@@ -38,6 +38,7 @@ void World::buildWorld(){
                      Lambertian(0.6,Vect3(0.4,0.4,0.4)),
                      Specular(0.2,5,Vect3(0.6,0.6,0.6)),
                      Glossy(0.9,1000,Vect3(1,1,1)));
+    
     Phong* phong2 = new Phong(
                               Lambertian(1,Vect3(0.0,0.3,0)),
                               Lambertian(0.6,Vect3(0,1,0)),

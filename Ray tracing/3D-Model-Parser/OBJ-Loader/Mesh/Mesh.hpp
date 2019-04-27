@@ -19,7 +19,7 @@ class Mesh {
 public:
     // Constructor
     Mesh();
-    Mesh(std::string const& name,
+    Mesh(bool smoothShading,std::string const& name,
                std::vector<Vect3> const& positions,
                std::vector<Vect3> const& normals,
                std::vector<Vect2> const& UVs,
@@ -31,6 +31,7 @@ public:
     }
 
 public:
+    bool smoothShading;
     std::string _name;
     std::vector<Vect3> _positions;
     std::vector<Vect3> _normals;

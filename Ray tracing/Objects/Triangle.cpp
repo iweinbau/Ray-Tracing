@@ -31,6 +31,11 @@ _normal((Vect3(v1-v0)).cross(v2-v0).normalize())
 {}
 Triangle::~Triangle(){}
 
+Normal Triangle::calculate_normal(double gamma, double beta){
+    return (Vect3(_v1-_v0)).cross(_v2-_v0).normalize();
+}
+
+
 bool Triangle::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
     double a = _v0.x_ - _v1.x_, b = _v0.x_ - _v2.x_, c = ray.direction_.x_, d = _v0.x_ - ray.origin_.x_;
     double e = _v0.y_ - _v1.y_, f = _v0.y_ - _v2.y_, g = ray.direction_.y_, h = _v0.y_ - ray.origin_.y_;
@@ -65,7 +70,7 @@ bool Triangle::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& no
 
     tmin                 = t;
     intersection     = ray.origin_ + ray.direction_ *t;
-    normal = _normal;
+    normal = calculate_normal(gamma, beta);
 
     return (true);
 }

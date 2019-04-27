@@ -41,6 +41,7 @@ namespace MeshLoader {
         std::cout << "Parsing obj-file: "<<filePath << std::endl;
 
         //constuct mesh data.
+        bool smoothShading = false;
         std::string obj_name;
         std::vector<Vertex> vertices;
         std::vector<Vect3> Positions;
@@ -56,6 +57,16 @@ namespace MeshLoader {
 
             //for now we just print the line
             std::cout << currentLine << std::endl;
+            
+            if(algorithm::startsWith(currentLine, "s ")){
+                std::vector<std::string> line_split = algorithm::split(currentLine,' ');
+                if( line_split[1] == std::string("off")){
+                    smoothShading = false;
+                }else if(line_split[1] == std::string("1")){
+                    //enalbe smooth shading;
+                    smoothShading = true;
+                }
+            }
 
             //check if the line starts with v -> vertex.
             if(algorithm::startsWith(currentLine, "o ")){
@@ -206,7 +217,7 @@ namespace MeshLoader {
         }
 
         //Load mesh data.
-        _mesh = Mesh(obj_name, Positions, Normals, UVs, V_indices);
+        _mesh = Mesh(smoothShading,obj_name, Positions, Normals, UVs, V_indices);
 
         //return true, succes.
         return true;

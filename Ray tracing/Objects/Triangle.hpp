@@ -21,10 +21,11 @@ public:
     Triangle();
     Triangle(Point3 v0,Point3 v1, Point3 v2,Material* material);
     Triangle(Point3 v0,Point3 v1, Point3 v2);
+    Normal virtual calculate_normal(double gamma, double beta);
     Box caluclateBoundingBox();
     ~Triangle();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
-private:
+protected:
     Point3 _v0,_v1,_v2;
     Normal _normal;
 };
