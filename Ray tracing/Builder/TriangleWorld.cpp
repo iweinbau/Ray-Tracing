@@ -38,24 +38,7 @@ void TriangleWorld::buildWorld(){
     objLoader.loadMesh("./Objects/cube.obj");
     Mesh mesh = objLoader.getLoadedMesh();
     
-    Grid* grid = new Grid();
-
-    for(int i= 0;i<mesh._indices.size();i=i+3){
-        Triangle* tri;
-        if(mesh.smoothShading){
-            tri = new SmoothTriangle(Point3(mesh._positions[mesh._indices[i]]),
-                                           Point3(mesh._positions[mesh._indices[i+1]]),
-                                           Point3(mesh._positions[mesh._indices[i+2]]),reflective);
-        }else{
-            tri = new Triangle(Point3(mesh._positions[mesh._indices[i]]),
-                                         Point3(mesh._positions[mesh._indices[i+1]]),
-                                         Point3(mesh._positions[mesh._indices[i+2]]),reflective);
-        }
-        
-        grid->add_object(tri);
-    }
-    
-    grid->constructCells();
+    Grid* grid = new Grid(mesh,reflective);
     
     Instance* instance = new Instance(grid,reflective);
     instance->scale(Vect3(2,1,1));
