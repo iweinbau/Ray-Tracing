@@ -10,9 +10,10 @@
 #define Light_h
 
 #include "../Utils/Vect3.hpp"
-#include "../Utils/Hitinfo.hpp"
 
+class Hitinfo;
 class World;
+
 class Ray;
 class Light {
 public:

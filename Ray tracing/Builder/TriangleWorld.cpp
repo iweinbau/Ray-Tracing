@@ -8,12 +8,13 @@
 
 #include <stdio.h>
 
+#include "./TriangleWorld.hpp"
+
 #include "../3D-Model-Parser/OBJ-Loader/Loader/MeshLoader.hpp"
 #include "../3D-Model-Parser/OBJ-Loader/Mesh/Mesh.hpp"
 
-#include "./TriangleWorld.hpp"
 #include "../Objects/Plane.hpp"
-#include "../Light/pointLight.hpp"
+
 #include "../Objects/Triangle.hpp"
 #include "../Objects/SmoothTriangle.hpp"
 #include "../Objects/Grid.hpp"
@@ -22,17 +23,22 @@
 #include "../Material/Mirror.hpp"
 #include "../Objects/Instance.hpp"
 
+#include "../Light/AreaLight.hpp"
+
+
 void TriangleWorld::buildWorld(){
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
-    PointLight* light = new PointLight(Vect3(1), Vect3(0,0, 5),10);
+    
+    Sphere* s = new Sphere(Vect3(0,0, 2), 1);
+    AreaLight* light = new AreaLight(s,Vect3(1),10);
 
     add_Light(light);
 
-    Reflective * reflective = new Reflective(
+    Phong * reflective = new Phong(
                                        Lambertian(0.25,Vect3(0.3)),
                                        Lambertian(0.6,Vect3(0.4)),
-                                       Specular(0.2,5,Vect3(0.6)),
-                                     Glossy(1,10,Vect3(1,1,1)));
+                                   Specular(0.2,5,Vect3(0.6)));//,
+                                     //Glossy(1,10,Vect3(1,1,1)));
 
     MeshLoader::OBJLoader objLoader;
     objLoader.loadMesh("./Objects/cube.obj");

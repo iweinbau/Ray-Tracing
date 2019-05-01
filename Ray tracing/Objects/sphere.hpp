@@ -11,6 +11,9 @@
 
 class Material;
 
+#include <random>
+
+
 #include "../Utils/Vect3.hpp"
 #include "../Utils/Normal.hpp"
 #include "Object.hpp"
@@ -82,6 +85,28 @@ public:
         }
 
         return (false);
+    }
+    
+    Vect3 sample(){
+        std::random_device rd;  //Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+        std::uniform_real_distribution<> dis(0.0, 1.0);
+        
+        double theta = 2 * PI * dis(gen);
+        double phi = acos(1 - 2 * dis(gen));
+        double x = sin(phi) * cos(theta);
+        double y = sin(phi) * sin(theta);
+        double z = cos(phi);
+        
+        return Vect3(x,y,z) + position;
+    }
+    
+    double pdf(){
+        return 1/(4 * PI * radius_ *radius_);
+    }
+    
+    Vect3 getNormal(Vect3 point){
+        return (point - position).normalize();
     }
 
     Box caluclateBoundingBox(){

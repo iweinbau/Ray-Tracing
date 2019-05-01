@@ -12,6 +12,9 @@
 #include "./Material/Material.hpp"
 #include "./Builder/World.hpp"
 
+#include "./Utils/ray.hpp"
+#include "./Objects/Object.hpp"
+
 class tracer{
 public:
     tracer()

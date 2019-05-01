@@ -11,7 +11,7 @@
 
 #define PI 3.14159265
 #define kEpsilon 0.001
-#define NUM_SAMPLES 5
+#define NUM_SAMPLES 50
 #define NUM_CHUNCKS 10
 
 

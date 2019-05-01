@@ -20,6 +20,7 @@
 
 #include "../Light/pointLight.hpp"
 #include "../Light/Directional.hpp"
+#include "../Light/AreaLight.hpp"
 
 
 

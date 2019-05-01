@@ -10,16 +10,7 @@
 #include "./Utils/Camera.hpp"
 #include "./Utils/Vect3.hpp"
 #include "./Utils/ray.hpp"
-#include "Material/Material.hpp"
-#include "./Objects/sphere.hpp"
-#include "./Objects/Triangle.hpp"
-#include "./Objects/Object.hpp"
-#include "./Objects/Plane.hpp"
-#include "./Material/Phong.hpp"
-#include "./Material/Reflective.hpp"
-#include "./Material/Mirror.hpp"
-#include "./Light/Light.hpp"
-#include "./Light/pointLight.hpp"
+
 #include "tracer.hpp"
 #include "./Utils/Hitinfo.hpp"
 #include "./pngWriter/lodepng.h"
@@ -37,9 +28,9 @@ void save_to_file(std::string filename, int width, int height, Vect3 const* pixe
   std::vector<unsigned char> image;
   image.resize(width * height * 4);
   for (unsigned i = 0; i < height * width; i++) {
-      image[i * 4 +0] = std::pow(std::min(std::max(pixels[i].x_,0.0), 1.0),1.0/g)  * 255;
-    image[i * 4 +1] = std::pow(std::min(std::max(pixels[i].y_,0.0), 1.0),1.0/g)  * 255;
-    image[i * 4 +2] = std::pow(std::min(std::max(pixels[i].z_,0.0), 1.0),1.0/g)  * 255;
+      image[i * 4 +0] = pow(std::min(std::max(pixels[i].x_,0.0), 1.0),1.0/g)  * 255;
+    image[i * 4 +1] = pow(std::min(std::max(pixels[i].y_,0.0), 1.0),1.0/g)  * 255;
+    image[i * 4 +2] = pow(std::min(std::max(pixels[i].z_,0.0), 1.0),1.0/g)  * 255;
     image[i * 4 +3] = 255;
   }
   lodepng::encode(filename.append(".png"),image,width,height);

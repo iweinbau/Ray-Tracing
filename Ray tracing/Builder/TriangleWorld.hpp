@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "World.hpp"
 
+
 class TriangleWorld: public World{
 public:
     virtual void buildWorld();

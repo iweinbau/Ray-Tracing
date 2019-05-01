@@ -43,6 +43,18 @@ public:
         return shader_;
     }
     
+    Vect3 virtual sample(){
+        return Vect3();
+    }
+    
+    Vect3 virtual getNormal(Vect3 point){
+        return Vect3();
+    }
+    
+    double virtual pdf(){
+        return 0;
+    }
+    
     void add_object(Object* object){}
     virtual Box caluclateBoundingBox() = 0;
     virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal) = 0;

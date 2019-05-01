@@ -12,8 +12,9 @@
 #include <vector>
 #include "../Utils/Vect3.hpp"
 #include "../Utils/Normal.hpp"
-#include "../Objects/Object.hpp"
-#include "../Light/Light.hpp"
+
+class Light;
+class Object;
 
 class World{
 public:

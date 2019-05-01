@@ -55,7 +55,8 @@ public:
                 Vect3 specularV;
                 Vect3 sp = specular.sample(hitinfo,lightDir,specularV);
                 Vect3 df = diffuse.sample(hitinfo,lightDir);
-                color = color + (df + sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * l->getIntensity(hitinfo);
+                Vect3 li = l->getIntensity(hitinfo);
+                color = color + (df + sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * li;
             }
         }
         return color;
