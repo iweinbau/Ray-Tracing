@@ -29,7 +29,7 @@
 void TriangleWorld::buildWorld(){
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
     
-    Sphere* s = new Sphere(Vect3(0,0, 2), 1);
+    Sphere* s = new Sphere(Vect3(0,0, 4), 1);
     AreaLight* light = new AreaLight(s,Vect3(1),10);
 
     add_Light(light);
@@ -37,7 +37,7 @@ void TriangleWorld::buildWorld(){
     Phong * reflective = new Phong(
                                        Lambertian(0.25,Vect3(0.3)),
                                        Lambertian(0.6,Vect3(0.4)),
-                                   Specular(0.2,5,Vect3(0.6)));//,
+                                   Specular(0.9,5,Vect3(0.6)));//,
                                      //Glossy(1,10,Vect3(1,1,1)));
 
     MeshLoader::OBJLoader objLoader;
