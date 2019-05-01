@@ -22,23 +22,24 @@
 #include "../Material/Reflective.hpp"
 #include "../Material/Mirror.hpp"
 #include "../Objects/Instance.hpp"
-
+#include "../Objects/Rectangle.hpp"
 #include "../Light/AreaLight.hpp"
 
 
 void TriangleWorld::buildWorld(){
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
-    
-    Sphere* s = new Sphere(Vect3(0,0, 4), 1);
-    AreaLight* light = new AreaLight(s,Vect3(1),10);
-
-    add_Light(light);
 
     Phong * reflective = new Phong(
                                        Lambertian(0.25,Vect3(0.3)),
                                        Lambertian(0.6,Vect3(0.4)),
                                    Specular(0.9,5,Vect3(0.6)));//,
                                      //Glossy(1,10,Vect3(1,1,1)));
+    
+    Rectangle* r = new Rectangle(Vect3(-5,5,-5),Vect3(10,0,0),Vect3(0,0,10));
+    AreaLight* light = new AreaLight(r,Vect3(1),200);
+    add_Light(light);
+    
+    
 
     MeshLoader::OBJLoader objLoader;
     objLoader.loadMesh("./Objects/cube.obj");
@@ -47,9 +48,11 @@ void TriangleWorld::buildWorld(){
     Grid* grid = new Grid(mesh,reflective);
     
     Instance* instance = new Instance(grid,reflective);
-    instance->scale(Vect3(2,1,1));
+    instance->scale(Vect3(2,2,2));
     instance->rotateY(45);
     instance->rotateX(45);
+    instance->translate(Vect3(0,0,2));
+
     
     Phong* planem = new Phong(
                               Lambertian(0.25,Vect3(0.8,0.8,0.8)),
@@ -73,13 +76,13 @@ void TriangleWorld::buildWorld(){
     Plane* planeleft = new Plane(Point3(-5, 0, 0), Normal(1,0,0),planel);
     Plane* planeright = new Plane(Point3(5, 0, 0), Normal(-1,0,0),planer);
     Plane* planebottom = new Plane(Point3(0, -5, 0), Normal(0,1,0),planeb);
-    Plane* planetop =  new Plane(Point3(0, 5, 0), Normal(0,-1,0),planem);
+    //Plane* planetop =  new Plane(Point3(0, 5, 0), Normal(0,-1,0),planem);
     
     add_object(planeback);
     add_object(planeleft);
     add_object(planeright);
     add_object(planebottom);
-    add_object(planetop);
+    //add_object(planetop);
     add_object(instance);
 
 }
