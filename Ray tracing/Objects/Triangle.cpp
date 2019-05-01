@@ -16,14 +16,14 @@
 Triangle::Triangle(){
 
 }
-Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2,Material* material):Object((v0+v1+v2)/3,material),
+Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2,Material* material):Object(material),
 _v0(v0),
 _v1(v1),
 _v2(v2),
 _normal((Vect3(v1-v0)).cross(v2-v0).normalize())
 {}
 
-Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2):Object((v0+v1+v2)/3),
+Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2):Object(),
 _v0(v0),
 _v1(v1),
 _v2(v2),
@@ -76,6 +76,6 @@ bool Triangle::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& no
 }
 
 Box Triangle::caluclateBoundingBox(){
-    return Box(Point3(std::min(std::min(_v0.x_,_v1.x_),_v2.x_),std::min(std::min(_v0.y_,_v1.y_),_v2.y_),std::min(std::min(_v0.z_,_v1.z_),_v2.z_)),
-        Point3(std::max(std::max(_v0.x_,_v1.x_),_v2.x_),std::max(std::max(_v0.y_,_v1.y_),_v2.y_),std::max(std::max(_v0.z_,_v1.z_),_v2.z_)));
+    return Box(Point3(std::min(std::min(_v0.x_,_v1.x_),_v2.x_)- kEpsilon,std::min(std::min(_v0.y_,_v1.y_),_v2.y_)- kEpsilon,std::min(std::min(_v0.z_,_v1.z_),_v2.z_)- kEpsilon),
+        Point3(std::max(std::max(_v0.x_,_v1.x_),_v2.x_)+ kEpsilon,std::max(std::max(_v0.y_,_v1.y_)+ kEpsilon,_v2.y_),std::max(std::max(_v0.z_,_v1.z_),_v2.z_))+ kEpsilon);
 };

@@ -49,7 +49,6 @@ public:
     }
 
     bool virtual shadow_hit(Ray const& ray,World const& world){
-      bool hit = false;
       double t;
       double maxt = (position_ - ray.origin_).length();
       Point3 intersection;
@@ -57,7 +56,6 @@ public:
       for(Object* obj : world.objects){
           if (obj->hit(ray,intersection, t,normal)) {
               if(t < maxt){
-                  //we found a closer object.
                   return true;
               }
           }

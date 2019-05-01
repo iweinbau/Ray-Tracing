@@ -122,9 +122,34 @@ namespace MeshLoader {
                 std::vector<std::string> vertex1 = algorithm::split(line_split[1],'/');
                 std::vector<std::string> vertex2 = algorithm::split(line_split[2],'/');
                 std::vector<std::string> vertex3 = algorithm::split(line_split[3],'/');
+                                
+                if(vertex1.size() <= 1){
+                    //VERTEX 1
+                    Vect3 position = Positions[std::stoi(vertex1[0])-1];
+                    Vertex v1(position);
+                    vertices.push_back(v1);
+                    
+                    //VERTEX 2
+                    position = Positions[std::stoi(vertex2[0])-1];
+                    Vertex v2(position);
+                    vertices.push_back(v2);
+                    
+                    //VERTEX 3
+                    position = Positions[std::stoi(vertex3[0])-1];
+                    Vertex v3(position);
+                    vertices.push_back(v3);
+                    
+                    //Add to Indices array.
+                    //calculate the index number
+                    //The 3 comes from 3 vertices per face.
+                    unsigned int index = vertices.size() - 3;
+                    V_indices.push_back(index);
+                    V_indices.push_back(index+1);
+                    V_indices.push_back(index+2);
+                }
 
                 //check if T exist.
-                if(vertex1[1] == ""){
+                else if(vertex1[1] == ""){
                     //NO Uv
                     //V -> index in the positions array.
                     //N -> index in the normals array.

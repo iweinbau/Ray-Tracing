@@ -25,15 +25,16 @@ public:
     {}
 
     Sphere(Point3 position, double radius, Material* material):
-    Object(position,material),radius_(radius)
+    Object(material),radius_(radius)
     {}
 
     Sphere(Point3 position, double radius):
-    Object(position),radius_(radius)
+    Object(),position(position),radius_(radius)
     {}
 
     Sphere(Sphere const& sphere):
-    Object(sphere.position,sphere.shader_),
+    Object(sphere.shader_),
+    position(sphere.position),
     radius_(sphere.radius_)
     {}
 
@@ -42,7 +43,8 @@ public:
             return (*this);
 
         Object::operator=(sphere);
-
+        
+        position = sphere.position;
         radius_ = sphere.radius_;
         return (*this);
     }
@@ -85,6 +87,7 @@ public:
     Box caluclateBoundingBox(){
       return Box(Point3(position - radius_), Point3(position + radius_));
     };
-
+private:
+    Point3 position;
 };
 #endif /* sphere_h */

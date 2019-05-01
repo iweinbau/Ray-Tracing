@@ -22,15 +22,18 @@ public:
     {}
 
     Plane(Point3 position, Normal normal,Material* shader):
-    Object(position,shader),
+    Object(shader),
+    position(position),
     normal_(normal.normalize()){}
 
     Plane(Point3 position, Normal normal):
-    Object(position),
+    Object(),
+    position(position),
     normal_(normal.normalize()){}
 
     Plane(Plane const& plane):
-    Object(plane.position,plane.shader_),
+    Object(plane.shader_),
+    position(plane.position),
     normal_(plane.normal_)
     {}
 
@@ -53,6 +56,8 @@ public:
 
 public:
     Normal normal_;
+private:
+    Point3 position;
 };
 
 #endif /* Plane_h */

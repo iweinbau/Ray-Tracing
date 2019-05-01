@@ -22,34 +22,19 @@ class Material;
 
 class Object{
 public:
-    Object():
-    position(Point3())
-    {}
-
-    Object(Point3 position):
-    position(position)
-    {}
-
-    Object(Point3 position,Material* material):
-    position(position),
-    shader_(material)
-    {}
+    Object(){}
 
     Object(Material* material):
-    position(),
     shader_(material)
     {}
 
     Object(Object const& obj):
-    position(obj.position),
     shader_(obj.shader_)
     {}
 
     Object& operator= (Object const& obj){
         if(this == &obj)
             return (*this);
-
-        position = obj.position;
         shader_ = obj.shader_;
         return (*this);
     }
@@ -57,14 +42,13 @@ public:
     Material* getShader(){
         return shader_;
     }
-
+    
+    void add_object(Object* object){}
     virtual Box caluclateBoundingBox() = 0;
     virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal) = 0;
 
 public:
     Material* shader_;
-    Point3 position;
-
 };
 
 #endif /* Object_h */

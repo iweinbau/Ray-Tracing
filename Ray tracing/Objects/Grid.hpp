@@ -11,18 +11,23 @@
 
 #include <vector>
 #include "Object.hpp"
+#include "Box.hpp"
+#include "Composite.hpp"
 
-class Grid{
+class Grid:public Object{
 public:
     Grid();
     ~Grid();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
+    Box caluclateBoundingBox();
     void add_object(Object* object);
     void constructCells();
 private:
+    Box bbox;
     int Mx,My,Mz;
+    int density=5;
     std::vector<Object*> objects;
-    std::vector<Object*> cells;
+    std::vector<Composite*> cells;
 };
 
 #endif /* Grid_hpp */

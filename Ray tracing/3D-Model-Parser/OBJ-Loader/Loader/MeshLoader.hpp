@@ -37,6 +37,9 @@ namespace MeshLoader {
     public:
         Vertex():
         _pos(),_normal(),_uv(){}
+        
+        Vertex(Vect3 pos):
+        _pos(pos),_normal(),_uv(){}
 
         Vertex(Vect3 pos, Vect3 normal, Vect2 uv):
         _pos(pos),

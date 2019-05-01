@@ -16,25 +16,29 @@
 #include "../Light/pointLight.hpp"
 #include "../Objects/Triangle.hpp"
 #include "../Objects/SmoothTriangle.hpp"
+#include "../Objects/Grid.hpp"
 #include "../Material/Phong.hpp"
 #include "../Material/Reflective.hpp"
+#include "../Material/Mirror.hpp"
 #include "../Objects/Instance.hpp"
 
 void TriangleWorld::buildWorld(){
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
-    PointLight* light = new PointLight(Vect3(1), Vect3(0,0, 3),10);
+    PointLight* light = new PointLight(Vect3(1), Vect3(0,0, 5),10);
 
     add_Light(light);
 
     Reflective * reflective = new Reflective(
-                                       Lambertian(0.25,Vect3(0.3,0.3,0.3)),
-                                       Lambertian(0.6,Vect3(0.4,0.4,0.4)),
-                                       Specular(0.2,5,Vect3(0.6,0.6,0.6)),
-                                       Glossy(0.9,10,Vect3(1,1,1)));
+                                       Lambertian(0.25,Vect3(0.3)),
+                                       Lambertian(0.6,Vect3(0.4)),
+                                       Specular(0.2,5,Vect3(0.6)),
+                                     Glossy(1,10,Vect3(1,1,1)));
 
     MeshLoader::OBJLoader objLoader;
-    objLoader.loadMesh("./Objects/sphereS.obj");
+    objLoader.loadMesh("./Objects/cube.obj");
     Mesh mesh = objLoader.getLoadedMesh();
+    
+    Grid* grid = new Grid();
 
     for(int i= 0;i<mesh._indices.size();i=i+3){
         Triangle* tri;
@@ -47,21 +51,16 @@ void TriangleWorld::buildWorld(){
                                          Point3(mesh._positions[mesh._indices[i+1]]),
                                          Point3(mesh._positions[mesh._indices[i+2]]),reflective);
         }
-        Instance* instance = new Instance(tri,reflective);
-        instance->rotateY(45);
-        instance->rotateX(45);
-
-        add_object(instance);
+        
+        grid->add_object(tri);
     }
-
-    //    Triangle(Vect3 v0,Vect3 v1, Vect3 v2,Material* material);
-    // Triangle vertices are defined counter clock wise.
-    //Triangle* tri = new Triangle(Point3(0, 2, 3), Point3(-2, 0, 3),Point3(2, 0, 3));
-
-    //Instance* instance = new Instance(tri,phong);
-    //instance->translate(Vect3(3,0,0));
-
-    //add_object(instance);
+    
+    grid->constructCells();
+    
+    Instance* instance = new Instance(grid,reflective);
+    instance->scale(Vect3(2,1,1));
+    instance->rotateY(45);
+    instance->rotateX(45);
     
     Phong* planem = new Phong(
                               Lambertian(0.25,Vect3(0.8,0.8,0.8)),
@@ -92,5 +91,6 @@ void TriangleWorld::buildWorld(){
     add_object(planeright);
     add_object(planebottom);
     add_object(planetop);
+    add_object(instance);
 
 }

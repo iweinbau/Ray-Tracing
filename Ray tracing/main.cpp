@@ -58,7 +58,7 @@ void mul_render(int start_width, int start_height,
             Vect3 color;
             for(int n = 0; n < NUM_SAMPLES;n++){
                 Ray ray= camera.constructRay(y,x);
-                color = color + tr.trace(ray,world, 2);
+                color = color + tr.trace(ray,world, 3);
             }
             pixels[width*(y-height_offset) +(x-width_offset)] = color/(double)(NUM_SAMPLES);
         }
