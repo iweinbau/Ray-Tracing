@@ -16,7 +16,7 @@ public:
     Matte():Material()
     {}
 
-    Matte(Lambertian ambient, Lambertian diffuse):
+    Matte(Lambertian ambient, Lambertian* diffuse):
     Material(),
     ambient(ambient),
     diffuse(diffuse)
@@ -45,8 +45,9 @@ public:
 
             if(!l->shadow_hit(shadowray,world)){
                 double ndotLightDir = hitinfo.normal.dot(lightDir);
+                Vect3 tmp;
                 if(ndotLightDir > 0){
-                    Vect3 df = diffuse.sample(hitinfo,lightDir) * ndotLightDir * l->getIntensity(hitinfo);
+                    Vect3 df = diffuse->sample(hitinfo,lightDir,tmp) * ndotLightDir * l->getIntensity(hitinfo);
                     color = color + df;
                 }
             }
@@ -67,7 +68,7 @@ public:
         return (*this);
     }
 
-    Lambertian diffuse;
+    Lambertian* diffuse;
     Lambertian ambient;
 };
 

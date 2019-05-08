@@ -24,6 +24,7 @@
 
 
 
+
 //Constructor
 World::World(){}
 World::~World(){}
@@ -36,18 +37,18 @@ void World::buildWorld(){
 
     Reflective* phong = new Reflective(
                      Lambertian(0.25,Vect3(0.3,0.3,0.3)),
-                     Lambertian(0.6,Vect3(0.4,0.4,0.4)),
-                     Specular(0.2,5,Vect3(0.6,0.6,0.6)),
+                     new Lambertian(0.6,Vect3(0.4,0.4,0.4)),
+                     new Specular(0.2,5,Vect3(0.6,0.6,0.6)),
                      Glossy(0.9,1000,Vect3(1,1,1)));
-    
+
     Phong* phong2 = new Phong(
                               Lambertian(1,Vect3(0.0,0.3,0)),
-                              Lambertian(0.6,Vect3(0,1,0)),
-                              Specular(0.2,5,Vect3(1,1,1)));
+                              new Lambertian(0.6,Vect3(0,1,0)),
+                              new Specular(0.2,5,Vect3(1,1,1)));
     Phong* phong3 = new Phong(
                               Lambertian(0.25,Vect3(0.3,0,0)),
-                              Lambertian(0.6,Vect3(0.8,0,0)),
-                              Specular(0.2,5,Vect3(1,1,1)));
+                              new Lambertian(0.6,Vect3(0.8,0,0)),
+                              new Specular(0.2,5,Vect3(1,1,1)));
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 
@@ -66,21 +67,21 @@ void World::buildWorld(){
 
     Phong* planem = new Phong(
                  Lambertian(0.25,Vect3(0.8,0.8,0.8)),
-                 Lambertian(0.6,Vect3(0.8,0.8,0.8)),
-                 Specular(0.2,5,Vect3(1,1,1)));
+                 new Lambertian(0.6,Vect3(0.8,0.8,0.8)),
+                 new Specular(0.2,5,Vect3(1,1,1)));
     Phong* planeb = new Phong(
                  Lambertian(0.25,Vect3(0.8,0.8,0.8)),
-                 Lambertian(0.6,Vect3(0.8,0.8,0.8)),
-                 Specular(0.2,1,Vect3(1,1,1)));
+                 new Lambertian(0.6,Vect3(0.8,0.8,0.8)),
+                 new Specular(0.2,1,Vect3(1,1,1)));
 
     Phong* planel = new Phong(
                  Lambertian(0.25,Vect3(0.8,0,0)),
-                 Lambertian(0.6,Vect3(0.8,0,0)),
-                 Specular(0.2,5,Vect3(1,1,1)));
+                 new Lambertian(0.6,Vect3(0.8,0,0)),
+                 new Specular(0.2,5,Vect3(1,1,1)));
     Phong* planer = new Phong(
                  Lambertian(0.25,Vect3(0,0.8,0)),
-                 Lambertian(0.5,Vect3(0,0.8,0)),
-                 Specular(0.2,5,Vect3(1,1,1)));
+                 new Lambertian(0.5,Vect3(0,0.8,0)),
+                 new Specular(0.2,5,Vect3(1,1,1)));
 
     Plane* planeback = new Plane(Point3(0, 0, -5), Normal(0,0,1),planem);
     Plane* planeleft = new Plane(Point3(-5, 0, 0), Normal(1,0,0),planel);

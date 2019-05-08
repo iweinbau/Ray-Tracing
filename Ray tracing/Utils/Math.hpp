@@ -9,8 +9,6 @@
 #ifndef Math_h
 #define Math_h
 
-#include <type_traits>
-
 inline double clamp(double value,double min, double max){
     return ( value<min? min :(value>max ? max:value));
 }

@@ -25,7 +25,7 @@ public:
     glossy(refl.glossy)
     {}
 
-    Reflective(Lambertian ambient, Lambertian diffuse, Specular specular,Glossy glossy):
+    Reflective(Lambertian ambient, Lambertian* diffuse, Specular* specular,Glossy glossy):
     Phong(ambient,diffuse,specular),
     glossy(glossy)
     {}

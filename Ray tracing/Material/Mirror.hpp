@@ -24,7 +24,7 @@ public:
     specular(mirror.specular)
     {}
 
-    Mirror(Lambertian ambient, Lambertian diffuse, Specular specular,Specular reflection):
+    Mirror(Lambertian ambient, Lambertian* diffuse, Specular* specular,Specular* reflection):
     Phong(ambient,diffuse,specular),
     specular(reflection)
     {}
@@ -46,14 +46,14 @@ public:
     Vect3 shade(Hitinfo const& hitinfo,World const& world,int depth){
         Vect3 color = Phong::shade(hitinfo,world,depth);
         Vect3 reflection;
-        specular.sample(hitinfo, hitinfo.direction.neg(), reflection);
-        Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal) * 0.001, reflection);
-        color = color + (tr.trace(reflectionRay,world,depth-1)*specular.color());
+        Vect3 reflective = specular->sample(hitinfo, hitinfo.direction.neg(), reflection);
+        Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal) * kEpsilon, reflection);
+        color = color + (tr.trace(reflectionRay,world,depth-1)*reflective);
         return color;
     }
     tracer tr;
 
 private:
-    Specular specular;
+    Specular* specular;
 };
 #endif /* Mirror_h */

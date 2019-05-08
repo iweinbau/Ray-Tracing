@@ -22,7 +22,7 @@ public:
     Phong():Material()
     {}
 
-    Phong(Lambertian ambient, Lambertian diffuse, Specular specular):
+    Phong(Lambertian ambient, Lambertian* diffuse, Specular* specular):
     Material(),
     ambient(ambient),
     diffuse(diffuse),
@@ -53,8 +53,9 @@ public:
 
             if(!l->shadow_hit(shadowray,world)){
                 Vect3 specularV;
-                Vect3 sp = specular.sample(hitinfo,lightDir,specularV);
-                Vect3 df = diffuse.sample(hitinfo,lightDir);
+                Vect3 tmp;
+                Vect3 sp = specular->sample(hitinfo,lightDir,specularV);
+                Vect3 df = diffuse->sample(hitinfo,lightDir,tmp);
                 Vect3 li = l->getIntensity(hitinfo);
                 color = color + (df + sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * li;
             }
@@ -76,9 +77,9 @@ public:
         return (*this);
     }
 
-    Lambertian diffuse;
+    Lambertian* diffuse;
     Lambertian ambient;
-    Specular specular;
+    Specular* specular;
 
 };
 
