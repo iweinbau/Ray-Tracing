@@ -94,9 +94,9 @@ public:
         
         double theta = 2 * PI * dis(gen);
         double phi = acos(1 - 2 * dis(gen));
-        double x = sin(phi) * cos(theta);
-        double y = sin(phi) * sin(theta);
-        double z = cos(phi);
+        double x = radius_ * sin(phi) * cos(theta);
+        double y = radius_ * sin(phi) * sin(theta);
+        double z = radius_ * cos(phi);
         
         return Vect3(x,y,z) + position;
     }

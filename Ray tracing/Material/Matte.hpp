@@ -42,7 +42,7 @@ public:
             //********* CAST SHADOW RAY ********** \\
             //cast shadow ray to check if the object is in shadow.
             Ray shadowray(hitinfo.point + Vect3(hitinfo.normal) * kEpsilon,lightDir);
-
+            
             if(!l->shadow_hit(shadowray,world)){
                 double ndotLightDir = hitinfo.normal.dot(lightDir);
                 Vect3 tmp;

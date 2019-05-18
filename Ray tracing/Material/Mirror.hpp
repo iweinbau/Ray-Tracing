@@ -11,6 +11,7 @@
 
 #include "../tracer.hpp"
 #include "../BRDF/Specular.hpp"
+#include "../BRDF/Glossy.hpp"
 #include "Phong.hpp"
 
 
@@ -21,12 +22,12 @@ public:
 
     Mirror(Mirror const& mirror):
     Phong(mirror.ambient,mirror.diffuse,mirror.specular),
-    specular(mirror.specular)
+    reflection(mirror.reflection)
     {}
 
-    Mirror(Lambertian ambient, Lambertian* diffuse, Specular* specular,Specular* reflection):
+    Mirror(Lambertian ambient, Lambertian* diffuse, Specular* specular,Glossy* reflection):
     Phong(ambient,diffuse,specular),
-    specular(reflection)
+    reflection(reflection)
     {}
 
     ~Mirror()
@@ -45,15 +46,15 @@ public:
 
     Vect3 shade(Hitinfo const& hitinfo,World const& world,int depth){
         Vect3 color = Phong::shade(hitinfo,world,depth);
-        Vect3 reflection;
-        Vect3 reflective = specular->sample(hitinfo, hitinfo.direction.neg(), reflection);
-        Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal) * kEpsilon, reflection);
-        color = color + (tr.trace(reflectionRay,world,depth-1)*reflective);
+        Vect3 r;
+        Vect3 reflective = reflection->sample(hitinfo, hitinfo.direction.neg(), r);
+        Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal) * kEpsilon, r);
+        color = color + (tr.trace(reflectionRay,world,depth-1)*reflective * std::max(0.0,hitinfo.normal.dot(r)));
         return color;
     }
     tracer tr;
 
 private:
-    Specular* specular;
+    Glossy* reflection;
 };
 #endif /* Mirror_h */

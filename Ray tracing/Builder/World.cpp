@@ -33,14 +33,15 @@ void World::buildWorld(){
     //World setup
 
     //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);
-    PointLight* light = new PointLight(Vect3(1), Vect3(-2,0,0),10);
+    Sphere* r = new Sphere(Vect3(0,0,6),1);
+    AreaLight* light = new AreaLight(r,Vect3(1),5);
+    add_Light(light);
 
-    Reflective* phong = new Reflective(
-                     Lambertian(0.25,Vect3(0.3,0.3,0.3)),
-                     new Lambertian(0.6,Vect3(0.4,0.4,0.4)),
-                     new Specular(0.2,5,Vect3(0.6,0.6,0.6)),
-                     Glossy(0.9,1000,Vect3(1,1,1)));
-
+    Mirror * reflective = new Mirror(Lambertian(0.25,Vect3(0.3)),
+                                     new Lambertian(0.6,Vect3(0.4)),
+                                     new Specular(0.9,5,Vect3(0.6)),
+                                     new Glossy(0.9,Vect3(1,1,1)));
+    
     Phong* phong2 = new Phong(
                               Lambertian(1,Vect3(0.0,0.3,0)),
                               new Lambertian(0.6,Vect3(0,1,0)),
@@ -52,7 +53,7 @@ void World::buildWorld(){
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 
-    Instance* s = new Instance(sphere,phong);
+    Instance* s = new Instance(sphere,reflective);
     s->scale(Vect3(3));
     s->translate(Vect3(3, 0, 0));
 

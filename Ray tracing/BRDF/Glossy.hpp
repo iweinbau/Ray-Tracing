@@ -27,10 +27,13 @@ public:
     Glossy(double factor,double exp, Vect3 color): ks(factor),e(exp), cs(color)
     {}
     
+    Glossy(double factor,Vect3 color): ks(factor),e(0), cs(color)
+    {}
+    
     //perfect reflection
     Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out){
         out = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
-        return cs * ks;
+        return cs * ks/ hitinfo.normal.dot(out);
     }
 
     //glossy reflection.
@@ -64,8 +67,6 @@ public:
 
         if (hitinfo.normal.dot(out) < 0.0)                         // reflected ray is below tangent plane
             out = u * - pu + v * -pv + w * pw;
-
-        pdf = 1;
 
         double lobe = std::pow(r.dot(out),e);
         pdf = lobe * hitinfo.normal.dot(out);
