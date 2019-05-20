@@ -9,7 +9,7 @@
 #ifndef Mirror_h
 #define Mirror_h
 
-#include "../tracer.hpp"
+#include "../Utils/tracer.hpp"
 #include "../BRDF/Specular.hpp"
 #include "../BRDF/Glossy.hpp"
 #include "Phong.hpp"

@@ -10,8 +10,8 @@
 #include "./Utils/Camera.hpp"
 #include "./Utils/Vect3.hpp"
 #include "./Utils/ray.hpp"
+#include "./Utils/tracer.hpp"
 
-#include "tracer.hpp"
 #include "./Utils/Hitinfo.hpp"
 #include "./pngWriter/lodepng.h"
 

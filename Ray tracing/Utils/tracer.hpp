@@ -9,11 +9,11 @@
 #ifndef tracer_h
 #define tracer_h
 
-#include "./Material/Material.hpp"
-#include "./Builder/World.hpp"
+#include "../Material/Material.hpp"
+#include "../Builder/World.hpp"
 
-#include "./Utils/ray.hpp"
-#include "./Objects/Object.hpp"
+#include "ray.hpp"
+#include "../Objects/Object.hpp"
 
 class tracer{
 public:
@@ -21,26 +21,26 @@ public:
     {}
     ~tracer()
     {}
-    
+
     Vect3 trace(Ray const& ray,World const& world,int depth) {
-        
+
         if(depth <= 0){
             return Vect3(1,1,1);
         }
-        
+
         Vect3 color = Vect3(); //set initial color to background.
 
         double t;
         Hitinfo hitinfo;
         hitinfo.direction = ray.direction_;
         hitinfo.d = INFINITY;
-        
+
         Object* closest = nullptr;
         Point3 intersection;
         Normal normal;
-        
+
         bool hit = false;
-        
+
         for(Object* obj : world.objects){
             if (obj->hit(ray, intersection, t, normal)) {
                 if (t < hitinfo.d) {
@@ -53,7 +53,7 @@ public:
                 }
             }
         }
-        
+
         if (hit) {
             return closest->shader_->shade(hitinfo,world,depth);
         }
