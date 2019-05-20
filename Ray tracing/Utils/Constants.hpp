@@ -10,7 +10,8 @@
 #define Constants_h
 
 #define PI 3.14159265
-#define NUM_SAMPLES 1
+#define kEpsilon 0.001
+#define NUM_SAMPLES 5
 #define NUM_CHUNCKS 10
 
 

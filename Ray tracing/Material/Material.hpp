@@ -16,22 +16,22 @@ class Material{
 public:
     Material()
     {}
-    
+
     Material(Material const& mat)
     {}
-    
+
     ~Material()
     {}
-    
+
     Material& operator= (Material const& mat)
     {
         if(this == &mat)
             return (*this);
-        
+
         return (*this);
     }
-    virtual Vect3 shade(Hitinfo const& hitinfo,World world,int depth) = 0;
-    
+    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth) = 0;
+
 };
 
 #endif /* Material_h */

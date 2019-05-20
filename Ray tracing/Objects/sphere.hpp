@@ -11,6 +11,9 @@
 
 class Material;
 
+#include <random>
+
+
 #include "../Utils/Vect3.hpp"
 #include "../Utils/Normal.hpp"
 #include "Object.hpp"
@@ -19,35 +22,36 @@ class Material;
 
 class Sphere : public Object{
 public:
-    const double kEpsilon = 0.001;
     double radius_;
-    
+
     Sphere():Object()
     {}
-    
+
     Sphere(Point3 position, double radius, Material* material):
-    Object(position,material),radius_(radius)
+    Object(material),radius_(radius)
     {}
-    
+
     Sphere(Point3 position, double radius):
-    Object(position),radius_(radius)
+    Object(),position(position),radius_(radius)
     {}
-    
+
     Sphere(Sphere const& sphere):
-    Object(sphere.position,sphere.shader_),
+    Object(sphere.shader_),
+    position(sphere.position),
     radius_(sphere.radius_)
     {}
-    
+
     Sphere& operator= (Sphere const& sphere){
         if(this == &sphere)
             return (*this);
-        
+
         Object::operator=(sphere);
         
+        position = sphere.position;
         radius_ = sphere.radius_;
         return (*this);
     }
-    
+
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
         double t;
         Vect3    temp     = ray.origin_ - position;
@@ -55,23 +59,23 @@ public:
         double         b         = 2 * temp.dot(ray.direction_);
         double         c         = temp.dot(temp) - radius_ * radius_;
         double         disc    = b * b - 4.0 * a * c;
-        
+
         if (disc < 0.0)
             return(false);
         else {
             double e = sqrt(disc);
             double denom = 2.0 * a;
             t = (-b - e) / denom;    // smaller root
-            
+
             if (t > kEpsilon) {
                 tmin = t;
                 intersection = ray.origin_ + (ray.direction_ * t);
                 normal = Normal(Vect3(intersection - position).normalize());
                 return (true);
             }
-            
+
             t = (-b + e) / denom;    // larger root
-            
+
             if (t > kEpsilon) {
                 tmin = t;
                 intersection = ray.origin_ + (ray.direction_ * t);
@@ -79,9 +83,36 @@ public:
                 return (true);
             }
         }
-        
+
         return (false);
     }
     
+    Vect3 sample(){
+        std::random_device rd;  //Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+        std::uniform_real_distribution<> dis(0.0, 1.0);
+        
+        double theta = 2 * PI * dis(gen);
+        double phi = acos(1 - 2 * dis(gen));
+        double x = radius_ * sin(phi) * cos(theta);
+        double y = radius_ * sin(phi) * sin(theta);
+        double z = radius_ * cos(phi);
+        
+        return Vect3(x,y,z) + position;
+    }
+    
+    double pdf(){
+        return 1/(4 * PI * radius_ *radius_);
+    }
+    
+    Vect3 getNormal(Vect3 point){
+        return (point - position).normalize();
+    }
+
+    Box caluclateBoundingBox(){
+      return Box(Point3(position - radius_), Point3(position + radius_));
+    };
+private:
+    Point3 position;
 };
 #endif /* sphere_h */

@@ -21,78 +21,66 @@ class Phong:public Material{
 public:
     Phong():Material()
     {}
-    
-    Phong(Lambertian ambient, Lambertian diffuse, Specular specular):
+
+    Phong(Lambertian ambient, Lambertian* diffuse, Specular* specular):
     Material(),
     ambient(ambient),
     diffuse(diffuse),
     specular(specular)
     {}
-    
+
     Phong(Phong const& phong):
     Material(),
     ambient(phong.ambient),
     diffuse(phong.diffuse),
     specular(phong.specular)
     {}
-    
+
     ~Phong()
     {}
-    
-    virtual Vect3 shade(Hitinfo const& hitinfo,World world,int depth){
-        
+
+    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
+
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
-        Vect3 color = ambient.color();
-        
+        Vect3 color = ambient.color() * world.ambientLight.getIntensity(hitinfo, world);
+
         for(Light* l : world.lights){
-            Vect3 lightDir = (l->getPosition() - hitinfo.point).normalize();
-            
+            Vect3 lightDir = l->getDirection(hitinfo);
             //********* CAST SHADOW RAY ********** \\
             //cast shadow ray to check if the object is in shadow.
             Ray shadowray(hitinfo.point + Vect3(hitinfo.normal) * 0.0001,lightDir);
-            
-            bool hit = false;
-            double t;
-            double maxt = (l->getPosition() - hitinfo.point).length();
-            Point3 tmp;
-            Normal tmp2;
-            for(Object* obj : world.objects){
-                if (obj->hit(shadowray,tmp, t,tmp2)) {
-                    if(t < maxt){
-                        hit = true;
-                        break;
-                    }
-                }
-            }
-            if(!hit){
+
+            if(!l->shadow_hit(shadowray,world)){
                 Vect3 specularV;
-                Vect3 sp = specular.sample(hitinfo,lightDir,specularV);
-                Vect3 df = (diffuse.sample(hitinfo,lightDir)+ sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * l->getIntensity(hitinfo);
-                color = color + df;
+                Vect3 tmp;
+                Vect3 sp = specular->sample(hitinfo,lightDir,specularV);
+                Vect3 df = diffuse->sample(hitinfo,lightDir,tmp);
+                Vect3 li = l->getIntensity(hitinfo,world);
+                color = color + (df + sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * li;
             }
         }
         return color;
     }
-    
+
     Phong& operator= (Phong const& phong)
     {
         if(this == &phong)
             return (*this);
-        
+
         Material::operator=(phong);
-        
+
         diffuse = phong.diffuse;
         ambient = phong.ambient;
         specular = phong.specular;
-        
+
         return (*this);
     }
-    
-    Lambertian diffuse;
+
+    Lambertian* diffuse;
     Lambertian ambient;
-    Specular specular;
-    
+    Specular* specular;
+
 };
 
 #endif /* Phong_h */

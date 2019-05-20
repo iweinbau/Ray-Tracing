@@ -10,30 +10,58 @@
 #define pointLight_h
 
 #include "Light.hpp"
-#include "../Utils/Hitinfo.hpp"
+
 #define PI 3.14159265
 
 
 class PointLight : public Light{
 public:
     PointLight(Vect3 color, Vect3 position,double i):
-    Light(color,position,i)
+    Light(color,i),position_(position)
     {}
-    
+
     PointLight(PointLight const& l):
     Light(l)
     {}
-    
+
     PointLight& operator= (PointLight const& l){
         if(this == &l)
             return (*this);
-        
+
         Light::operator=(l);
         return (*this);
     }
-    
-    Vect3 virtual getIntensity(Hitinfo const& hitinfo){
-        return (color_ * i_) / (hitinfo.d * hitinfo.d);
+
+    Vect3 getPosition() {
+        return position_;
     }
+
+    Vect3 virtual getDirection(Hitinfo& hitinfo){
+      return (position_ - hitinfo.point).normalize();
+    }
+
+    Vect3 virtual getIntensity(Hitinfo& hitinfo,World& world){
+        double distance = (position_ - hitinfo.point).length();
+        double attenuation = 1 / (distance * distance);
+        return (color_ * i_ * attenuation);
+    }
+
+    bool virtual shadow_hit(Ray const& ray,World& world){
+      double t;
+      double maxt = (position_ - ray.origin_).length();
+      Point3 intersection;
+      Normal normal;
+      for(Object* obj : world.objects){
+          if (obj->hit(ray,intersection, t,normal)) {
+              if(t < maxt){
+                  return true;
+              }
+          }
+      }
+      return false;
+    }
+
+  private:
+      Vect3 position_;
 };
 #endif /* pointLight_h */

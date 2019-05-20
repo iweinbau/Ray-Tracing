@@ -16,34 +16,34 @@ class Lambertian:BRDF{
 public:
     Lambertian(): kd(0.0), cd()
     {}
-    
+
     ~Lambertian()
     {}
-    
+
     Lambertian(double factor, Vect3 color): kd(factor), cd(color)
     {}
-    
+
     Vect3 color()
     {
-        //Just return black
         return cd * kd;
-        
+
     }
+
     // No sampling here just use the Bling-Phong light model
-    Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld){
+    Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out){
         return cd * kd * (1/PI);
     }
-    
+
     Lambertian& operator= (Lambertian const& lam)
     {
         if( this == &lam)
             return (*this);
-        
+
         BRDF::operator=(lam);
-        
+
         kd = lam.kd;
         cd = lam.cd;
-        
+
         return (*this);
     }
 private:

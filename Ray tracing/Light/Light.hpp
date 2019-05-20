@@ -10,40 +10,40 @@
 #define Light_h
 
 #include "../Utils/Vect3.hpp"
-#include "../Utils/Hitinfo.hpp"
 
+class Hitinfo;
+class World;
+
+class Ray;
 class Light {
 public:
-    Light(Vect3 color,Vect3 position,double i):
+    Light(){}
+    
+    Light(Vect3 color,double i):
     color_(color),
-    position_(position),
     i_(i)
     {}
-    
+
     Light(Light const& l):
     color_(l.color_),
     i_(l.i_)
     {}
-    
+
     Light& operator= (Light const& l){
         if(this == &l)
             return (*this);
-        
+
         color_ = l.color_;
         i_ = l.i_;
         return (*this);
     }
-    
-    Vect3 getPosition() {
-        return position_;
-    }
-    
-    Vect3 virtual getIntensity(Hitinfo const& hitinfo){
-        return color_ * i_;
-    };
-    
-private:
-    Vect3 position_;
+
+    Vect3 virtual getDirection(Hitinfo& hitinfo) = 0;
+
+    Vect3 virtual getIntensity(Hitinfo& hitinfo,World& world) = 0;
+
+    bool virtual shadow_hit(Ray const& ray,World& world) = 0;
+
 protected:
     Vect3 color_;
     double i_;

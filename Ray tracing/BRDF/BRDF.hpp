@@ -16,19 +16,19 @@ class BRDF{
 public:
     BRDF()
     {}
-    
+
     BRDF(BRDF const& other)
     {}
-    
+
     ~BRDF()
     {}
-    
-    virtual Vect3 sample(Hitinfo const& hitinfo)
+
+    virtual Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out)
     {
         //Just return black
         return Vect3();
     }
-    
+
     virtual Vect3 color()
     {
         //Just return black
