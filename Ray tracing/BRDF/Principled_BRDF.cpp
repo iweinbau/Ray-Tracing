@@ -91,12 +91,14 @@ Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo,Vect3 const& ld)
     double Cdlum = 0.3*Cd.x_ + 0.6*Cd.y_ + 0.1*Cd.z_; // luminance approx.
 
     Vect3 Ctint = Cdlum > 0.0 ? Cd / Cdlum : Vect3(1.0); // normalize lum. to isolate hue+sat
-    Vect3 Cspec0 = lerp(lerp(Vect3(1.0) * mat->specular*0.08,Ctint,mat->specularTint), Cd, mat->metallic);
+    Vect3 Cspec0 = lerp(mat->specular*.08*lerp(Vect3(1.0f), Ctint, mat->specularTint), Cd, mat->metallic);
     Vect3 Csheen = lerp(Vect3(1.0), Ctint, mat->sheenTint);
+
+    Cspec0.print();
 
     double FL = Schlick_fresnel(NdotL), FV = Schlick_fresnel(NdotV);
     double Fd90 = 0.5 + 2.0 * LdotH * LdotH * mat->roughness;
-    double Fd = ((1-FL) + Fd90 * FL) * ((1-FV) + Fd90 * FV);
+    double Fd = lerp(1.0,Fd90,FL) * lerp(1.0,Fd90,FV);
 
     double Fss90 = LdotH*LdotH*mat->roughness;
     double Fss = lerp(1.0, Fss90, FL) * lerp(1.0, Fss90, FV);
@@ -107,7 +109,7 @@ Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo,Vect3 const& ld)
     double Ds = GTR2(NdotH, a);
     double FH = Schlick_fresnel(LdotH);
     Vect3 Fs = lerp(Cspec0, Vect3(1), FH);
-    double roughg = std::sqrt(mat->roughness*0.5 + 0.5);
+    double roughg = a;
     double Gs = smithG_GGX(NdotL, roughg) * smithG_GGX(NdotV, roughg);
 
     // sheen
@@ -125,7 +127,7 @@ Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo,Vect3 const& ld)
 }
 
 Vect3 PrincipledBRDF::lerp(Vect3 a, Vect3 b, double t){
-  return a + (b-a) * t;
+  return a + (b-a)*t;
 }
 
 double PrincipledBRDF::lerp(double a, double b, double t){

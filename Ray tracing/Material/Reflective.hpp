@@ -9,7 +9,7 @@
 #ifndef Reflective_h
 #define Reflective_h
 
-#include "../tracer.hpp"
+#include "../Utils/tracer.hpp"
 #include "../BRDF/Glossy.hpp"
 #include "../Material/Phong.hpp"
 

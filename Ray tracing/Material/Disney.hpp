@@ -2,7 +2,7 @@
 #define Disney_h
 
 #include "Material.hpp"
-#include "../tracer.hpp"
+#include "../Utils/tracer.hpp"
 #include "../Light/Light.hpp"
 #include "../BRDF/Principled_BRDF.hpp"
 
@@ -74,10 +74,10 @@ public:
     }
   public:
     Vect3 baseColor = Vect3(0.86,0.67,0.16);
-    double metallic = 1;
+    double metallic = 0.5;
     double subsurface = 0;
-    double specular = 0;
-    double roughness = 1;
+    double specular = 1;
+    double roughness = 0.5;
     double specularTint = 1;
     double anisotropic = 0;
     double sheen = 0;

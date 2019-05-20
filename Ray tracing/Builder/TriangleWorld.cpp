@@ -34,7 +34,7 @@ void TriangleWorld::buildWorld(){
                                    new Lambertian(0.6,Vect3(0.4)),
                                    new Specular(0.9,5,Vect3(0.6)),
                                    new Glossy(1,10,Vect3(1,1,1)));
-    
+
     Sphere* r = new Sphere(Vect3(0,0,6),1);
     AreaLight* light = new AreaLight(r,Vect3(1),10);
     add_Light(light);
