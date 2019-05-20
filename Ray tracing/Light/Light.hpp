@@ -17,6 +17,8 @@ class World;
 class Ray;
 class Light {
 public:
+    Light(){}
+    
     Light(Vect3 color,double i):
     color_(color),
     i_(i)
@@ -36,11 +38,11 @@ public:
         return (*this);
     }
 
-    Vect3 virtual getDirection(Hitinfo const& hitinfo) = 0;
+    Vect3 virtual getDirection(Hitinfo& hitinfo) = 0;
 
-    Vect3 virtual getIntensity(Hitinfo const& hitinfo) = 0;
+    Vect3 virtual getIntensity(Hitinfo& hitinfo,World& world) = 0;
 
-    bool virtual shadow_hit(Ray const& ray,World const& world) = 0;
+    bool virtual shadow_hit(Ray const& ray,World& world) = 0;
 
 protected:
     Vect3 color_;

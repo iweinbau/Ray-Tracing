@@ -34,7 +34,7 @@ public:
     ~Disney()
     {}
 
-    virtual Vect3 shade(Hitinfo const& hitinfo,World const& world,int depth){
+    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
 
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
@@ -48,7 +48,7 @@ public:
             if(!l->shadow_hit(shadowray,world)){
                 double ndotLightDir = hitinfo.normal.dot(lightDir);
                 if(ndotLightDir > 0){
-                    Vect3 df = brdf->sample(this,hitinfo,lightDir) * l->getIntensity(hitinfo);
+                    Vect3 df = brdf->sample(this,hitinfo,lightDir) * l->getIntensity(hitinfo,world);
                     color = color + df;
                 }
             }

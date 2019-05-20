@@ -9,11 +9,11 @@ public:
   Directional(Vect3 direction, Vect3 color, double i);
   ~Directional();
 
-  Vect3 getDirection(Hitinfo const& hitinfo);
+  Vect3 getDirection(Hitinfo& hitinfo);
 
-  Vect3 getIntensity(Hitinfo const& hitinfo);
+  Vect3 getIntensity(Hitinfo& hitinfo,World& world);
 
-  bool shadow_hit(Ray const& ray,World const& world);
+  bool shadow_hit(Ray const& ray,World& world);
 private:
   Vect3 direction_;
 };

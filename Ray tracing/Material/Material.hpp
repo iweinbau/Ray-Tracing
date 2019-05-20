@@ -30,7 +30,7 @@ public:
 
         return (*this);
     }
-    virtual Vect3 shade(Hitinfo const& hitinfo,World const& world,int depth) = 0;
+    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth) = 0;
 
 };
 

@@ -19,11 +19,11 @@ public:
     
     AreaLight(AreaLight const& l);
     
-    Vect3 getDirection(Hitinfo const& hitinfo);
+    Vect3 getDirection(Hitinfo& hitinfo);
     
-    Vect3 getIntensity(Hitinfo const& hitinfo);
+    Vect3 getIntensity(Hitinfo& hitinfo,World& world);
     
-    bool shadow_hit(Ray const& ray,World const& world);
+    bool shadow_hit(Ray const& ray,World& world);
 private:
     Object* obj;
     Vect3 direction;

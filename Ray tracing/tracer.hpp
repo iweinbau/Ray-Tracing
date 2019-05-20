@@ -22,7 +22,7 @@ public:
     ~tracer()
     {}
     
-    Vect3 trace(Ray const& ray,World const& world,int depth) {
+    Vect3 trace(Ray const& ray,World& world,int depth) {
         
         if(depth <= 0){
             return Vect3(1,1,1);

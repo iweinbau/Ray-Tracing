@@ -31,11 +31,11 @@ public:
     ~Matte()
     {}
 
-    virtual Vect3 shade(Hitinfo const& hitinfo,World const& world,int depth){
+    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
 
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
-        Vect3 color = ambient.color();
+        Vect3 color = ambient.color() * world.ambientLight.getIntensity(hitinfo, world);
 
         for(Light* l : world.lights){
             Vect3 lightDir = l->getDirection(hitinfo);
@@ -47,7 +47,7 @@ public:
                 double ndotLightDir = hitinfo.normal.dot(lightDir);
                 Vect3 tmp;
                 if(ndotLightDir > 0){
-                    Vect3 df = diffuse->sample(hitinfo,lightDir,tmp) * ndotLightDir * l->getIntensity(hitinfo);
+                    Vect3 df = diffuse->sample(hitinfo,lightDir,tmp) * ndotLightDir * l->getIntensity(hitinfo,world);
                     color = color + df;
                 }
             }

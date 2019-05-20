@@ -36,6 +36,8 @@ void World::buildWorld(){
     Sphere* r = new Sphere(Vect3(0,0,6),1);
     AreaLight* light = new AreaLight(r,Vect3(1),5);
     add_Light(light);
+    
+    ambientLight = AmbientLight(0,Vect3(1),1);
 
     Mirror * reflective = new Mirror(Lambertian(0.25,Vect3(0.3)),
                                      new Lambertian(0.6,Vect3(0.4)),

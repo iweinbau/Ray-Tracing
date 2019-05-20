@@ -12,6 +12,7 @@
 #include <vector>
 #include "../Utils/Vect3.hpp"
 #include "../Utils/Normal.hpp"
+#include "../Light/AmbientLight.hpp"
 
 class Light;
 class Object;
@@ -26,6 +27,7 @@ public:
     
     std::vector<Object*> objects;
     std::vector<Light*> lights;
+    AmbientLight ambientLight;
     
 };
 

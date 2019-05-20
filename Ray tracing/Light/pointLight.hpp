@@ -36,17 +36,17 @@ public:
         return position_;
     }
 
-    Vect3 virtual getDirection(Hitinfo const& hitinfo){
+    Vect3 virtual getDirection(Hitinfo& hitinfo){
       return (position_ - hitinfo.point).normalize();
     }
 
-    Vect3 virtual getIntensity(Hitinfo const& hitinfo){
+    Vect3 virtual getIntensity(Hitinfo& hitinfo,World& world){
         double distance = (position_ - hitinfo.point).length();
         double attenuation = 1 / (distance * distance);
         return (color_ * i_ * attenuation);
     }
 
-    bool virtual shadow_hit(Ray const& ray,World const& world){
+    bool virtual shadow_hit(Ray const& ray,World& world){
       double t;
       double maxt = (position_ - ray.origin_).length();
       Point3 intersection;

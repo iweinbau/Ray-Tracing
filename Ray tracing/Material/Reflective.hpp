@@ -44,7 +44,7 @@ public:
         return (*this);
     }
 
-    Vect3 shade(Hitinfo const& hitinfo,World const& world,int depth){
+    Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
         Vect3 color = Phong::shade(hitinfo,world,depth);
         Vect3 reflection;
         double pdf;

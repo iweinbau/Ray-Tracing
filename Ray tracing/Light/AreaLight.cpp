@@ -17,7 +17,7 @@ AreaLight::AreaLight(Object* object,Vect3 color,double i):Light(color,i),obj(obj
 
 AreaLight::AreaLight(AreaLight const& l):Light(l){}
 
-Vect3 AreaLight::getDirection(Hitinfo const& hitinfo){
+Vect3 AreaLight::getDirection(Hitinfo& hitinfo){
     //get point on surface.
     samplePoint = obj->sample();
     normal = obj->getNormal(samplePoint);
@@ -26,7 +26,7 @@ Vect3 AreaLight::getDirection(Hitinfo const& hitinfo){
     return direction;
 }
 
-Vect3 AreaLight::getIntensity(Hitinfo const& hitinfo){
+Vect3 AreaLight::getIntensity(Hitinfo& hitinfo,World& world){
     double ddotn = (direction.neg().dot(normal));
     if(ddotn < 0){
         return Vect3(0);
@@ -36,7 +36,7 @@ Vect3 AreaLight::getIntensity(Hitinfo const& hitinfo){
     return (color_ * i_ * G) / obj->pdf();
 }
 
-bool AreaLight::shadow_hit(Ray const& ray,World const& world){
+bool AreaLight::shadow_hit(Ray const& ray,World& world){
     double t;
     double maxt = (samplePoint - ray.origin_).length();
     Point3 intersection;
