@@ -54,8 +54,8 @@ public:
             if(!l->shadow_hit(shadowray,world)){
                 Vect3 specularV;
                 Vect3 tmp;
-                Vect3 sp = specular->sample(hitinfo,lightDir,specularV);
-                Vect3 df = diffuse->sample(hitinfo,lightDir,tmp);
+                Vect3 sp = specular->f(hitinfo,lightDir,specularV);
+                Vect3 df = diffuse->f(hitinfo,lightDir,tmp);
                 Vect3 li = l->getIntensity(hitinfo,world);
                 color = color + (df + sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * li;
             }

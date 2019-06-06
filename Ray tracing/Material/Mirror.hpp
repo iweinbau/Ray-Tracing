@@ -47,7 +47,7 @@ public:
     Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
         Vect3 color = Phong::shade(hitinfo,world,depth);
         Vect3 r;
-        Vect3 reflective = reflection->sample(hitinfo, hitinfo.direction.neg(), r);
+        Vect3 reflective = reflection->f(hitinfo, hitinfo.direction.neg(), r);
         Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal) * kEpsilon, r);
         color = color + (tr.trace(reflectionRay,world,depth-1)*reflective * std::max(0.0,hitinfo.normal.dot(r)));
         return color;

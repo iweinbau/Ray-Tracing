@@ -23,7 +23,7 @@ public:
     ~BRDF()
     {}
 
-    virtual Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out)
+    virtual Vect3 f(Hitinfo const& hitinfo,Vect3 const& wi, Vect3& wo)
     {
         //Just return black
         return Vect3();

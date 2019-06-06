@@ -47,7 +47,7 @@ public:
                 double ndotLightDir = hitinfo.normal.dot(lightDir);
                 Vect3 tmp;
                 if(ndotLightDir > 0){
-                    Vect3 df = diffuse->sample(hitinfo,lightDir,tmp) * ndotLightDir * l->getIntensity(hitinfo,world);
+                    Vect3 df = diffuse->f(hitinfo,lightDir,tmp) * ndotLightDir * l->getIntensity(hitinfo,world);
                     color = color + df;
                 }
             }

@@ -30,7 +30,7 @@ public:
     }
 
     // No sampling here just use the Bling-Phong light model
-    Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out){
+    Vect3 f(Hitinfo const& hitinfo,Vect3 const& wi, Vect3& wo){
         return cd * kd * (1/PI);
     }
 

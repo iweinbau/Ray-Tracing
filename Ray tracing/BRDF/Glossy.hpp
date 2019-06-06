@@ -31,13 +31,13 @@ public:
     {}
     
     //perfect reflection
-    Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out){
-        out = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
-        return cs * ks/ hitinfo.normal.dot(out);
+    Vect3 f(Hitinfo const& hitinfo,Vect3 const& wi, Vect3& wo){
+        wo = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
+        return cs * ks/ hitinfo.normal.dot(wo);
     }
 
     //glossy reflection.
-    Vect3 sample_(Hitinfo const& hitinfo,Vect3& out,double& pdf){
+    Vect3 f_(Hitinfo const& hitinfo,Vect3& out,double& pdf){
 
         Vect3 r = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
 
