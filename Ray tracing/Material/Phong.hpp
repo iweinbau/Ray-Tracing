@@ -13,7 +13,7 @@
 
 #include "../Objects/sphere.hpp"
 #include "../BRDF/Lambertian.hpp"
-#include "../BRDF/Specular.hpp"
+#include "../BRDF/Glossy.hpp"
 
 #include "../Light/Light.hpp"
 
@@ -22,7 +22,7 @@ public:
     Phong():Material()
     {}
 
-    Phong(Lambertian ambient, Lambertian* diffuse, Specular* specular):
+    Phong(Lambertian ambient, Lambertian* diffuse, Glossy* specular):
     Material(),
     ambient(ambient),
     diffuse(diffuse),
@@ -39,25 +39,24 @@ public:
     ~Phong()
     {}
 
-    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
+    virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
 
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
         Vect3 color = ambient.color() * world.ambientLight.getIntensity(hitinfo, world);
-
+        Vect3 wo = hitinfo.direction.neg();
+        
         for(Light* l : world.lights){
-            Vect3 lightDir = l->getDirection(hitinfo);
+            Vect3 wi = l->getDirection(hitinfo);
             //********* CAST SHADOW RAY ********** \\
             //cast shadow ray to check if the object is in shadow.
-            Ray shadowray(hitinfo.point + Vect3(hitinfo.normal) * 0.0001,lightDir);
+            Ray shadowray(hitinfo.point + Vect3(hitinfo.normal) * 0.0001,wi);
 
             if(!l->shadow_hit(shadowray,world)){
-                Vect3 specularV;
-                Vect3 tmp;
-                Vect3 sp = specular->f(hitinfo,lightDir,specularV);
-                Vect3 df = diffuse->f(hitinfo,lightDir,tmp);
+                Vect3 sp = specular->f(hitinfo,wi,wo);
+                Vect3 df = diffuse->f(hitinfo,wi,wo);
                 Vect3 li = l->getIntensity(hitinfo,world);
-                color = color + (df + sp) * std::max(0.0,hitinfo.normal.dot(lightDir)) * li;
+                color = color + (df + sp) * hitinfo.normal.dot(wi) * li;
             }
         }
         return color;
@@ -79,7 +78,7 @@ public:
 
     Lambertian* diffuse;
     Lambertian ambient;
-    Specular* specular;
+    Glossy* specular;
 
 };
 

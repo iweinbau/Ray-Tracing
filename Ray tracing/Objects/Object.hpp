@@ -55,11 +55,16 @@ public:
         return 0;
     }
     
+    void setShadowCast(bool b){
+        shadow_cast = b;
+    }
+    
     void add_object(Object* object){}
     virtual Box caluclateBoundingBox() = 0;
     virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal) = 0;
 
 public:
+    bool shadow_cast = true;
     Material* shader_;
 };
 

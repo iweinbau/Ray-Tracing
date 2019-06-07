@@ -42,7 +42,7 @@ bool AreaLight::shadow_hit(Ray const& ray,World& world){
     Point3 intersection;
     Normal normal;
     for(Object* obj : world.objects){
-        if (obj->hit(ray,intersection, t,normal)) {
+        if (obj->hit(ray,intersection, t,normal) && obj->shadow_cast) {
             if(t < maxt){
                 return true;
             }

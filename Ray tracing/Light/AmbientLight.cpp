@@ -17,7 +17,7 @@
 Vect3 AmbientLight::getDirection(Hitinfo& hitinfo){
     Vect3 w = hitinfo.normal;
     Vect3 u = Vect3(0.00424, 1, 0.00764).cross(w);
-    u.normalize();
+    u = u.normalize();
     Vect3 v = u.cross(w);
     
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
@@ -55,7 +55,7 @@ bool AmbientLight::shadow_hit(Ray const& ray,World& world){
     Point3 intersection;
     Normal normal;
     for(Object* obj : world.objects){
-        if (obj->hit(ray,intersection, t,normal)) {
+        if (obj->hit(ray,intersection, t,normal)&&obj->shadow_cast) {
             return true;
         }
     }

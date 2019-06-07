@@ -12,6 +12,7 @@
 #define PI 3.14159265
 #define kEpsilon 0.001
 #define NUM_SAMPLES 5
+#define MAX_BOUNCE 10
 #define NUM_CHUNCKS 10
 
 

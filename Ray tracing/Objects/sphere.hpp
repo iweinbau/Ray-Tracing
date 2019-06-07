@@ -28,7 +28,7 @@ public:
     {}
 
     Sphere(Point3 position, double radius, Material* material):
-    Object(material),radius_(radius)
+    Object(material),radius_(radius),position(position)
     {}
 
     Sphere(Point3 position, double radius):

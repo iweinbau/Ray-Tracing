@@ -1,25 +1,24 @@
 //
-//  tracer.hpp
-//  Ray-tracer
+//  GlobalTracer.h
+//  Ray GlobalTracer
 //
-//  Created by Iwein Bau on 17/12/2018.
-//  Copyright © 2018 Iwein Bau. All rights reserved.
+//  Created by Iwein Bau on 06/06/2019.
+//  Copyright © 2019 Iwein Bau. All rights reserved.
 //
 
-#ifndef tracer_h
-#define tracer_h
-
+#ifndef GlobalTracer_h
+#define GlobalTracer_h
 #include "../Material/Material.hpp"
 #include "../Builder/World.hpp"
 
 #include "ray.hpp"
 #include "../Objects/Object.hpp"
 
-class tracer{
+class GlobalTracer{
 public:
-    tracer()
+    GlobalTracer()
     {}
-    ~tracer()
+    ~GlobalTracer()
     {}
     
     Vect3 trace(Ray const& ray,World& world,int depth) {
@@ -27,20 +26,20 @@ public:
         if(depth > MAX_BOUNCE){
             return Vect3();
         }
-
+        
         Vect3 color = Vect3(); //set initial color to background.
-
+        
         double t;
         Hitinfo hitinfo;
         hitinfo.direction = ray.direction_;
         hitinfo.d = INFINITY;
-
+        
         Object* closest = nullptr;
         Point3 intersection;
         Normal normal;
-
+        
         bool hit = false;
-
+        
         for(Object* obj : world.objects){
             if (obj->hit(ray, intersection, t, normal)) {
                 if (t < hitinfo.d) {
@@ -53,8 +52,10 @@ public:
                 }
             }
         }
+        
         if (hit) {
-            return closest->shader_->direct_shade(hitinfo,world,depth);
+            color = color + closest->shader_->indirect_shade(hitinfo,world,depth);
+            return color;
         }else{
             //no hit environment color.
             color = color + Vect3(1);
@@ -63,4 +64,4 @@ public:
     }
 };
 
-#endif /* tracer_h */
+#endif /* GlobalGlobalTracer_h */

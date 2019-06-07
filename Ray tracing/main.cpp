@@ -11,6 +11,8 @@
 #include "./Utils/Vect3.hpp"
 #include "./Utils/ray.hpp"
 #include "./Utils/tracer.hpp"
+#include "./Utils/GlobalTracer.hpp"
+
 
 #include "./Utils/Hitinfo.hpp"
 #include "./pngWriter/lodepng.h"
@@ -41,7 +43,8 @@ void mul_render(int start_width, int start_height,
                 int end_width, int end_height,int width, int height,
                 Camera& camera,World& world,Vect3* pixels,
                 int width_offset=0, int height_offset=0){
-    tracer tr;
+    GlobalTracer tr;
+    tracer t;
     int x, y;
     for (y = start_height; y < end_height; y++) {
         for (x = start_width; x < end_width; x++) {
@@ -49,7 +52,7 @@ void mul_render(int start_width, int start_height,
             Vect3 color;
             for(int n = 0; n < NUM_SAMPLES;n++){
                 Ray ray= camera.constructRay(y,x);
-                color = color + tr.trace(ray,world, 3);
+                color = color + tr.trace(ray,world,0) ;//+ t.trace(ray, world, 3);
             }
             pixels[width*(y-height_offset) +(x-width_offset)] = color/(double)(NUM_SAMPLES);
         }

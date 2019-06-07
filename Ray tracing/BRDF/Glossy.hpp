@@ -30,20 +30,23 @@ public:
     Glossy(double factor,Vect3 color): ks(factor),e(0), cs(color)
     {}
     
-    //perfect reflection
-    Vect3 f(Hitinfo const& hitinfo,Vect3 const& wi, Vect3& wo){
-        wo = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
-        return cs * ks/ hitinfo.normal.dot(wo);
+    //specular BRDF
+    Vect3 f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo){
+        Vect3 r = wi.neg() + (Vect3(hitinfo.normal) * wi.dot(Vect3(hitinfo.normal)) * 2);
+        double RdotV = std::max(0.0,r.dot(wo));
+        return cs * ks * pow(RdotV,e);
     }
 
-    //glossy reflection.
-    Vect3 f_(Hitinfo const& hitinfo,Vect3& out,double& pdf){
 
-        Vect3 r = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
+    //Sampling specular BRDF.
+    Vect3 sample_f(Hitinfo const& hitinfo,Vect3& wi,Vect3 const& wo,double& pdf){
+        
+        double ndotwo = hitinfo.normal.dot(wo);
+        Vect3 r = wo.neg() + hitinfo.normal * 2 * ndotwo;
 
         Vect3 w = r;
         Vect3 u = Vect3(0.00424, 1, 0.00764).cross(w);
-        u.normalize();
+        u = u.normalize();
         Vect3 v = u.cross(w);
 
         std::random_device rd;  //Will be used to obtain a seed for the random number engine
@@ -63,13 +66,15 @@ public:
         double pv = sin_theta * sin_phi;
         double pw = cos_theta;
 
-        out = u * pu + v * pv + w * pw;
+        wi = u * pu + v * pv + w * pw;
 
-        if (hitinfo.normal.dot(out) < 0.0)                         // reflected ray is below tangent plane
-            out = u * - pu + v * -pv + w * pw;
+        if (hitinfo.normal.dot(wi) < 0.0)                         // reflected ray is below tangent plane
+            wi = u * - pu + v * -pv + w * pw;
+        
+        wi = wi.normalize();
 
-        double lobe = std::pow(r.dot(out),e);
-        pdf = lobe * hitinfo.normal.dot(out);
+        double lobe = std::pow(r.dot(wi),e);
+        pdf = lobe * (hitinfo.normal.dot(wi));
         return cs * ks * lobe;
 
     }

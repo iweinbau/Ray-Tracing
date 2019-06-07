@@ -34,7 +34,7 @@ public:
     ~Disney()
     {}
 
-    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
+    virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
 
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
