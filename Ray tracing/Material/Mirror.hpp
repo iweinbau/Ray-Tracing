@@ -58,15 +58,6 @@ public:
     }
     
     Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
-        
-        Vect3 color;
-        
-        //If first hit then calculate the Phong::direct_shade of this object.
-        //Not the 
-        if(depth == 0){
-            color = Phong::direct_shade(hitinfo, world, depth);
-        }
-        
         Vect3 wi;
         Vect3 wo = hitinfo.direction.neg();
         double pdf;
@@ -74,7 +65,7 @@ public:
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
         Vect3 tracedColor = gltr.trace(r, world, depth+1);
-        return color +(fs * tracedColor * hitinfo.normal.dot(wi)/pdf);
+        return (fs * tracedColor * hitinfo.normal.dot(wi)/pdf);
     }
     
     tracer tr;
