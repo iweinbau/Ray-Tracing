@@ -98,7 +98,7 @@ public:
         return (*this);
     }
 
-private:
+public:
     double e;
     double ks;
     Vect3 cs;

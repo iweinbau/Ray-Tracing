@@ -79,7 +79,7 @@ public:
 
         return (*this);
     }
-private:
+public:
     double kd;
     Vect3 cd;
 };

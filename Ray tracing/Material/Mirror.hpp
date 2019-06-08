@@ -65,11 +65,6 @@ public:
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
         Vect3 tracedColor;
-        if(depth == 0){
-            tracedColor = gltr.trace(r, world, depth+2);
-        }else{
-            tracedColor = gltr.trace(r, world, depth+1);
-        }
         return (fs * tracedColor * hitinfo.normal.dot(wi)/pdf);
     }
     

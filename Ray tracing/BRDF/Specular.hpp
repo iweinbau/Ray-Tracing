@@ -57,7 +57,7 @@ public:
         return (*this);
     }
 
-private:
+public:
     double ks;
     double e;
     Vect3 cs;

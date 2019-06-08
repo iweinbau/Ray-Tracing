@@ -8,9 +8,12 @@
 
 #ifndef Phong_h
 #define Phong_h
+#include <math.h>
+
 
 #include "Material.hpp"
 
+#include "../Utils/GlobalTracer.hpp"
 #include "../Objects/sphere.hpp"
 #include "../BRDF/Lambertian.hpp"
 #include "../BRDF/Glossy.hpp"
@@ -61,6 +64,27 @@ public:
         }
         return color;
     }
+    
+    Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
+        //first probability of diffuse.
+        double q1 = PI * diffuse->kd;
+        double q2 = ((2 * PI)/ (specular->e +2))*specular->ks;
+        
+        //second probability of specular.
+        //calculate diffuse first.
+        //calculate specular second.
+        Vect3 wi;
+        Vect3 wo = hitinfo.direction.neg();
+        double pdfd;
+        double pdfs;
+        Vect3 f = diffuse->sample_f(hitinfo, wi, wo, pdfd);
+        specular->sample_f(hitinfo, wi, wo, pdfs);
+
+        //Create new ray
+        Ray r(hitinfo.point+ wi * kEpsilon,wi);
+        Vect3 tracedColor = gltr.trace(r, world, depth+1);
+        return (tracedColor * (diffuse->color() + specular->color()* pow(wi.dot(wo)*hitinfo.normal.dot(wi),specular->e)))/(q1 * pdfd + q2 *pdfs);
+    }
 
     Phong& operator= (Phong const& phong)
     {
@@ -76,6 +100,7 @@ public:
         return (*this);
     }
 
+    GlobalTracer gltr;
     Lambertian* diffuse;
     Lambertian ambient;
     Glossy* specular;
