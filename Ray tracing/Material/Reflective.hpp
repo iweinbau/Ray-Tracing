@@ -64,7 +64,13 @@ public:
         Vect3 fs = glossy->sample_f(hitinfo, wi, wo, pdf);
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
-        Vect3 tracedColor = gltr.trace(r, world, depth+1);
+        Vect3 tracedColor;
+        //Take into account that when reflective ray hit area light this wil return black. so sample depth +2
+        if(depth == 0){
+            tracedColor = gltr.trace(r, world, depth+2);
+        }else{
+            tracedColor = gltr.trace(r, world, depth+1);
+        }
         return (fs * tracedColor * hitinfo.normal.dot(wi)/pdf);
     }
     
