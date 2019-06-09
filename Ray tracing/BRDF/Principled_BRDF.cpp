@@ -56,7 +56,7 @@ Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo
     
     Vect3 wi;
     
-    if( p - ratiodiffuse){
+    if( p < ratiodiffuse){
         //sample diffuse lobe
         double cos_phi = cos(2.0 * PI * x);
         double sin_phi = sin(2.0 * PI * x);
