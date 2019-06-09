@@ -108,8 +108,8 @@ Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Ve
     float Cdlum = 0.3*Cdlin.x_ + 0.6*Cdlin.y_ + 0.1*Cdlin.z_; // luminance approx.
     
     Vect3 Ctint = Cdlum > 0.0 ? Cdlin / Cdlum : Vect3(1.0); // normalize lum. to isolate hue+sat
-    Vect3 Cspec0 = lerp(mat->specular*0.08*lerp(Vect3(1.0), Ctint, mat->specularTint), Cdlin, mat->metallic);
-    Vect3 Csheen = lerp(Vect3(1.0), Ctint, mat->sheenTint);
+    Vect3 Cspec0 = lerp(mat->metallic,mat->specular*0.08*lerp(mat->specularTint,Vect3(1.0), Ctint), Cdlin);
+    Vect3 Csheen = lerp(mat->sheenTint,Vect3(1.0), Ctint);
     
     
     double Fd90 = 0.5 + 2*ndoth * ndoth * mat->roughness;

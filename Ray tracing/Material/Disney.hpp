@@ -65,7 +65,7 @@ public:
     Vect3 baseColor = Vect3(0.83,0.63,0.14);
     double metallic = 0;
     double subsurface = 0;
-    double specular = 0.5;
+    double specular = 0;
     double roughness = 0;
     double specularTint = 0;
     double anisotropic = 0;
