@@ -70,9 +70,9 @@ public:
     double specularTint = 0;
     double anisotropic = 0;
     double sheen = 0;
-    double sheenTint = 0.5;
+    double sheenTint = 0;
     double clearcoat = 0;
-    double clearcoatGloss = 1;
+    double clearcoatGloss = 0;
     GlobalTracer tr;
     PrincipledBRDF* brdf;
 };

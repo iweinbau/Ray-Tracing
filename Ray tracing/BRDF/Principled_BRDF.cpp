@@ -111,36 +111,38 @@ Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Ve
     Vect3 Cspec0 = lerp(mat->specular*0.08*lerp(Vect3(1.0), Ctint, mat->specularTint), Cdlin, mat->metallic);
     Vect3 Csheen = lerp(Vect3(1.0), Ctint, mat->sheenTint);
     
-    Vect3 Fd90 = 0.5 + ndoth * ndoth * mat->roughness;
+    Vect3 Fd90 = 0.5 + 2*ndoth * ndoth * mat->roughness;
     double Fi = fresnel(ndotwi);
     double Fo = fresnel(ndotwo);
     
 
-    Vect3 fd = (Cdlin/PI)*(1 + (Fd90-1)*Fi)*(1 + (Fd90-1)*Fo);
+    Vect3 Fd = (1 + (Fd90-1)*Fi)*(1 + (Fd90-1)*Fo);
     
     double Fss90 = widoth*widoth*mat->roughness;
     double Fss = lerp(Fi,1.0,Fss90) * lerp(Fo,1.0,Fss90);
     double ss = 1.25 * (Fss * (1.0 / (ndotwi + ndotwo) - 0.5) + 0.5);
     
+    float a = std::max(0.001, mat->roughness);
     //specular D
-    double Ds = GTR2(ndoth, mat->roughness * mat->roughness);
+    double Ds = GTR2(ndoth, a);
     //clearcoat D
-    double Dc = GTR1(ndoth,lerp(mat->clearcoatGloss,0.2,0.001));
+    double Dc = GTR1(ndoth,lerp(mat->clearcoatGloss,0.1,0.001));
     
     //specular G
-    double Gs = GGX(ndotwo, mat->roughness) * GGX(ndotwi,mat->roughness);
+    double roughg = std::sqrt(mat->roughness*0.5 + 0.5);
+    double Gs = GGX(ndotwo, roughg) * GGX(ndotwi,roughg);
     //clearcoat G
     double Gc = GGX(ndotwo, 0.25) * GGX(ndotwi, 0.25);
     
     //specular F
     double Fh = fresnel(widoth);
     // F = F0 + (1-F0)Fh -> F0 = lepr(Fh,
-    Vect3 Fs = lerp(Fh,Vect3(1),Cspec0);
+    Vect3 Fs = lerp(Fh,Cspec0,Vect3(1));
     //clearcoat F
     double Fc = lerp(Fh,0.04f, 1.0f);
     
     // sheen
     Vect3 Fsheen = Fh * mat->sheen * Csheen;
     
-    return (fd + Fsheen)*(1.0 - mat->metallic)+ Gs*Fs*Ds + 0.25*mat->clearcoat*Gc*Fc*Dc;
+    return ((1/PI) * lerp(mat->subsurface, Fd, ss)*Cdlin + Fsheen)*(1.0 - mat->metallic)+ Gs*Fs*Ds + 0.25*mat->clearcoat*Gc*Fc*Dc;
 }

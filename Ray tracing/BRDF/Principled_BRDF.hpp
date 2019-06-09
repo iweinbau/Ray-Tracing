@@ -2,6 +2,9 @@
 #define PrincipledSpecular_h
 
 #include "BRDF.hpp"
+#include "../Utils/Math.hpp"
+#include "../Utils/Constants.hpp"
+
 
 class Disney;
 
@@ -27,12 +30,13 @@ private:
 };
 
 inline double PrincipledBRDF::fresnel(double cosT){
-    double v = 1-cosT;
+    double v = clamp(1-cosT,0,1);
     double v2 = v *v;
     return v2 * v2 * v;
 }
 
 inline double PrincipledBRDF::GTR1(double cosT,double a){
+    if(a >= 1) return 1/PI;
     double t = (1+(a*a-1)*cosT*cosT);
     return (a*a-1.0f) / (PI*log(a*a)*t);
 }
@@ -43,7 +47,9 @@ inline double PrincipledBRDF::GTR2(double cosT,double a){
 }
 
 inline double PrincipledBRDF::GGX(double cosT, double a){
-    return (2*cosT)/(cosT * (2-a) + a);
+    double a2 = a*a;
+    double b = cosT*cosT;
+    return 1 / (cosT + sqrt(a2 + b - a*b));
 }
 #endif /* Specular_h */
 

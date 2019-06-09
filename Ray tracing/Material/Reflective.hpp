@@ -64,7 +64,7 @@ public:
         Vect3 fs = glossy->sample_f(hitinfo, wi, wo, pdf);
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
-        Vect3 tracedColor;
+        Vect3 tracedColor = gltr.trace(r, world, depth+1);
         return (fs * tracedColor * hitinfo.normal.dot(wi)/pdf);
     }
     

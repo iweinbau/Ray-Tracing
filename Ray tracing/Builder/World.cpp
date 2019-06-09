@@ -38,8 +38,8 @@ void World::buildWorld(){
     //World setup
 
     //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);
-    Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(10,Vect3(1)));
-    AreaLight* light = new AreaLight(r,Vect3(1),10);
+    Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(4,Vect3(1)));
+    AreaLight* light = new AreaLight(r,Vect3(1),4);
     r->setShadowCast(false);
     //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),10);
 
@@ -59,7 +59,7 @@ void World::buildWorld(){
     Phong* mat3 = new Phong(
                               Lambertian(0.25,Vect3(0.3,0,0)),
                               new Lambertian(0.5,Vect3(0.8,0,0)),
-                                new Glossy(0.5,20,Vect3(1,0,0)));
+                              new Glossy(0.5,10000,Vect3(1,0,0)));
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 
@@ -97,7 +97,7 @@ void World::buildWorld(){
     Plane* planetop =  new Plane(Point3(0, 5, 0), Normal(0,-1,0),planem);
 
 
-    add_object(s3);
+    //add_object(s3);
     add_object(s2);
     add_object(s);
     add_object(r);
