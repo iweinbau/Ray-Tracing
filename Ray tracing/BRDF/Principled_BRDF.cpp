@@ -111,12 +111,12 @@ Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Ve
     Vect3 Cspec0 = lerp(mat->specular*0.08*lerp(Vect3(1.0), Ctint, mat->specularTint), Cdlin, mat->metallic);
     Vect3 Csheen = lerp(Vect3(1.0), Ctint, mat->sheenTint);
     
-    Vect3 Fd90 = 0.5 + ndoth * ndoth * mat->roughness;
+    double Fd90 = 0.5 + ndoth * ndoth * mat->roughness;
     double Fi = fresnel(ndotwi);
     double Fo = fresnel(ndotwo);
     
 
-    Vect3 fd = (Cdlin/PI)*(1 + (Fd90-1)*Fi)*(1 + (Fd90-1)*Fo);
+    double fd = (1 + (Fd90-1)*Fi)*(1 + (Fd90-1)*Fo);
     
     double Fss90 = widoth*widoth*mat->roughness;
     double Fss = lerp(Fi,1.0,Fss90) * lerp(Fo,1.0,Fss90);
@@ -137,10 +137,10 @@ Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Ve
     // F = F0 + (1-F0)Fh -> F0 = lepr(Fh,
     Vect3 Fs = lerp(Fh,Vect3(1),Cspec0);
     //clearcoat F
-    double Fc = lerp(Fh,0.04f, 1.0f);
+    double Fc = lerp(Fh,0.04, 1.0);
     
     // sheen
     Vect3 Fsheen = Fh * mat->sheen * Csheen;
     
-    return (fd + Fsheen)*(1.0 - mat->metallic)+ Gs*Fs*Ds + 0.25*mat->clearcoat*Gc*Fc*Dc;
+    return ((1/PI) * lerp(mat->subsurface,fd,ss)* Cdlin + Fsheen)*(1.0 - mat->metallic)+ Gs*Fs*Ds + 0.25*mat->clearcoat*Gc*Fc*Dc;
 }

@@ -43,7 +43,10 @@ inline double PrincipledBRDF::GTR2(double cosT,double a){
 }
 
 inline double PrincipledBRDF::GGX(double cosT, double a){
-    return (2*cosT)/(cosT * (2-a) + a);
+    double a2 = a*a;
+    double b = cosT*cosT;
+    return 1.0/ (cosT + sqrt(a2 + b - a2*b));
+
 }
 #endif /* Specular_h */
 

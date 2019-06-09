@@ -38,10 +38,10 @@ void World::buildWorld(){
     //World setup
 
     //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);
-    Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(10,Vect3(1)));
+    Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(5,Vect3(1)));
     AreaLight* light = new AreaLight(r,Vect3(1),10);
     r->setShadowCast(false);
-    //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),10);
+    //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),5);
 
     add_Light(light);
     
