@@ -41,7 +41,7 @@ void World::buildWorld(){
     Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(4,Vect3(1)));
     AreaLight* light = new AreaLight(r,Vect3(1),4);
     r->setShadowCast(false);
-    //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),10);
+    //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),5);
 
     add_Light(light);
     

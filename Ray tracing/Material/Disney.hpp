@@ -62,7 +62,7 @@ public:
         return (*this);
     }
   public:
-    Vect3 baseColor = Vect3(0.86,0.67,0.16);
+    Vect3 baseColor = Vect3(0.00063,0.00063,0.00063);
     double metallic = 0;
     double subsurface = 0;
     double specular = 0.5;
