@@ -14,6 +14,8 @@
 #include "../Material/Reflective.hpp"
 #include "../Material/Matte.hpp"
 #include "../Material/Emissive.hpp"
+#include "../Material/Disney.hpp"
+
 
 
 #include "../Objects/sphere.hpp"
@@ -45,10 +47,11 @@ void World::buildWorld(){
     
     ambientLight = AmbientLight(1,Vect3(1),1);
 
-    Reflective * reflective = new Reflective(Lambertian(0.25,Vect3(1,1,0.3)),
-                                     new Lambertian(0.6,Vect3(1,1,0.3)),
-                                     new Glossy(0.5,20,Vect3(1,1,0.3)),
-                                     new Glossy(0.9,100,Vect3(1,1,0.3)));
+//    Reflective * reflective = new Reflective(Lambertian(0.25,Vect3(1,1,0.3)),
+//                                     new Lambertian(0.6,Vect3(1,1,0.3)),
+//                                     new Glossy(0.5,20,Vect3(1,1,0.3)),
+//                                     new Glossy(0.9,100,Vect3(1,1,0.3)));
+    Disney* reflective = new Disney();
     
     Matte* Matte2 = new Matte(
                               Lambertian(1,Vect3(0.0,0.3,0)),

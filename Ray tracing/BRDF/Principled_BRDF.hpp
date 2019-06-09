@@ -2,7 +2,6 @@
 #define PrincipledSpecular_h
 
 #include "BRDF.hpp"
-#include "../Utils/Math.hpp"
 
 class Disney;
 
@@ -12,28 +11,39 @@ public:
 
     ~PrincipledBRDF();
 
-    double PDF(Disney* mat,Hitinfo const& hitinfo, Vect3 const& v, Vect3 const& ld);
+    double pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo);
 
-    Vect3 Sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& i);
+    Vect3 sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo);
 
-    Vect3 sample(Disney* mat,Hitinfo const& hitinfo,Vect3 const& ld);
-
-    Vect3 lerp(Vect3 a, Vect3 b, double t);
-
-    double lerp(double a, double b, double t);
-
-
-    double GTR1(double u, double a);
-
-    double GTR2(double u, double a);
-
-    double smithG_GGX(double u, double alphaG);
-
-    double Schlick_fresnel(double u);
-
-    Vect3 color();
-
+    Vect3 eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo);
+    
+private:
+    double fresnel(double cosT);
+    double GTR1(double cosT,double a);
+    double GTR2(double cosT,double a);
+    double GGX(double cosT,double a);
+    double k(double a, double y);
     PrincipledBRDF& operator= (PrincipledBRDF const& d);
 };
 
+inline double PrincipledBRDF::fresnel(double cosT){
+    double v = 1-cosT;
+    double v2 = v *v;
+    return v2 * v2 * v;
+}
+
+inline double PrincipledBRDF::GTR1(double cosT,double a){
+    double t = (1+(a*a-1)*cosT*cosT);
+    return (a*a-1.0f) / (PI*log(a*a)*t);
+}
+
+inline double PrincipledBRDF::GTR2(double cosT,double a){
+    double t = (1+(a*a-1)*cosT*cosT);
+    return (a*a) / (PI*t*t);
+}
+
+inline double PrincipledBRDF::GGX(double cosT, double a){
+    return (2*cosT)/(cosT * (2-a) + a);
+}
 #endif /* Specular_h */
+
