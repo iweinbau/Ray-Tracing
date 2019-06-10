@@ -56,7 +56,7 @@ namespace MeshLoader {
         while(std::getline(file, currentLine)){
 
             //for now we just print the line
-            std::cout << currentLine << std::endl;
+            //std::cout << currentLine << std::endl;
             
             if(algorithm::startsWith(currentLine, "s ")){
                 std::vector<std::string> line_split = algorithm::split(currentLine,' ');

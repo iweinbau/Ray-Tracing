@@ -29,7 +29,7 @@ public:
         
         Vect3 color = Vect3(); //set initial color to background.
         
-        double t;
+        double t = INFINITY;
         Hitinfo hitinfo;
         hitinfo.direction = ray.direction_;
         hitinfo.d = INFINITY;

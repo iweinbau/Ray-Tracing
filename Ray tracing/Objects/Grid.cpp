@@ -275,9 +275,9 @@ void Grid::constructCells(){
     //Use formula Mi = Si * pow( (density * N)/V, 0,333333)
     //where i the correspond to the dimensions x,y,z
     
-    Mx = Sx * pow((density * N)/V,0.33333);
-    My = Sy * pow((density * N)/V,0.33333);
-    Mz = Sz * pow((density * N)/V,0.33333);
+    Mx = Sx * pow((density * N)/V,0.33333)+1;
+    My = Sy * pow((density * N)/V,0.33333)+1;
+    Mz = Sz * pow((density * N)/V,0.33333)+1;
     
     int num_cels = Mx*My*Mz;
     
@@ -317,7 +317,7 @@ void Grid::constructCells(){
         }
     }
     
-    objects.erase(objects.cbegin(),objects.cend());
+    //objects.erase(objects.cbegin(),objects.cend());
 }
 
 Box Grid::caluclateBoundingBox(){
