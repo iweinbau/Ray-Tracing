@@ -24,11 +24,10 @@ Grid::Grid(Mesh const& mesh,Material* material):Object(){
                                      Point3(mesh._positions[mesh._indices[i+2]]),
                                      Normal(mesh._normals[mesh._indices[i]]),
                                      Normal(mesh._normals[mesh._indices[i+1]]),
-                                     Normal(mesh._normals[mesh._indices[i]+2]),material);
+                                     Normal(mesh._normals[mesh._indices[i+2]]),material);
         }else{
             tri = new Triangle(Point3(mesh._positions[mesh._indices[i]]),
-                               Point3(mesh._positions[mesh._indices[i+1]]),
-Point3(mesh._positions[mesh._indices[i+2]]),Normal(mesh._normals[mesh._indices[i]]),material);
+                               Point3(mesh._positions[mesh._indices[i+1]]),Point3(mesh._positions[mesh._indices[i+2]]),Normal(mesh._normals[mesh._indices[i]]),material);
         }
         
         add_object(tri);
