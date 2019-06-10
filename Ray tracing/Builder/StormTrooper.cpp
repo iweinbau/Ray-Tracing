@@ -32,7 +32,7 @@ void StormTrooper::buildWorld(){
     objLoader.loadMesh("./Objects/lights.obj");
     Mesh mesh2 = objLoader.getLoadedMesh();
     
-    Grid* lights = new Grid(mesh2,new Emissive(3,Vect3(0.11, 2.18, 3.2)));
+    Grid* lights = new Grid(mesh2,new Emissive(3,Vect3(3.2, 0.13, 0.13)));
     
     objLoader.loadMesh("./Objects/helmets.obj");
     Mesh mesh3 = objLoader.getLoadedMesh();
