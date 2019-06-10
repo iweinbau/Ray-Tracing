@@ -18,14 +18,14 @@ Grid::Grid():Object(){}
 Grid::Grid(Mesh const& mesh,Material* material):Object(){
     for(int i= 0;i<mesh._indices.size();i=i+3){
         Triangle* tri;
-        if(mesh.smoothShading){
+        if(false){
             tri = new SmoothTriangle(Point3(mesh._positions[mesh._indices[i]]),
                                      Point3(mesh._positions[mesh._indices[i+1]]),
                                      Point3(mesh._positions[mesh._indices[i+2]]),material);
         }else{
             tri = new Triangle(Point3(mesh._positions[mesh._indices[i]]),
                                Point3(mesh._positions[mesh._indices[i+1]]),
-                               Point3(mesh._positions[mesh._indices[i+2]]),material);
+Point3(mesh._positions[mesh._indices[i+2]]),Normal(mesh._normals[mesh._indices[i]]),material);
         }
         
         add_object(tri);

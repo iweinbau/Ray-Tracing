@@ -20,6 +20,7 @@ class Triangle: public Object{
 public:
     Triangle();
     Triangle(Point3 v0,Point3 v1, Point3 v2,Material* material);
+    Triangle(Point3 v0,Point3  v1, Point3  v2,Normal normal,Material* material);
     Triangle(Point3 v0,Point3 v1, Point3 v2);
     Normal virtual calculate_normal(double gamma, double beta);
     Box caluclateBoundingBox();

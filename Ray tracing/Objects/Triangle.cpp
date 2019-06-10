@@ -23,6 +23,13 @@ _v2(v2),
 _normal((Vect3(v1-v0)).cross(v2-v0).normalize())
 {}
 
+Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2,Normal normal,Material* material):Object(material),
+_v0(v0),
+_v1(v1),
+_v2(v2),
+_normal(normal)
+{}
+
 Triangle::Triangle(Point3 v0,Point3  v1, Point3  v2):Object(),
 _v0(v0),
 _v1(v1),

@@ -37,7 +37,7 @@ Temporary Items
 *.slo
 *.lo
 *.o
-*.obj
+
 
 # Precompiled Headers
 *.gch
