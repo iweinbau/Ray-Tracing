@@ -36,8 +36,8 @@ void StormTrooper::buildWorld(){
     helmetsMat->metallic = 0.4;
     
     Disney* soldierMat = new Disney();
-    helmetsMat->baseColor = Vect3(0);
-    helmetsMat->specular = 0;
+    soldierMat->baseColor = Vect3(0);
+    soldierMat->specular = 0;
     
     
     MeshLoader::OBJLoader objLoader;

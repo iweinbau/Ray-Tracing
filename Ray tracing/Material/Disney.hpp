@@ -41,7 +41,7 @@ public:
     Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
         //1 Sample point
         Vect3 wi = brdf->sample(this, hitinfo, hitinfo.direction.neg());
-        Ray r(hitinfo.point + hitinfo.normal * kEpsilon, wi);
+        Ray r(hitinfo.point + hitinfo.normal, wi);
         //2 calculate pdf
         double pdf = brdf->pdf(this, hitinfo, wi, hitinfo.direction.neg());
         //3 evaluate brdf
