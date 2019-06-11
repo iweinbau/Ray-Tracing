@@ -44,12 +44,13 @@ Box Composite::caluclateBoundingBox(){
 }
 bool Composite::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
     double t;
+    double tmax = INFINITY;
     Point3 intersect;
     Normal n;
     bool hit = false;
     for(Object* obj : objects){
         if (obj->hit(ray, intersect, t,n)) {
-            if (t < tmin) {
+            if (t < tmax) {
                 //we found a closer object.
                 tmin = t;
                 intersection = intersect;

@@ -24,8 +24,8 @@ public:
     
     Vect3 trace(Ray const& ray,World& world,int depth) {
         
-        if(depth <= 0){
-            return Vect3(1,1,1);
+        if(depth > MAX_BOUNCE){
+            return Vect3();
         }
 
         Vect3 color = Vect3(); //set initial color to background.
@@ -53,9 +53,11 @@ public:
                 }
             }
         }
-
         if (hit) {
-            return closest->shader_->shade(hitinfo,world,depth);
+            return closest->shader_->direct_shade(hitinfo,world,depth);
+        }else{
+            //no hit environment color.
+            color = color + Vect3(1);
         }
         return color;
     }

@@ -2,7 +2,7 @@
 #define Disney_h
 
 #include "Material.hpp"
-#include "../Utils/tracer.hpp"
+#include "../Utils/GlobalTracer.hpp"
 #include "../Light/Light.hpp"
 #include "../BRDF/Principled_BRDF.hpp"
 
@@ -34,31 +34,20 @@ public:
     ~Disney()
     {}
 
-    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
-
-        //********** AMBIENT COLOR ********** \\
-        //set color to ambient light.
-        Vect3 color;
-
-        for(Light* l : world.lights){
-            Vect3 lightDir = l->getDirection(hitinfo);
-            //********* CAST SHADOW RAY ********** \\
-            //cast shadow ray to check if the object is in shadow.
-            Ray shadowray(hitinfo.point + Vect3(hitinfo.normal) * kEpsilon,lightDir);
-            if(!l->shadow_hit(shadowray,world)){
-                double ndotLightDir = hitinfo.normal.dot(lightDir);
-                if(ndotLightDir > 0){
-                    Vect3 df = brdf->sample(this,hitinfo,lightDir) * l->getIntensity(hitinfo,world);
-                    color = color + df;
-                }
-            }
-            Vect3 reflectance = brdf->Sample(this,hitinfo,hitinfo.direction.neg());
-            double pdf = brdf->PDF(this,hitinfo,hitinfo.direction.neg(),reflectance);
-            Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal)*kEpsilon, reflectance);
-            color = color + brdf->sample(this,hitinfo,reflectance) * tr.trace(reflectionRay,world,depth-1)/pdf;
-        }
-
-        return color;
+    Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
+        return Vect3();
+    }
+    
+    Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
+        //1 Sample point
+        Vect3 wi = brdf->sample(this, hitinfo, hitinfo.direction.neg());
+        Ray r(hitinfo.point + hitinfo.normal, wi);
+        //2 calculate pdf
+        double pdf = brdf->pdf(this, hitinfo, wi, hitinfo.direction.neg());
+        //3 evaluate brdf
+        Vect3 f = brdf->eval(this, hitinfo,wi,hitinfo.direction.neg());
+        
+        return f * tr.trace(r, world, depth +1) * hitinfo.normal.dot(wi)/ pdf;
     }
 
     Disney& operator= (Disney const& d)
@@ -73,18 +62,18 @@ public:
         return (*this);
     }
   public:
-    Vect3 baseColor = Vect3(0.86,0.67,0.16);
-    double metallic = 0.5;
+    Vect3 baseColor = Vect3(1);
+    double metallic = 0;
     double subsurface = 0;
-    double specular = 1;
-    double roughness = 0.5;
-    double specularTint = 1;
+    double specular = 0.5;
+    double roughness = 0;
+    double specularTint = 0;
     double anisotropic = 0;
     double sheen = 0;
-    double sheenTint = 0.5;
+    double sheenTint = 0;
     double clearcoat = 0;
-    double clearcoatGloss = 1;
-    tracer tr;
+    double clearcoatGloss = 0;
+    GlobalTracer tr;
     PrincipledBRDF* brdf;
 };
 

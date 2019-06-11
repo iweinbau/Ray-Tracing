@@ -10,11 +10,16 @@
 #include "./World.hpp"
 
 #include "../Material/Mirror.hpp"
-#include "../Material/Phong.hpp"
+#include "../Material/Matte.hpp"
 #include "../Material/Reflective.hpp"
 #include "../Material/Matte.hpp"
+#include "../Material/Emissive.hpp"
+#include "../Material/Disney.hpp"
+
+
 
 #include "../Objects/sphere.hpp"
+#include "../Objects/Rectangle.hpp"
 #include "../Objects/Plane.hpp"
 #include "../Objects/Instance.hpp"
 
@@ -33,58 +38,57 @@ void World::buildWorld(){
     //World setup
 
     //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);
-    Sphere* r = new Sphere(Vect3(0,0,6),1);
-    AreaLight* light = new AreaLight(r,Vect3(1),5);
+    Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(4,Vect3(1)));
+    AreaLight* light = new AreaLight(r,Vect3(1),4);
+    r->setShadowCast(false);
+    //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),5);
+
     add_Light(light);
     
-    ambientLight = AmbientLight(0,Vect3(1),1);
+    ambientLight = AmbientLight(1,Vect3(1),1);
 
-    Mirror * reflective = new Mirror(Lambertian(0.25,Vect3(0.3)),
-                                     new Lambertian(0.6,Vect3(0.4)),
-                                     new Specular(0.9,5,Vect3(0.6)),
-                                     new Glossy(0.9,Vect3(1,1,1)));
+//    Reflective * reflective = new Reflective(Lambertian(0.25,Vect3(1,1,0.3)),
+//                                     new Lambertian(0.6,Vect3(1,1,0.3)),
+//                                     new Glossy(0.5,20,Vect3(1,1,0.3)),
+//                                     new Glossy(0.9,100,Vect3(1,1,0.3)));
+    Disney* reflective = new Disney();
     
-    Phong* phong2 = new Phong(
+    Matte* Matte2 = new Matte(
                               Lambertian(1,Vect3(0.0,0.3,0)),
-                              new Lambertian(0.6,Vect3(0,1,0)),
-                              new Specular(0.2,5,Vect3(1,1,1)));
-    Phong* phong3 = new Phong(
+                              new Lambertian(0.5,Vect3(0,1,0)));
+    Phong* mat3 = new Phong(
                               Lambertian(0.25,Vect3(0.3,0,0)),
-                              new Lambertian(0.6,Vect3(0.8,0,0)),
-                              new Specular(0.2,5,Vect3(1,1,1)));
+                              new Lambertian(0.5,Vect3(0.8,0,0)),
+                              new Glossy(0.5,10000,Vect3(1,0,0)));
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 
     Instance* s = new Instance(sphere,reflective);
-    s->scale(Vect3(3));
-    s->translate(Vect3(3, 0, 0));
+    s->scale(Vect3(5));
+    s->translate(Vect3(0, 0, -7));
 
-    Instance* s2 = new Instance(sphere,phong2);
+    Instance* s2 = new Instance(sphere,Matte2);
     s2->scale(Vect3(2,3,2));
-    s2->translate(Vect3(-3, -2, -5));
+    s2->translate(Vect3(-3, -2, -2));
 
-    Instance* s3 = new Instance(sphere,phong3);
-    s3->scale(Vect3(3));
-    s3->translate(Vect3(5, 5, -10));
+    Instance* s3 = new Instance(sphere,mat3);
+    s3->scale(Vect3(2.5));
+    s3->translate(Vect3(3,-2, -1));
 
 
-    Phong* planem = new Phong(
-                 Lambertian(0.25,Vect3(0.8,0.8,0.8)),
-                 new Lambertian(0.6,Vect3(0.8,0.8,0.8)),
-                 new Specular(0.2,5,Vect3(1,1,1)));
-    Phong* planeb = new Phong(
-                 Lambertian(0.25,Vect3(0.8,0.8,0.8)),
-                 new Lambertian(0.6,Vect3(0.8,0.8,0.8)),
-                 new Specular(0.2,1,Vect3(1,1,1)));
+    Matte* planem = new Matte(
+                 Lambertian(0.25,Vect3(1)),
+                 new Lambertian(0.5,Vect3(1)));
+    Matte* planeb = new Matte(
+                 Lambertian(0.25,Vect3(1)),
+                 new Lambertian(0.5,Vect3(1)));
 
-    Phong* planel = new Phong(
-                 Lambertian(0.25,Vect3(0.8,0,0)),
-                 new Lambertian(0.6,Vect3(0.8,0,0)),
-                 new Specular(0.2,5,Vect3(1,1,1)));
-    Phong* planer = new Phong(
-                 Lambertian(0.25,Vect3(0,0.8,0)),
-                 new Lambertian(0.5,Vect3(0,0.8,0)),
-                 new Specular(0.2,5,Vect3(1,1,1)));
+    Matte* planel = new Matte(
+                 Lambertian(0.25,Vect3(1,0,0)),
+                 new Lambertian(0.5,Vect3(1,0,0)));
+    Matte* planer = new Matte(
+                 Lambertian(0.25,Vect3(0,1,0)),
+                 new Lambertian(0.5,Vect3(0,1,0)));
 
     Plane* planeback = new Plane(Point3(0, 0, -5), Normal(0,0,1),planem);
     Plane* planeleft = new Plane(Point3(-5, 0, 0), Normal(1,0,0),planel);
@@ -93,9 +97,10 @@ void World::buildWorld(){
     Plane* planetop =  new Plane(Point3(0, 5, 0), Normal(0,-1,0),planem);
 
 
-    add_object(s3);
+    //add_object(s3);
     add_object(s2);
     add_object(s);
+    add_object(r);
     add_object(planeback);
     add_object(planeleft);
     add_object(planeright);

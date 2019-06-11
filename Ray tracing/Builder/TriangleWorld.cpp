@@ -32,8 +32,8 @@ void TriangleWorld::buildWorld(){
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
     Mirror * reflective = new Mirror(Lambertian(0.25,Vect3(0.3)),
                                    new Lambertian(0.6,Vect3(0.4)),
-                                   new Specular(0.9,5,Vect3(0.6)),
-                                   new Glossy(1,10,Vect3(1,1,1)));
+                                   new Glossy(0.9,5,Vect3(0.6)),
+                                   new Specular(1,Vect3(1,1,1)));
 
     Sphere* r = new Sphere(Vect3(0,0,6),1);
     AreaLight* light = new AreaLight(r,Vect3(1),10);
@@ -48,20 +48,20 @@ void TriangleWorld::buildWorld(){
     Phong* planem = new Phong(
                               Lambertian(0.25,Vect3(0.8,0.8,0.8)),
                               new Lambertian(0.6,Vect3(0.8,0.8,0.8)),
-                              new Specular(0.2,5,Vect3(1,1,1)));
+                              new Glossy(0.2,5,Vect3(1,1,1)));
     Phong* planeb = new Phong(
                               Lambertian(0.25,Vect3(0.8,0.8,0.8)),
                               new Lambertian(0.6,Vect3(0.8,0.8,0.8)),
-                              new Specular(0.2,1,Vect3(1,1,1)));
+                              new Glossy(0.2,1,Vect3(1,1,1)));
 
     Phong* planel = new Phong(
                               Lambertian(0.25,Vect3(0.8,0,0)),
                               new Lambertian(0.6,Vect3(0.8,0,0)),
-                              new Specular(0.2,5,Vect3(1,1,1)));
+                              new Glossy(0.2,5,Vect3(1,1,1)));
     Phong* planer = new Phong(
                               Lambertian(0.25,Vect3(0,0.8,0)),
                               new Lambertian(0.5,Vect3(0,0.8,0)),
-                              new Specular(0.2,5,Vect3(1,1,1)));
+                              new Glossy(0.2,5,Vect3(1,1,1)));
 
     Plane* planeback = new Plane(Point3(0, 0, -5), Normal(0,0,1),planem);
     Plane* planeleft = new Plane(Point3(-5, 0, 0), Normal(1,0,0),planel);

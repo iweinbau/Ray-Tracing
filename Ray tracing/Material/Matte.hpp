@@ -11,6 +11,8 @@
 
 #include "Material.hpp"
 
+#include "../Utils/GlobalTracer.hpp"
+
 class Matte: public Material{
 public:
     Matte():Material()
@@ -31,7 +33,7 @@ public:
     ~Matte()
     {}
 
-    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth){
+    virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
 
         //********** AMBIENT COLOR ********** \\
         //set color to ambient light.
@@ -47,12 +49,23 @@ public:
                 double ndotLightDir = hitinfo.normal.dot(lightDir);
                 Vect3 tmp;
                 if(ndotLightDir > 0){
-                    Vect3 df = diffuse->sample(hitinfo,lightDir,tmp) * ndotLightDir * l->getIntensity(hitinfo,world);
+                    Vect3 df = diffuse->f(hitinfo,lightDir,tmp) * ndotLightDir * l->getIntensity(hitinfo,world);
                     color = color + df;
                 }
             }
         }
         return color;
+    }
+    
+    Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
+        Vect3 wi;
+        Vect3 wo = hitinfo.direction.neg();
+        double pdf;
+        Vect3 f = diffuse->sample_f(hitinfo, wi, wo, pdf);
+        //Create new ray
+        Ray r(hitinfo.point+ wi * kEpsilon,wi);
+        Vect3 tracedColor = gltr.trace(r, world, depth+1);
+        return (f * tracedColor * hitinfo.normal.dot(wi)/pdf);
     }
 
     Matte& operator= (Matte const& matte)
@@ -67,9 +80,13 @@ public:
 
         return (*this);
     }
+    
+    GlobalTracer gltr;
 
     Lambertian* diffuse;
     Lambertian ambient;
+    
+    
 };
 
 #endif /* Matte_h */

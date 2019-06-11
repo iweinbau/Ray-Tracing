@@ -13,4 +13,11 @@ inline double clamp(double value,double min, double max){
     return ( value<min? min :(value>max ? max:value));
 }
 
+inline double lerp(double t, double a, double b){
+    return (1-t)*a + t*b;
+}
+
+inline Vect3 lerp(Vect3 t, Vect3 a, Vect3 b){
+    return (Vect3(1)-t)*a + t*b;
+}
 #endif /* Math_h */

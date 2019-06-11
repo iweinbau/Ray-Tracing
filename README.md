@@ -1,4 +1,9 @@
 <p align='center'>
+<img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/out_global_500.strormtrooper.png' width=800/>
+<figcaption>Rendered Stoormtrooper, credits to <a href='https://www.blendswap.com/blends/view/76637'>Scottgram</a> providing this scene. This was rendered using indirect lighting and using the <a href='https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf'>Disney principled BRDF</a>
+</figcaption>
+</p>
+<p align='center'>
 <img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/out.png' width=400/>
 <img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/glossy_render.png' width=400/>
 <figcaption>Fig.1 - render scene, left perfect mirror reflections. Right glossy reflections.</figcaption>

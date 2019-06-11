@@ -56,7 +56,7 @@ namespace MeshLoader {
         while(std::getline(file, currentLine)){
 
             //for now we just print the line
-            std::cout << currentLine << std::endl;
+            //std::cout << currentLine << std::endl;
             
             if(algorithm::startsWith(currentLine, "s ")){
                 std::vector<std::string> line_split = algorithm::split(currentLine,' ');
@@ -104,9 +104,9 @@ namespace MeshLoader {
                 //construct new vertex normal.
                 std::vector<std::string> line_split = algorithm::split(currentLine,' ');
 
-                float x = std::stof(line_split[1]);
-                float y = std::stof(line_split[2]);
-                float z = std::stof(line_split[3]);
+                float x = std::stod(line_split[1]);
+                float y = std::stod(line_split[2]);
+                float z = std::stod(line_split[3]);
                 Vect3 normal = Vect3(x,y,z);
                 Normals.push_back(normal);
             }

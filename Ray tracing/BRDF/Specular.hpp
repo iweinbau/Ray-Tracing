@@ -25,15 +25,16 @@ public:
     Specular(double factor, Vect3 color): ks(factor),e(0),cs(color)
     {}
 
-    //No sampling used here. Used the formula of Bling-Phong light model
-    Vect3 sample(Hitinfo const& hitinfo,Vect3 const& ld, Vect3& out){
-
-        out = ld.neg() + (Vect3(hitinfo.normal) * ld.dot(Vect3(hitinfo.normal)) * 2);
-
-//        Vect3 H = (ld + hitinfo.direction.neg()).normalize();
-//        // Intensity of specular light
-        double RdotV = std::max(0.0,out.dot(hitinfo.direction.neg()));
-        return cs * ks * pow(RdotV,e);
+    //
+    Vect3 f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo){
+        return Vect3();
+    }
+    
+    //Perfect mirror BRDF.
+    Vect3 sample_f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo,double& pdf){
+        wi = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
+        pdf = hitinfo.normal.dot(wi);
+        return cs * ks;
     }
 
     Vect3 color()

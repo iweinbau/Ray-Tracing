@@ -21,11 +21,13 @@ Grid::Grid(Mesh const& mesh,Material* material):Object(){
         if(mesh.smoothShading){
             tri = new SmoothTriangle(Point3(mesh._positions[mesh._indices[i]]),
                                      Point3(mesh._positions[mesh._indices[i+1]]),
-                                     Point3(mesh._positions[mesh._indices[i+2]]),material);
+                                     Point3(mesh._positions[mesh._indices[i+2]]),
+                                     Normal(mesh._normals[mesh._indices[i]]),
+                                     Normal(mesh._normals[mesh._indices[i+1]]),
+                                     Normal(mesh._normals[mesh._indices[i+2]]),material);
         }else{
             tri = new Triangle(Point3(mesh._positions[mesh._indices[i]]),
-                               Point3(mesh._positions[mesh._indices[i+1]]),
-                               Point3(mesh._positions[mesh._indices[i+2]]),material);
+                               Point3(mesh._positions[mesh._indices[i+1]]),Point3(mesh._positions[mesh._indices[i+2]]),Normal(mesh._normals[mesh._indices[i]]),material);
         }
         
         add_object(tri);
@@ -275,9 +277,9 @@ void Grid::constructCells(){
     //Use formula Mi = Si * pow( (density * N)/V, 0,333333)
     //where i the correspond to the dimensions x,y,z
     
-    Mx = Sx * pow((density * N)/V,0.33333);
-    My = Sy * pow((density * N)/V,0.33333);
-    Mz = Sz * pow((density * N)/V,0.33333);
+    Mx = Sx * pow((density * N)/V,0.33333)+1;
+    My = Sy * pow((density * N)/V,0.33333)+1;
+    Mz = Sz * pow((density * N)/V,0.33333)+1;
     
     int num_cels = Mx*My*Mz;
     
@@ -317,7 +319,7 @@ void Grid::constructCells(){
         }
     }
     
-    objects.erase(objects.cbegin(),objects.cend());
+    //objects.erase(objects.cbegin(),objects.cend());
 }
 
 Box Grid::caluclateBoundingBox(){

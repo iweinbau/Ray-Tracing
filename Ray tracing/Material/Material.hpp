@@ -30,7 +30,11 @@ public:
 
         return (*this);
     }
-    virtual Vect3 shade(Hitinfo& hitinfo,World& world,int depth) = 0;
+    
+    virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth) = 0;
+    virtual Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
+        return Vect3();
+    };
 
 };
 
