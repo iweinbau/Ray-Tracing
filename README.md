@@ -1,4 +1,9 @@
 <p align='center'>
+<img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/out_global_500.strormtrooper.png' width=800/>
+<figcaption>Rendered Stoormtrooper, credits to <a href='https://www.blendswap.com/blends/view/76637'>Scottgram</a> providing this scene. This was rendered using indirect lighting and using the <a href='https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf'>Disney principled BRDF</a>
+</figcaption>
+</p>
+<p align='center'>
 <img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/out.png' width=400/>
 <img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/glossy_render.png' width=400/>
 <figcaption>Fig.1 - render scene, left perfect mirror reflections. Right glossy reflections.</figcaption>
@@ -16,6 +21,8 @@ The goal of this project is to get familiar with c++ and learn the basics of com
  - Phong material, has also specular using Bling-Phong.
  - Reflective material. Perfect mirror and glossy reflections.
  - Aliasing using random pixel sampling.
+ - Ambient occlusion
+ - Area Lights/Soft shadows.
 
 I'm still working and I'll add new features.
 
@@ -28,9 +35,22 @@ Since most objects don't have a perfect reflective surface I've implemented glos
 
 Also see Fig 1 for a comparison.
 
+## Ambient occlusion
+Ambient occusion let us variate the ambient color an object receives by checking how much of the hemishere above a hit point is blocked. Each scene has an ambient light class that samples random directions on the hemisphere and checks if this direction is blocked.
+
+<p align='center'>
+<img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/ambient_occ_factor_0.png' width=400/>
+<img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/ambient_occ_factor_05.png' width=400/>
+<figcaption>Fig.2 - render scene, left ambient occlusion with factor 0, Right left ambient occlusion with factor 0.5.</figcaption>
+</p>
+
 ## Aliasing
 
 Removing the pixelated effect of sharp edges. For this I used per pixel sampling, cast multiple rays randomly spread in each pixel. This doesn't give us the best result, because rays can group together, but it's easy to understand.
+
+## Transforming
+
+There is support for transforming objects using a transformation matrix. This is used in combination with instancing (resusing objects with diffrent transfomations), This limit memory usage.
 
 ## Running the code
 I provided a simple make file that compiles the code to an executable.
