@@ -48,20 +48,22 @@ public:
     Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
         Vect3 color = Phong::direct_shade(hitinfo,world,depth);
         
-        Vect3 wi;
         Vect3 wo = hitinfo.direction.neg();
-        double pdf;
-        Vect3 reflective = reflection->sample_f(hitinfo,wi, wo,pdf);
+        Vect3 wi = reflection->sample_f(this, hitinfo, wo);
+        double pdf = reflection->pdf(this, hitinfo, wi, wo);
+        Vect3 reflective = reflection->eval(this,hitinfo,wi, wo);
+        
         Ray reflectionRay = Ray(hitinfo.point + Vect3(hitinfo.normal) * kEpsilon, wi);
         color = color + (tr.trace(reflectionRay,world,depth+1)*reflective/pdf);
         return color;
     }
     
     Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
-        Vect3 wi;
         Vect3 wo = hitinfo.direction.neg();
-        double pdf;
-        Vect3 fs = reflection->sample_f(hitinfo, wi, wo, pdf);
+        Vect3 wi = reflection->sample_f(this, hitinfo, wo);
+        double pdf = reflection->pdf(this, hitinfo, wi, wo);
+        Vect3 fs = reflection->eval(this,hitinfo, wi, wo);
+        
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
         Vect3 tracedColor;

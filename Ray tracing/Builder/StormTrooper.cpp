@@ -90,5 +90,4 @@ void StormTrooper::buildWorld(){
     
     add_object(box);
     add_object(lights);
-    
 }

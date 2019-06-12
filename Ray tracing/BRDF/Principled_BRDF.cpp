@@ -36,7 +36,7 @@ double PrincipledBRDF::pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, 
     return diffuseRatio * pdfDiff + specularRatio * pdfSpec;
 }
 
-Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo)
+Vect3 PrincipledBRDF::sample_f(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo)
 {
     std::random_device rd;  //Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -50,7 +50,6 @@ Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo
     v = v.normalize();
     Vect3 u = v.cross(w);
     
-    //From raytracing from the ground up.
     double x = dis(gen);
     double y = dis(gen);
     
@@ -75,13 +74,18 @@ Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo
         
         float phi = x * 2.0 * PI;
         
-        float cosTheta = sqrt((1.0 - y) / (1.0 + (a*a-1.0) *y));
-        float sinTheta = sqrt(1.0 - (cosTheta * cosTheta));
-        float sinPhi = sinf(phi);
-        float cosPhi = cosf(phi);
+        //same code as in sample_f in glossy brdf.
+        //TODO: extract this code to a sampler class.
+        float cos_theta = sqrt((1.0 - y) / (1.0 + (a*a-1.0) *y));
+        float sin_theta = sqrt(1.0 - (cos_theta * cos_theta));
+        float sin_phi = sinf(phi);
+        float cos_phi = cosf(phi);
         
-        Vect3 half = Vect3(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
-        half = u * half.x_ + v * half.y_ + w * half.z_;
+        double pu = sin_theta * cos_phi;
+        double pv = sin_theta * sin_phi;
+        double pw = cos_theta;
+        
+        Vect3 half = u * pu + v * pv + w * pw;
         half = half.normalize();
         
         wi = half* 2.0* wo.dot(half) - wo; //reflection vector
@@ -91,7 +95,7 @@ Vect3 PrincipledBRDF::sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo
     return wi;
 }
 
-
+//From https://github.com/wdas/brdf/blob/master/src/brdfs/disney.brdf.
 Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo){
     // halfway vector;
     Vect3 wh = (wi + wo).normalize();
@@ -105,13 +109,14 @@ Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Ve
         return Vect3();
     
     Vect3 Cdlin = mat->baseColor;
-    float Cdlum = 0.3*Cdlin.x_ + 0.6*Cdlin.y_ + 0.1*Cdlin.z_; // luminance approx.
+    double Cdlum = 0.3*Cdlin.x_ + 0.6*Cdlin.y_ + 0.1*Cdlin.z_; // luminance approx.
     
     Vect3 Ctint = Cdlum > 0.0 ? Cdlin / Cdlum : Vect3(1.0); // normalize lum. to isolate hue+sat
     Vect3 Cspec0 = lerp(mat->metallic,mat->specular*0.08*lerp(mat->specularTint,Vect3(1.0), Ctint), Cdlin);
     Vect3 Csheen = lerp(mat->sheenTint,Vect3(1.0), Ctint);
     
     
+    //DIFUSE
     double Fd90 = 0.5 + 2*ndoth * ndoth * mat->roughness;
     double Fi = fresnel(ndotwi);
     double Fo = fresnel(ndotwo);
@@ -122,7 +127,7 @@ Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Ve
     double Fss = lerp(Fi,1.0,Fss90) * lerp(Fo,1.0,Fss90);
     double ss = 1.25 * (Fss * (1.0 / (ndotwi + ndotwo) - 0.5) + 0.5);
     
-    float a = std::max(0.001, mat->roughness);
+    double a = std::max(0.001, mat->roughness);
     //specular D
     double Ds = GTR2(ndoth, a);
     //clearcoat D

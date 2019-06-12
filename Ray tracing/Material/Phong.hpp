@@ -73,16 +73,17 @@ public:
         //second probability of specular.
         //calculate diffuse first.
         //calculate specular second.
-        Vect3 wi;
         Vect3 wo = hitinfo.direction.neg();
-        double pdfd;
-        double pdfs;
-        Vect3 f = diffuse->sample_f(hitinfo, wi, wo, pdfd);
-        specular->sample_f(hitinfo, wi, wo, pdfs);
+        Vect3 wi = diffuse->sample_f(this, hitinfo, wo);
+        double pdfd = diffuse->pdf(this, hitinfo, wi, wo);
+        double pdfs = specular->pdf(this, hitinfo, wi, wo);
+        Vect3 f = diffuse->eval(this,hitinfo, wi, wo);
+        Vect3 fs = specular->eval(this, hitinfo, wi, wo);
 
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
         Vect3 tracedColor = gltr.trace(r, world, depth+1);
+        //TODO: Not shure about this evaluation.
         return (tracedColor * (diffuse->color() + specular->color()* pow(wi.dot(wo)*hitinfo.normal.dot(wi),specular->e)))/(q1 * pdfd + q2 *pdfs);
     }
 
