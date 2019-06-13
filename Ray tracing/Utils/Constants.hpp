@@ -13,7 +13,6 @@
 #define kEpsilon 0.001
 #define NUM_SAMPLES 1
 #define MAX_BOUNCE 2
-#define NUM_CHUNCKS 10
 
 
 #endif /* Constants_h */
