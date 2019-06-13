@@ -84,9 +84,11 @@ public:
         if(p <  diffuse->kd){
             //sample in diffuse lobe.
              wi = diffuse->sample_f(this, hitinfo, wo);
-        }else{
+        }else if( diffuse->kd <= p && p < diffuse->kd + specular->ks){
             //sample specular lobe.
             wi = specular->sample_f(this, hitinfo, wo);
+        }else{
+            return Vect3();
         }
         double pdfd = diffuse->pdf(this, hitinfo, wi, wo);
         double pdfs = specular->pdf(this, hitinfo, wi, wo);

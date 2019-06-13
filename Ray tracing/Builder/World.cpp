@@ -57,9 +57,9 @@ void World::buildWorld(){
                               Lambertian(1,Vect3(0.0,0.3,0)),
                               new Lambertian(0.5,Vect3(0,1,0)));
     Phong* mat3 = new Phong(
-                              Lambertian(0.25,Vect3(0.3,0,0)),
-                              new Lambertian(0.5,Vect3(0.8,0,0)),
-                              new Glossy(0.5,10000,Vect3(1,0,0)));
+                              Lambertian(0.7,Vect3(0.3,0,0)),
+                              new Lambertian(0.7,Vect3(0.8,0,0)),
+                              new Glossy(0,10000,Vect3(1,0,0)));
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 
