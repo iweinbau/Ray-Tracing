@@ -72,11 +72,6 @@ int main(int argc, char* argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
 
-    //construct a camera
-    Point3 lookfrom(0,0,10);
-    Vect3 lookat(0,0,0);
-    Camera camera(lookfrom, lookat, 90);
-
     World builder;
     builder.buildWorld();
 
@@ -88,8 +83,8 @@ int main(int argc, char* argv[]) {
     ThreadPool th_pool(NUM_THREADS);
     th_pool.init();
 
-    int image_width = camera.width;
-    int image_height = camera.height;
+    int image_width = builder.camera.width;
+    int image_height = builder.camera.height;
     int start_width = 0;
     int end_width = image_width;
     int start_height = 0;
@@ -122,7 +117,7 @@ int main(int argc, char* argv[]) {
             res.push_back(th_pool.submit(mul_render,x,y,
                                          image_width,
                                          image_height,
-                                         std::ref(camera),
+                                         std::ref(builder.camera),
                                          std::ref(builder),
                                          std::ref(pixels),start_width,start_height));
         }

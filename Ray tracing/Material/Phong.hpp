@@ -71,6 +71,7 @@ public:
         std::uniform_real_distribution<> dis(0.0, 1.0);
         
         double p = dis(gen);
+        
         //first probability of diffuse.
         double q1 = 1/PI;
         double q2 = (specular->e +2)/(2 * PI);
@@ -98,6 +99,8 @@ public:
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
         Vect3 tracedColor = gltr.trace(r, world, depth+1);
+        
+        //We are not multiplying by q1 since this factor is already taken into account in the lamberian BRDF.
         return (tracedColor * (f + q2*fs) * hitinfo.normal.dot(wi))/(pdfd + q2*pdfs);
     }
 

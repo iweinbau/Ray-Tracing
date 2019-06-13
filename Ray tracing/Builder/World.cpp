@@ -35,8 +35,14 @@ World::World(){}
 World::~World(){}
 
 void World::buildWorld(){
+    
+    //Camera setup
+    //construct a camera
+    Point3 lookfrom(0,0,10);
+    Vect3 lookat(0,0,0);
+    camera = Camera(lookfrom, lookat, 90);
+    
     //World setup
-
     //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);
     Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(100,Vect3(1)));
     AreaLight* light = new AreaLight(r,Vect3(1),100);
