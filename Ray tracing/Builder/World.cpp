@@ -63,17 +63,17 @@ void World::buildWorld(){
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 
-    Instance* s = new Instance(sphere,reflective);
-    s->scale(Vect3(5));
-    s->translate(Vect3(0, 0, -7));
+    Instance* s = new Instance(sphere,mat3);
+    s->scale(Vect3(3));
+    s->translate(Vect3(0, 0, -2));
 
-    Instance* s2 = new Instance(sphere,Matte2);
-    s2->scale(Vect3(2,3,2));
-    s2->translate(Vect3(-3, -2, -2));
-
-    Instance* s3 = new Instance(sphere,mat3);
-    s3->scale(Vect3(2.5));
-    s3->translate(Vect3(3,-2, -1));
+//    Instance* s2 = new Instance(sphere,Matte2);
+//    s2->scale(Vect3(2,3,2));
+//    s2->translate(Vect3(-3, -2, -2));
+//
+//    Instance* s3 = new Instance(sphere,mat3);
+//    s3->scale(Vect3(2.5));
+//    s3->translate(Vect3(3,-2, -1));
 
 
     Matte* planem = new Matte(
@@ -98,7 +98,7 @@ void World::buildWorld(){
 
 
     //add_object(s3);
-    add_object(s2);
+//    add_object(s2);
     add_object(s);
     add_object(r);
     add_object(planeback);

@@ -12,6 +12,7 @@ PrincipledBRDF::PrincipledBRDF():BRDF()
 PrincipledBRDF::~PrincipledBRDF()
 {}
 
+//http://simon-kallweit.me/rendercompo2015/report/
 double PrincipledBRDF::pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo){
     Vect3 n = hitinfo.normal;
     
@@ -96,6 +97,7 @@ Vect3 PrincipledBRDF::sample_f(Disney* mat,Hitinfo const& hitinfo, Vect3 const& 
 }
 
 //From https://github.com/wdas/brdf/blob/master/src/brdfs/disney.brdf.
+//TODO add anisotropic values.
 Vect3 PrincipledBRDF::eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo){
     // halfway vector;
     Vect3 wh = (wi + wo).normalize();

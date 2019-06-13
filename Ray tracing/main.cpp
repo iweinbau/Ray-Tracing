@@ -73,11 +73,11 @@ int main(int argc, char* argv[]) {
     auto end = std::chrono::high_resolution_clock::now();
 
     //construct a camera
-    Point3 lookfrom(-0.283894,-0.794405,9.13327);
-    Vect3 lookat(-0.9951571822166443,0.00454461295157671,-0.09819173067808151);
-    Camera camera(lookfrom, lookat, 39.6);
+    Point3 lookfrom(0,0,10);
+    Vect3 lookat(0,0,0);
+    Camera camera(lookfrom, lookat, 90);
 
-    StormTrooper builder;
+    World builder;
     builder.buildWorld();
 
     //get num thread from command line argument.
