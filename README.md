@@ -9,7 +9,7 @@
 <figcaption>Fig.1 - render scene, left perfect mirror reflections. Right glossy reflections.</figcaption>
 </p>
 
-# Basic ray-tracer in C++
+# Ray-tracer in C++
 
 The goal of this project is to get familiar with c++ and learn the basics of computer graphics.
 
@@ -23,6 +23,7 @@ The goal of this project is to get familiar with c++ and learn the basics of com
  - Aliasing using random pixel sampling.
  - Ambient occlusion
  - Area Lights/Soft shadows.
+ - Global illumination.
 
 I'm still working and I'll add new features.
 
