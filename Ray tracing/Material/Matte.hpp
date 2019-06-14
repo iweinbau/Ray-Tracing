@@ -58,10 +58,11 @@ public:
     }
     
     Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
-        Vect3 wi;
         Vect3 wo = hitinfo.direction.neg();
-        double pdf;
-        Vect3 f = diffuse->sample_f(hitinfo, wi, wo, pdf);
+        Vect3 wi = diffuse->sample_f(this, hitinfo, wo);
+        double pdf = diffuse->pdf(this, hitinfo, wi, wo);
+        Vect3 f = diffuse->eval(this,hitinfo, wi, wo);
+        
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
         Vect3 tracedColor = gltr.trace(r, world, depth+1);

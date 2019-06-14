@@ -12,6 +12,9 @@
 #include "../Utils/Vect3.hpp"
 #include "../Utils/Hitinfo.hpp"
 
+#include "../Material/Material.hpp"
+
+template <class M>
 class BRDF{
 public:
     BRDF()
@@ -29,7 +32,7 @@ public:
         return Vect3();
     }
     
-    virtual Vect3 sample_f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo,double& pdf){
+    virtual Vect3 sample_f(M* mat,Hitinfo const& hitinfo, Vect3 const& wo){
         return Vect3();
     }
 
@@ -38,6 +41,10 @@ public:
         //Just return black
         return Vect3();
     }
+    
+    virtual double pdf(M* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo)=0;
+        
+    virtual Vect3 eval(M* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo)=0;
 };
 
 #endif /* BRDF_h */

@@ -10,6 +10,7 @@
 #define World_h
 
 #include <vector>
+#include "../Utils/Camera.hpp"
 #include "../Utils/Vect3.hpp"
 #include "../Utils/Normal.hpp"
 #include "../Light/AmbientLight.hpp"
@@ -28,6 +29,7 @@ public:
     std::vector<Object*> objects;
     std::vector<Light*> lights;
     AmbientLight ambientLight;
+    Camera camera;
     
 };
 

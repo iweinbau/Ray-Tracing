@@ -12,7 +12,7 @@
 #include "BRDF.hpp"
 #include "../Utils/Constants.hpp"
 
-class Lambertian:BRDF{
+class Lambertian:BRDF<Material>{
 public:
     Lambertian(): kd(0.0), cd()
     {}
@@ -34,13 +34,16 @@ public:
         return cd * kd * (1/PI);
     }
     
-    Vect3 sample_f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo,double& pdf){
-
+    double pdf(Material* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo){
+        return hitinfo.normal.dot(wi) * (1/PI);
+    }
+    
+    Vect3 sample_f(Material* mat,Hitinfo const& hitinfo, Vect3 const& wo){
         Vect3 w = hitinfo.normal;
         Vect3 v = Vect3(0.0034, 1, 0.0071).cross(w);
         v = v.normalize();
         Vect3 u = v.cross(w);
-
+        
         
         std::random_device rd;  //Will be used to obtain a seed for the random number engine
         std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
@@ -59,11 +62,11 @@ public:
         double pv = sin_theta * sin_phi;
         double pw = cos_theta;
         
-        wi = u * pu + v * pv + w * pw;
-        wi = wi.normalize();
-        
-        pdf = hitinfo.normal.dot(wi) * (1/PI);
-        
+        Vect3 wi = u * pu + v * pv + w * pw;
+        return wi.normalize();
+    }
+    
+    Vect3 eval(Material* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo){
         return (kd * cd * (1/PI));
     }
 

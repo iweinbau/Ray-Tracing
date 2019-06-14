@@ -8,7 +8,7 @@
 
 class Disney;
 
-class PrincipledBRDF:public BRDF{
+class PrincipledBRDF:public BRDF<Disney>{
 public:
     PrincipledBRDF();
 
@@ -16,7 +16,7 @@ public:
 
     double pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo);
 
-    Vect3 sample(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo);
+    Vect3 sample_f(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo);
 
     Vect3 eval(Disney* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo);
     

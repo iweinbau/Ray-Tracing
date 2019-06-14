@@ -11,7 +11,7 @@
 
 #include "BRDF.hpp"
 
-class Specular:BRDF{
+class Specular:BRDF<Material>{
 public:
     Specular(): ks(1),e(0), cs()
     {}
@@ -28,13 +28,6 @@ public:
     //
     Vect3 f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo){
         return Vect3();
-    }
-    
-    //Perfect mirror BRDF.
-    Vect3 sample_f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo,double& pdf){
-        wi = hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
-        pdf = hitinfo.normal.dot(wi);
-        return cs * ks;
     }
 
     Vect3 color()
@@ -55,6 +48,19 @@ public:
         cs = spec.cs;
 
         return (*this);
+    }
+    
+    //Perfect mirror BRDF.
+    Vect3 sample_f(Material* mat,Hitinfo const& hitinfo, Vect3 const& wo){
+        return hitinfo.direction - ( Vect3(hitinfo.normal) * 2 * hitinfo.direction.dot(Vect3(hitinfo.normal)));
+    }
+    
+    double pdf(Material* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo){
+        return hitinfo.normal.dot(wi);
+    }
+    
+    Vect3 eval(Material* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo){
+        return cs * ks;
     }
 
 private:

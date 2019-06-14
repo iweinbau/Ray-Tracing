@@ -66,24 +66,42 @@ public:
     }
     
     Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
+        std::random_device rd;  //Will be used to obtain a seed for the random number engine
+        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+        std::uniform_real_distribution<> dis(0.0, 1.0);
+        
+        double p = dis(gen);
+        
         //first probability of diffuse.
-        double q1 = PI * diffuse->kd;
-        double q2 = ((2 * PI)/ (specular->e +2))*specular->ks;
+        double q1 = 1/PI;
+        double q2 = (specular->e +2)/(2 * PI);
         
         //second probability of specular.
         //calculate diffuse first.
         //calculate specular second.
-        Vect3 wi;
         Vect3 wo = hitinfo.direction.neg();
-        double pdfd;
-        double pdfs;
-        Vect3 f = diffuse->sample_f(hitinfo, wi, wo, pdfd);
-        specular->sample_f(hitinfo, wi, wo, pdfs);
+        Vect3 wi;
+
+        if(p <  diffuse->kd){
+            //sample in diffuse lobe.
+             wi = diffuse->sample_f(this, hitinfo, wo);
+        }else if( diffuse->kd <= p && p < diffuse->kd + specular->ks){
+            //sample specular lobe.
+            wi = specular->sample_f(this, hitinfo, wo);
+        }else{
+            return Vect3();
+        }
+        double pdfd = diffuse->pdf(this, hitinfo, wi, wo);
+        double pdfs = specular->pdf(this, hitinfo, wi, wo);
+        Vect3 f = diffuse->eval(this,hitinfo, wi, wo);
+        Vect3 fs = specular->eval(this, hitinfo, wi, wo);
 
         //Create new ray
         Ray r(hitinfo.point+ wi * kEpsilon,wi);
         Vect3 tracedColor = gltr.trace(r, world, depth+1);
-        return (tracedColor * (diffuse->color() + specular->color()* pow(wi.dot(wo)*hitinfo.normal.dot(wi),specular->e)))/(q1 * pdfd + q2 *pdfs);
+        
+        //We are not multiplying by q1 since this factor is already taken into account in the lamberian BRDF.
+        return (tracedColor * (f + q2*fs) * hitinfo.normal.dot(wi))/(pdfd + q2*pdfs);
     }
 
     Phong& operator= (Phong const& phong)

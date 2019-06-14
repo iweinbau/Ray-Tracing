@@ -24,6 +24,12 @@
 
 void StormTrooper::buildWorld(){
     
+    //Camera setup
+    //construct a camera
+    Point3 lookfrom(-0.283894,-0.794405,9.13327);
+    Vect3 lookat(-0.9951571822166443,0.00454461295157671,-0.09819173067808151);
+    camera = Camera(lookfrom, lookat, 39.6);
+    
     Disney* boxMat = new Disney();
     boxMat->baseColor = Vect3(0.17);
     boxMat->specular = 0;
@@ -72,7 +78,7 @@ void StormTrooper::buildWorld(){
     // Initialize Loader
     objl::Loader soldier;
     // Load .obj File
-    loadout = soldier.LoadFile("./Objects/soldier.obj");
+    loadout = soldier.LoadFile("./Objects/soldiers.obj");
     
     if(loadout){
         // Go through each loaded mesh and out its contents
@@ -87,8 +93,6 @@ void StormTrooper::buildWorld(){
         }
     }
 
-    
     add_object(box);
     add_object(lights);
-    
 }
