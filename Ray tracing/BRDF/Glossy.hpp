@@ -9,12 +9,10 @@
 #ifndef Glossy_h
 #define Glossy_h
 
-#include <random>
 #include <iostream>
 
 #include "../Utils/Constants.hpp"
 #include "../BRDF/BRDF.hpp"
-
 class Glossy:BRDF<Material>{
 public:
     Glossy(): ks(1.0),cs(1,1,1)
@@ -45,26 +43,11 @@ public:
         u = u.normalize();
         Vect3 v = u.cross(w);
         
-        std::random_device rd;  //Will be used to obtain a seed for the random number engine
-        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-        std::uniform_real_distribution<> dis(0.0, 1.0);
+        Point3 p = sampler.sampleOnHemisphere(e);
         
-        //From raytracing from the ground up.
-        double x = dis(gen);
-        double y = dis(gen);
-        
-        double cos_phi = cos(2.0 * PI * x);
-        double sin_phi = sin(2.0 * PI * x);
-        double cos_theta = pow((1.0 - y), 1.0 / (e + 1.0));
-        double sin_theta = sqrt (1.0 - cos_theta * cos_theta);
-        
-        double pu = sin_theta * cos_phi;
-        double pv = sin_theta * sin_phi;
-        double pw = cos_theta;
-        
-        Vect3 wi = u * pu + v * pv + w * pw;
+        Vect3 wi = u * p.x_ + v * p.y_ + w * p.z_;
         if (hitinfo.normal.dot(wi) < 0.0)                         // reflected ray is below tangent plane
-            wi = u * - pu + v * -pv + w * pw;
+            wi = u * - p.x_ + v * -p.y_ + w * p.z_;
         return wi.normalize();
     }
     

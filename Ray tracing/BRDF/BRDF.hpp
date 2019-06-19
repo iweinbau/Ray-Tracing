@@ -14,6 +14,8 @@
 
 #include "../Material/Material.hpp"
 
+#include "../Sampler/Sampler.hpp"
+
 template <class M>
 class BRDF{
 public:
@@ -42,9 +44,21 @@ public:
         return Vect3();
     }
     
+    BRDF<M>& operator= (BRDF<M> const& brdf)
+    {
+        if( this == &brdf)
+            return (*this);
+        
+        sampler = brdf.sampler;
+        return (*this);
+    }
+    
     virtual double pdf(M* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo)=0;
         
     virtual Vect3 eval(M* mat,Hitinfo const& hitinfo,Vect3 const& wi,Vect3 const& wo)=0;
+    
+protected:
+    Sampler sampler;
 };
 
 #endif /* BRDF_h */

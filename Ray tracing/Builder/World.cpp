@@ -51,7 +51,7 @@ void World::buildWorld(){
 
     add_Light(light);
     
-    ambientLight = AmbientLight(1,Vect3(1),1);
+    ambientLight = AmbientLight(0.5,Vect3(1),1);
 
     Reflective * reflective = new Reflective(Lambertian(0.25,Vect3(1,1,0.3)),
                                      new Lambertian(0.6,Vect3(1,1,0.3)),
@@ -65,7 +65,7 @@ void World::buildWorld(){
     Phong* mat3 = new Phong(
                               Lambertian(0.7,Vect3(0.3,0,0)),
                               new Lambertian(0.7,Vect3(0.8,0,0)),
-                              new Glossy(0,10000,Vect3(1,0,0)));
+                              new Glossy(0.3,10,Vect3(1,0,0)));
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 

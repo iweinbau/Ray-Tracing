@@ -39,54 +39,31 @@ double PrincipledBRDF::pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, 
 
 Vect3 PrincipledBRDF::sample_f(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wo)
 {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<> dis(0.0, 1.0);
     
     double ratiodiffuse = (1 - mat->metallic)/2;
-    double p = dis(gen);
+    double p = sampler.samlple();
     
     Vect3 w = hitinfo.normal;
     Vect3 v = Vect3(0.0034, 1, 0.0071).cross(w);
     v = v.normalize();
     Vect3 u = v.cross(w);
     
-    double x = dis(gen);
-    double y = dis(gen);
-    
     Vect3 wi;
     
     if( p < ratiodiffuse){
         //sample diffuse lobe
-        double cos_phi = cos(2.0 * PI * x);
-        double sin_phi = sin(2.0 * PI * x);
-        double cos_theta = pow((1.0 - y), 1.0 / (1.0+1.0));
-        double sin_theta = sqrt (1.0 - cos_theta * cos_theta);
         
-        double pu = sin_theta * cos_phi;
-        double pv = sin_theta * sin_phi;
-        double pw = cos_theta;
+        Point3 p = sampler.sampleOnHemisphere();
         
-        wi = u * pu + v * pv + w * pw;
+        wi = u * p.x_ + v * p.y_ + w * p.z_;
         wi = wi.normalize();
     }else{
         //sample specular lobe.
         float a = std::max(0.001, mat->roughness);
         
-        float phi = x * 2.0 * PI;
+        Point3 p = sampler.sampleOnHemisphere(a*a);
         
-        //same code as in sample_f in glossy brdf.
-        //TODO: extract this code to a sampler class.
-        float cos_theta = sqrt((1.0 - y) / (1.0 + (a*a-1.0) *y));
-        float sin_theta = sqrt(1.0 - (cos_theta * cos_theta));
-        float sin_phi = sinf(phi);
-        float cos_phi = cosf(phi);
-        
-        double pu = sin_theta * cos_phi;
-        double pv = sin_theta * sin_phi;
-        double pw = cos_theta;
-        
-        Vect3 half = u * pu + v * pv + w * pw;
+        Vect3 half = u * p.x_ + v * p.y_ + w * p.z_;
         half = half.normalize();
         
         wi = half* 2.0* wo.dot(half) - wo; //reflection vector
