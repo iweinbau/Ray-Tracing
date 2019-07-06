@@ -15,20 +15,18 @@
 #include "Box.hpp"
 #include "Composite.hpp"
 
-class Grid:public Object{
+class Grid:public Composite{
 public:
     Grid();
     Grid(Mesh const& mesh,Material* material);
     ~Grid();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
     Box caluclateBoundingBox();
-    void add_object(Object* object);
     void constructCells();
 private:
     Box bbox;
     int Mx,My,Mz;
     int density=5;
-    std::vector<Object*> objects;
     std::vector<Composite*> cells;
 };
 

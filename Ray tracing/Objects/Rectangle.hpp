@@ -23,7 +23,7 @@ public:
     Box caluclateBoundingBox();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
     Vect3 sample();
-    Vect3 getNormal(Vect3 point);
+    Normal getNormal(Vect3 const& point);
     double pdf();
 private:
     Sampler sampler;

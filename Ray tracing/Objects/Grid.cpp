@@ -14,8 +14,8 @@
 #include <iostream>
 
 
-Grid::Grid():Object(){}
-Grid::Grid(Mesh const& mesh,Material* material):Object(){
+Grid::Grid():Composite(){}
+Grid::Grid(Mesh const& mesh,Material* material):Composite(){
     for(int i= 0;i<mesh._indices.size();i=i+3){
         Triangle* tri;
         if(mesh.smoothShading){
@@ -231,9 +231,6 @@ bool Grid::hit(Ray const& ray, Point3& intersection, double& t,Normal& normal){
             }
         }
     }
-}
-void Grid::add_object(Object* object){
-    objects.push_back(object);
 }
 
 void Grid::constructCells(){

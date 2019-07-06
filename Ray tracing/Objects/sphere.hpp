@@ -104,7 +104,7 @@ public:
         return 1/(4 * PI * radius_ *radius_);
     }
     
-    Vect3 getNormal(Vect3 point){
+    Normal getNormal(Vect3 const& point){
         return (point - position).normalize();
     }
 

@@ -66,7 +66,7 @@ Vect3 Rectangle::sample(){
     
     return p0 + a * x + b * y;
 }
-Vect3 Rectangle::getNormal(Vect3 point){
+Normal Rectangle::getNormal(Vect3 const& point){
     return n;
 }
 double Rectangle::pdf(){

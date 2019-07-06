@@ -47,7 +47,7 @@ public:
         return Vect3();
     }
     
-    Vect3 virtual getNormal(Vect3 point){
+    Normal virtual getNormal(Vect3 const& point){
         return Vect3();
     }
     
@@ -59,7 +59,6 @@ public:
         shadow_cast = b;
     }
     
-    void add_object(Object* object){}
     virtual Box caluclateBoundingBox() = 0;
     virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal) = 0;
 

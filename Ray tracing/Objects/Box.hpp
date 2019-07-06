@@ -12,6 +12,6 @@ public:
   ~Box();
   bool inside(Point3 const& point);
   bool hit(Ray const& ray,double &t);
-    Point3 * getVertices(Point3 v[8]);
+  Point3 * getVertices(Point3 v[8]);
 };
 #endif
