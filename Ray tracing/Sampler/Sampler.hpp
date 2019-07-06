@@ -19,7 +19,7 @@ public:
     ~Sampler();
     
     Point3 sampleOnHemisphere(double exp=1);
-    double samlple();
+    double sample();
     
     Sampler& operator= (Sampler const& s);
     

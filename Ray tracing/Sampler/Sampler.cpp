@@ -36,7 +36,7 @@ Point3 Sampler::sampleOnHemisphere(double exp){
     return Point3(pu,pv,pw);
 }
 
-double Sampler::samlple(){
+double Sampler::sample(){
     return dis(gen);
 }
 

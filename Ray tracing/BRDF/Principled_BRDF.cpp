@@ -41,7 +41,7 @@ Vect3 PrincipledBRDF::sample_f(Disney* mat,Hitinfo const& hitinfo, Vect3 const& 
 {
     
     double ratiodiffuse = (1 - mat->metallic)/2;
-    double p = sampler.samlple();
+    double p = sampler.sample();
     
     Vect3 w = hitinfo.normal;
     Vect3 v = Vect3(0.0034, 1, 0.0071).cross(w);
