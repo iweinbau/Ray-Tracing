@@ -7,7 +7,7 @@
 
 # Ray-tracer in C++
 
-The goal of this project is to get familiar with c++ and learn the basics of computer graphics.
+The goal of this project is to get familiar with c++ and learn the basics of computer graphics. View design on [google drive](https://drive.google.com/open?id=1AycpsDItILuk4ehFi2Kk7ZPwQ3XedO23)
 
 ## Current features 
 
