@@ -11,7 +11,7 @@
 
 #define PI 3.14159265
 #define kEpsilon 0.001
-#define NUM_SAMPLES 3
+#define NUM_SAMPLES 50
 #define MAX_BOUNCE 2
 
 

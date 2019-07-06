@@ -10,6 +10,7 @@
 #define Rectangle_hpp
 
 #include "Object.hpp"
+#include "../Sampler/Sampler.hpp"
 
 class Rectangle: public Object {
 public:
@@ -25,6 +26,7 @@ public:
     Vect3 getNormal(Vect3 point);
     double pdf();
 private:
+    Sampler sampler;
     Point3 p0;
     Vect3 a;
     Vect3 b;

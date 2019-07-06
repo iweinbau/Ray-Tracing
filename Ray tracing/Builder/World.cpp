@@ -44,14 +44,14 @@ void World::buildWorld(){
     
     //World setup
     //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);
-    Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(100,Vect3(1)));
-    AreaLight* light = new AreaLight(r,Vect3(1),100);
+    Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(10,Vect3(1)));
+    AreaLight* light = new AreaLight(r,Vect3(1),10);
     r->setShadowCast(false);
     //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),5);
 
     add_Light(light);
     
-    ambientLight = AmbientLight(1,Vect3(1),1);
+    ambientLight = AmbientLight(0.5,Vect3(1),1);
 
     Reflective * reflective = new Reflective(Lambertian(0.25,Vect3(1,1,0.3)),
                                      new Lambertian(0.6,Vect3(1,1,0.3)),
@@ -64,8 +64,8 @@ void World::buildWorld(){
                               new Lambertian(0.5,Vect3(0,1,0)));
     Phong* mat3 = new Phong(
                               Lambertian(0.7,Vect3(0.3,0,0)),
-                              new Lambertian(0.7,Vect3(0.8,0,0)),
-                              new Glossy(0,10000,Vect3(1,0,0)));
+                              new Lambertian(0.5,Vect3(0.8,0,0)),
+                              new Glossy(0.5,10000,Vect3(1,0,0)));
 
     Sphere* sphere = new Sphere(Point3(0, 0, 0), 1);
 

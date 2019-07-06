@@ -9,6 +9,7 @@
 #ifndef sphere_h
 #define sphere_h
 
+#include "../Sampler/Sampler.hpp"
 class Material;
 
 #include <random>
@@ -88,12 +89,10 @@ public:
     }
     
     Vect3 sample(){
-        std::random_device rd;  //Will be used to obtain a seed for the random number engine
-        std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-        std::uniform_real_distribution<> dis(0.0, 1.0);
+        double r1 = sampler.sample(),r2 = sampler.sample();
         
-        double theta = 2 * PI * dis(gen);
-        double phi = acos(1 - 2 * dis(gen));
+        double theta = 2 * PI * r1;
+        double phi = acos(1 - 2 * r2);
         double x = radius_ * sin(phi) * cos(theta);
         double y = radius_ * sin(phi) * sin(theta);
         double z = radius_ * cos(phi);
@@ -113,6 +112,7 @@ public:
       return Box(Point3(position - radius_), Point3(position + radius_));
     };
 private:
+    Sampler sampler;
     Point3 position;
 };
 #endif /* sphere_h */

@@ -10,6 +10,7 @@
 #define AmbientLight_hpp
 
 #include "Light.hpp"
+#include "../Sampler/Sampler.hpp"
 
 class AmbientLight : public Light{
 public:
@@ -41,6 +42,7 @@ public:
     bool shadow_hit(Ray const& ray,World& world);
 private:
     double factor;
+    Sampler sampler;
 };
 
 #endif /* AmbientLight_hpp */
