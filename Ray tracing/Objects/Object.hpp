@@ -48,7 +48,7 @@ public:
     }
     
     Normal virtual getNormal(Vect3 const& point){
-        return Vect3();
+        return Normal();
     }
     
     double virtual pdf(){

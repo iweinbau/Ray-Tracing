@@ -20,13 +20,11 @@ public:
 
     Vect3(double x);
 
-
     Vect3(Vect3 const &v);
 
     Vect3(Point3 const& p);
 
     Vect3(Normal const& p);
-
 
     ~Vect3();
     Vect3& operator= (Vect3 const& v);

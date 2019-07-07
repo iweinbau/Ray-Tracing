@@ -11,14 +11,7 @@
 
 Matrix4::Matrix4(){
     //Default matrix
-    for (int i = 0; i < 4; i++){
-        for (int j = 0; j < 4; j++) {
-            if (i == j)
-                elements[i][j] = 1.0;
-            else
-                elements[i][j] = 0.0;
-        }
-    }
+    set_identity();
 }
 
 Matrix4::Matrix4(Matrix4 const& mat){

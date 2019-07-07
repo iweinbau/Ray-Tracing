@@ -9,18 +9,13 @@
 #ifndef Normal_h
 #define Normal_h
 
-#include <iostream>
-#include "math.h"
+#include "Vect3.hpp"
 
 class Point3;
 class Vect3;
 
-class Normal {
+class Normal: public Vect3{
 public:
-    double x_;
-    double y_;
-    double z_;
-    
     Normal();
     
     Normal(double x, double y, double z);
@@ -30,46 +25,11 @@ public:
     Normal(Point3 const& p);
     
     Normal(Vect3 const& v);
+
     
     ~Normal();
     Normal& operator= (Normal const& v);
-    
-    double length();
-    
-    Normal normalize();
-    
-    Normal neg() const;
-    
-    double dot(Normal const& other)const;
-    
-    Normal cross(Normal other);
-    
-    void print()
-    {
-        std::cout << x_ << '/' << y_ << '/' << z_<< std::endl;
-    }
 };
-
-inline Normal operator + (const Normal & v1, const Normal &v2) {
-    return Normal(v1.x_ + v2.x_, v1.y_ + v2.y_, v1.z_ + v2.z_);
-}
-
-inline Normal operator - (const Normal & v1, const Normal &v2){
-    return Normal(v1.x_ - v2.x_, v1.y_ - v2.y_, v1.z_ - v2.z_);
-}
-
-inline Normal operator * (const Normal & v1, const Normal &v2){
-    return Normal(v1.x_ * v2.x_, v1.y_ * v2.y_,v1.z_ * v2.z_);
-}
-
-inline Normal operator / (const Normal & v1, double const& s) {
-    return Normal(v1.x_ / s, v1.y_ / s,v1.z_ / s);
-}
-
-
-inline Normal operator * (const Normal & v1, double const& s) {
-    return Normal(v1.x_ * s, v1.y_ * s,v1.z_ * s);
-}
 
 
 #endif /* Normal_h */
