@@ -12,6 +12,7 @@
 #include "Material.hpp"
 
 #include "../Utils/GlobalTracer.hpp"
+#include "../BRDF/Lambertian.hpp"
 
 class Matte: public Material{
 public:

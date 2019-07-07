@@ -11,7 +11,7 @@
 #include <math.h>
 
 
-#include "Material.hpp"
+#include "Matte.hpp"
 
 #include "../Utils/GlobalTracer.hpp"
 #include "../Objects/sphere.hpp"
@@ -20,22 +20,18 @@
 
 #include "../Light/Light.hpp"
 
-class Phong:public Material{
+class Phong:public Matte{
 public:
-    Phong():Material()
+    Phong():Matte()
     {}
 
     Phong(Lambertian ambient, Lambertian* diffuse, Glossy* specular):
-    Material(),
-    ambient(ambient),
-    diffuse(diffuse),
+    Matte(ambient,diffuse),
     specular(specular)
     {}
 
     Phong(Phong const& phong):
-    Material(),
-    ambient(phong.ambient),
-    diffuse(phong.diffuse),
+    Matte(phong.ambient,phong.diffuse),
     specular(phong.specular)
     {}
 
@@ -44,9 +40,8 @@ public:
 
     virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
 
-        //********** AMBIENT COLOR ********** \\
-        //set color to ambient light.
-        Vect3 color = ambient.color() * world.ambientLight.getIntensity(hitinfo, world);
+        Vect3 color = Matte::direct_shade(hitinfo, world, depth);
+
         Vect3 wo = hitinfo.direction.neg();
         
         for(Light* l : world.lights){
@@ -57,9 +52,8 @@ public:
 
             if(!l->shadow_hit(shadowray,world)){
                 Vect3 sp = specular->f(hitinfo,wi,wo);
-                Vect3 df = diffuse->f(hitinfo,wi,wo);
                 Vect3 li = l->getIntensity(hitinfo,world);
-                color = color + (df + sp) * hitinfo.normal.dot(wi) * li;
+                color = color + (sp * hitinfo.normal.dot(wi) * li);
             }
         }
         return color;
@@ -119,8 +113,6 @@ public:
     }
 
     GlobalTracer gltr;
-    Lambertian* diffuse;
-    Lambertian ambient;
     Glossy* specular;
 
 };

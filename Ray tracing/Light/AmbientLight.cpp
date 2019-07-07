@@ -11,6 +11,7 @@
 #include "../Utils/Hitinfo.hpp"
 #include "../Utils/Normal.hpp"
 #include "../Objects/Object.hpp"
+#include "../Utils/Point3.hpp"
 #include "../Builder/World.hpp"
 #include <random>
 

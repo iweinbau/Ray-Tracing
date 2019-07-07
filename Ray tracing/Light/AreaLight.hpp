@@ -10,8 +10,12 @@
 #define AreaLight_hpp
 
 #include "Light.hpp"
+#include "../Utils/Point3.hpp"
+#include "../Utils/Normal.hpp"
+
 
 class Object;
+class Point3;
 
 class AreaLight: public Light {
 public:
@@ -27,7 +31,7 @@ public:
 private:
     Object* obj;
     Vect3 direction;
-    Vect3 normal;
-    Vect3 samplePoint;
+    Normal normal;
+    Point3 samplePoint;
 };
 #endif /* AreaLight_hpp */
