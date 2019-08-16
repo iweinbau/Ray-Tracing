@@ -31,7 +31,22 @@ public:
         return (*this);
     }
     
+    /**
+     *  Calculate the contribution of the material using direct light sampling
+     *  @param hitinfo HintInfo of current node in the path.
+     *  @param world World info.
+     *  @param depth recursion depth
+     *  @return Vect3
+     */
     virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth) = 0;
+    
+    /**
+     *  Calculate the contribution of the material using indirect light sampling
+     *  @param hitinfo HintInfo of current node in the path.
+     *  @param world World info.
+     *  @param depth recursion depth
+     *  @return Vect3
+     */
     virtual Vect3 indirect_shade(Hitinfo& hitinfo,World& world,int depth){
         return Vect3();
     };

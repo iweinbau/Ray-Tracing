@@ -5,6 +5,9 @@
 //  Created by Iwein Bau on 19/06/2019.
 //  Copyright © 2019 Iwein Bau. All rights reserved.
 //
+//
+//  Utility class for creating all sorts of samples, random double, random sample on hemisphere, ...
+//
 
 #ifndef Sampler_hpp
 #define Sampler_hpp
@@ -18,7 +21,17 @@ public:
     Sampler();
     ~Sampler();
     
+    /**
+     *  Samples random point on hemisphere following a cos distribution with a given exp.
+     *  @param exp The exponent of the distribution.
+     *  @return Point3 sampled point.
+     */
     Point3 sampleOnHemisphere(double exp=1);
+    
+    /**
+     *  Samples a random number between 0 and 1
+     *  @return double random double between 0 and 1.
+     */
     double sample();
     
     Sampler& operator= (Sampler const& s);

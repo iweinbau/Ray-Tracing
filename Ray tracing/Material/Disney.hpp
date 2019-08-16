@@ -62,6 +62,7 @@ public:
         return (*this);
     }
   public:
+    // all values are between [0,1]
     Vect3 baseColor = Vect3(1);
     double metallic = 0;
     double subsurface = 0;
@@ -73,6 +74,8 @@ public:
     double sheenTint = 0;
     double clearcoat = 0;
     double clearcoatGloss = 0;
+    
+    
     GlobalTracer tr;
     PrincipledBRDF* brdf;
 };
