@@ -34,7 +34,7 @@ void TriangleWorld::buildWorld(){
     //construct a camera
     Point3 lookfrom(0,0,10);
     Vect3 lookat(0,0,0);
-    camera = Camera(lookfrom, lookat, 90);
+    camera = new Camera(lookfrom, lookat, 90);
 
     //PointLight light(Vect3(1, 1,1), Vect3(5,5, -5),500);
     Mirror * reflective = new Mirror(Lambertian(0.25,Vect3(0.3)),

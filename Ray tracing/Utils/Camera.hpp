@@ -11,6 +11,7 @@
 
 #include "Vect3.hpp"
 #include "ray.hpp"
+#include "../Sampler/Sampler.hpp"
 
 //Class that stores information about the camara.
 //In create camera rays from it pointing in the world based on the properties.
@@ -21,21 +22,20 @@ public:
     Camera(Point3 lookfrom, Vect3 lookat, double fovy);
     Camera();
     ~Camera();
-    Ray constructRay(int i, int j);
     Camera(Camera const& c):
     eye_(c.eye_),
     up_(c.up_),
     lookat_(c.lookat_),
     direction_(c.direction_),
     fovy_(c.fovy_),
-    aspect_(c.aspect_),
-    upper_corner_(c.upper_corner_),
-    horizontal_(c.horizontal_),
-    vertical_(c.vertical_),
-    u(c.u),
-    v(c.v),
-    n(c.n)
+    xAxis(c.xAxis),
+    yAxis(c.yAxis),
+    zAxis(c.zAxis),
+    tanFovX(c.tanFovX),
+    tanFovY(c.tanFovY)
     {}
+    
+    virtual Ray constructRay(int i, int j);
 
     Camera& operator= (Camera const& c)
     {
@@ -43,17 +43,15 @@ public:
         up_ = c.up_;
         lookat_ = c.lookat_;
         direction_ = c.direction_;
+        tanFovX = c.tanFovX;
+        tanFovY = c.tanFovY;
         fovy_ = c.fovy_;
-        aspect_ = c.aspect_;
-        upper_corner_ = c.upper_corner_;
-        horizontal_ = c.horizontal_;
-        vertical_ = c.vertical_;
-        u = c.u;
-        v = c.v;
-        n = c.n;
+        xAxis = c.xAxis;
+        yAxis = c.yAxis;
+        zAxis = c.zAxis;
         return *this;
     }
-private:
+protected:
     const double distance_ = 1;
     //the position of the camera;
     Point3 eye_;
@@ -61,14 +59,12 @@ private:
     Vect3 lookat_;
     Vect3 direction_;
     double fovy_;
-    double aspect_;
-    Vect3 upper_corner_;
-    //the horizontal vector/of the image view.
-    double horizontal_;
-    //the vertical vector of the image view.
-    double vertical_;
+    double tanFovX;
+    double tanFovY;
     //unit vectors of the camera axis.
-    Vect3 u, v, n;
+    Vect3 xAxis, yAxis, zAxis;
+    
+    Sampler sampler;
 };
 
 #endif /* Camera_hpp */

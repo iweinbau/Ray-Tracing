@@ -28,7 +28,7 @@ void StormTrooper::buildWorld(){
     //construct a camera
     Point3 lookfrom(-0.283894,-0.794405,9.13327);
     Vect3 lookat(-0.9951571822166443,0.00454461295157671,-0.09819173067808151);
-    camera = Camera(lookfrom, lookat, 39.6);
+    camera = new Camera(lookfrom, lookat, 39.6);
     
     Disney* boxMat = new Disney();
     boxMat->baseColor = Vect3(0.17);

@@ -10,6 +10,7 @@
 
 #include "Camera.hpp"
 #include "Constants.hpp"
+#include "Matrix.hpp"
 
 //Destructor
 Camera::~Camera(){};
@@ -20,37 +21,30 @@ Camera::Camera(Point3 lookfrom, Vect3 lookat, double fovy):
 eye_(lookfrom),
 lookat_(lookat),
 fovy_(fovy),
-aspect_(double(width)/double(height)),
-direction_((lookat_ - lookfrom).normalize()),
+direction_((eye_ - lookat).normalize()),
 up_(Vect3(0,1,0)){ // fov is top to bottom in degrees
 
     //degree to radian convertion.
     double tetha = (fovy_ * PI) / 180;
-    double view_width = tan(tetha / 2) * distance_;
-    double view_height = view_width / aspect_;
+    tanFovX = tan(tetha / 2);
+    tanFovY = tan((tetha / 2) *  double(height) / double (width));
 
-    horizontal_ = view_width * 2;
-    vertical_ = view_height * 2;
-
-
-    Vect3 center = eye_ + ( direction_ * distance_);
-
-    u = direction_.neg();
-    n = (up_.cross(u)).normalize();
-    v = u.cross(n);
-
-    upper_corner_ = center + (n.neg() * view_width) + (v * view_height);
+    zAxis = direction_;
+    xAxis = (up_.cross(zAxis)).normalize();
+    yAxis = zAxis.cross(xAxis);
 
 }
 
 Ray Camera::constructRay(int i, int j) {
-    std::random_device rd;  //Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
-    std::uniform_real_distribution<> dis(0.0, 1.0);
-
-    //From raytracing from the ground up.
-    double x = dis(gen);
-    double y = dis(gen);
+    double x = sampler.sample();
+    double y = sampler.sample();
+    
+    Vect3 viewVector( (((i+x) / double(width)) * 2.0 - 1.0) * tanFovX, -(((j+y) / double(width)) * 2.0 - 1.0) * tanFovY, -1.0);
+    
+    Vect3 dir(viewVector.dot(Vect3(xAxis.x_, yAxis.x_, zAxis.x_)),
+              viewVector.dot(Vect3(xAxis.y_, yAxis.y_, zAxis.y_)),
+              viewVector.dot(Vect3(xAxis.z_, yAxis.z_, zAxis.z_)));
+    
     //calculate the ray.
-    return Ray(eye_,(upper_corner_ + (n * (j+x) * (horizontal_/double(width))) + (v.neg() * (i+y) * (vertical_/double(height)))) - eye_);
+    return Ray(eye_,dir.normalize());
 }

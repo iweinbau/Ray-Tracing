@@ -13,6 +13,7 @@
 #define Sampler_hpp
 
 #include <random>
+#include "../3D-Model-Parser/OBJ-Loader/Utils/Vect2.hpp"
 
 class Point3;
 
@@ -27,6 +28,12 @@ public:
      *  @return Point3 sampled point.
      */
     Point3 sampleOnHemisphere(double exp=1);
+    
+    /**
+     *  Samples point on unit disk.
+     *  @return Vect2 coordinates of the point on the disk.
+     */
+    Vect2 samplePointOnUnitDisk();
     
     /**
      *  Samples a random number between 0 and 1

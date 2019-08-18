@@ -41,13 +41,13 @@ void save_to_file(std::string filename, int width, int height, Vect3 const* pixe
 }
 
 
-void mul_render(int x,int y,int width, int height,Camera& camera,World& world,Vect3* pixels,int width_offset=0, int height_offset=0){
+void mul_render(int x,int y,int width, int height,Camera* camera,World& world,Vect3* pixels,int width_offset=0, int height_offset=0){
     GlobalTracer tr;
     tracer t;
     //construct a ray for through this pixel.
     Vect3 color;
     for(int n = 0; n < NUM_SAMPLES;n++){
-        Ray ray= camera.constructRay(y,x);
+        Ray ray= camera->constructRay(x,y);
         color = color + tr.trace(ray,world,0);//+ t.trace(ray, world, 3);
     }
     pixels[width*(y-height_offset)+(x-width_offset)] = color/(double)(NUM_SAMPLES);
@@ -83,8 +83,8 @@ int main(int argc, char* argv[]) {
     ThreadPool th_pool(NUM_THREADS);
     th_pool.init();
 
-    int image_width = builder.camera.width;
-    int image_height = builder.camera.height;
+    int image_width = builder.camera->width;
+    int image_height = builder.camera->height;
     int start_width = 0;
     int end_width = image_width;
     int start_height = 0;
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
             res.push_back(th_pool.submit(mul_render,x,y,
                                          image_width,
                                          image_height,
-                                         std::ref(builder.camera),
+                                         builder.camera,
                                          std::ref(builder),
                                          std::ref(pixels),start_width,start_height));
         }

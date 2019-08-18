@@ -36,6 +36,14 @@ Point3 Sampler::sampleOnHemisphere(double exp){
     return Point3(pu,pv,pw);
 }
 
+Vect2 Sampler::samplePointOnUnitDisk(){
+    double r = dis(gen); // radius [0,1]
+    double w = dis(gen) * 2 * PI; // angle [0,2*PI]
+    
+    return Vect2(sqrt(r) * cos(w), sqrt(r) * sin(w));
+}
+
+
 double Sampler::sample(){
     return dis(gen);
 }

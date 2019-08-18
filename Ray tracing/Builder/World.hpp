@@ -29,7 +29,7 @@ public:
     std::vector<Object*> objects;
     std::vector<Light*> lights;
     AmbientLight ambientLight;
-    Camera camera;
+    Camera* camera;
     
 };
 
