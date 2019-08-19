@@ -15,15 +15,15 @@
 
 class ThinLens : public Camera {
 public:
-    ThinLens(Point3 lookfrom, Vect3 lookat, double fovy, double lensRadius, double focal);
+    ThinLens(Point3 lookfrom, Vect3 lookat, double fovy, double focal, double apertureSize);
     ThinLens();
     ~ThinLens();
     virtual Ray constructRay(int i, int j);
 
 
 private:
-    double lensRadius;
     double focalDistance;
+    double apertureSize;
 };
 
 #endif /* ThinLens_hpp */

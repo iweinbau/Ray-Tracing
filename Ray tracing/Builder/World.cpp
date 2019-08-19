@@ -27,7 +27,7 @@
 #include "../Light/Directional.hpp"
 #include "../Light/AreaLight.hpp"
 
-
+#include "../Utils/ThinLens.hpp"
 
 
 //Constructor
@@ -40,7 +40,7 @@ void World::buildWorld(){
     //construct a camera
     Point3 lookfrom(0,0,10);
     Vect3 lookat(0,0,0);
-    camera = new Camera(lookfrom, lookat, 90);
+    camera = new ThinLens(lookfrom, lookat, 90, 10, 1);
     
     //World setup
     //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);

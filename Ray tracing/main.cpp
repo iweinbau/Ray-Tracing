@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
 
-    World builder;
+    StormTrooper builder;
     builder.buildWorld();
 
     //get num thread from command line argument.
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
             res.push_back(th_pool.submit(mul_render,x,y,
                                          image_width,
                                          image_height,
-                                         builder.camera,
+                                         std::ref(builder.camera),
                                          std::ref(builder),
                                          std::ref(pixels),start_width,start_height));
         }
