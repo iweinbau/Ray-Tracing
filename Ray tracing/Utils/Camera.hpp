@@ -18,7 +18,7 @@
 class Camera {
 public:
     //resolution in pixels.
-    static const int width = 800, height = 800;
+    static const int width = 1920, height = 1080;
     Camera(Point3 lookfrom, Vect3 lookat, double fovy);
     Camera();
     ~Camera();

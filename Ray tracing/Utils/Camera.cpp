@@ -39,7 +39,7 @@ Ray Camera::constructRay(int i, int j) {
     double x = sampler.sample();
     double y = sampler.sample();
     
-    Vect3 viewVector( (((i+x) / double(width)) * 2.0 - 1.0) * tanFovX, -(((j+y) / double(width)) * 2.0 - 1.0) * tanFovY, -1.0);
+    Vect3 viewVector( (((i+x) / double(width)) * 2.0 - 1.0) * tanFovX, -(((j+y) / double(height)) * 2.0 - 1.0) * tanFovY, -distance_);
     
     Vect3 dir(viewVector.dot(Vect3(xAxis.x_, yAxis.x_, zAxis.x_)),
               viewVector.dot(Vect3(xAxis.y_, yAxis.y_, zAxis.y_)),

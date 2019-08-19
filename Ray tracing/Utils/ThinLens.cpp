@@ -23,7 +23,7 @@ Ray ThinLens::constructRay(int i, int j){
     double y = sampler.sample();
         
     Vect3 pixelOnfocalPlane((((i + x) / double(width)) * 2.0 - 1.0) * tanFovX * (focalDistance/distance_),
-                    -(((j + y) / double(width)) * 2.0 - 1.0) * tanFovY * (focalDistance/distance_),
+                    -(((j + y) / double(height)) * 2.0 - 1.0) * tanFovY * (focalDistance/distance_),
                     -focalDistance);
     
     //point in eyeSpace
