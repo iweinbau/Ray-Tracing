@@ -36,7 +36,9 @@ public:
     {}
 
     ~Phong()
-    {}
+    {
+        delete specular;
+    }
 
     virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
 

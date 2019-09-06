@@ -15,6 +15,9 @@
 #include "../Builder/World.hpp"
 #include <random>
 
+AmbientLight::~AmbientLight(){}
+
+
 Vect3 AmbientLight::getDirection(Hitinfo& hitinfo){
     Vect3 w = hitinfo.normal;
     Vect3 u = Vect3(0.00424, 1, 0.00764).cross(w);

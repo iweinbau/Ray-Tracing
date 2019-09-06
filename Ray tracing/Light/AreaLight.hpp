@@ -23,6 +23,8 @@ public:
     
     AreaLight(AreaLight const& l);
     
+    ~AreaLight();
+    
     Vect3 getDirection(Hitinfo& hitinfo);
     
     Vect3 getIntensity(Hitinfo& hitinfo,World& world);

@@ -12,7 +12,9 @@ Instance::Instance():Object(),object(),transform(){}
 
 Instance::Instance(Object* obj,Material* mat):Object(mat),object(obj),transform(){}
 
-Instance::~Instance(){}
+Instance::~Instance(){
+    delete object;
+}
 
 //Transformations
 void Instance::translate(Vect3 const& translate) {

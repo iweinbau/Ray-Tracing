@@ -32,7 +32,9 @@ public:
     {}
 
     ~Disney()
-    {}
+    {
+        delete brdf;
+    }
 
     Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
         return Vect3();

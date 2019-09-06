@@ -34,7 +34,11 @@ Grid::Grid(Mesh const& mesh,Material* material):Composite(){
     }
     constructCells();
 }
-Grid::~Grid(){}
+Grid::~Grid(){
+    for (int i =0; i<cells.size(); i++) {
+        delete cells[i];
+    }
+}
 
 bool Grid::hit(Ray const& ray, Point3& intersection, double& t,Normal& normal){
     double ox = ray.origin_.x_;

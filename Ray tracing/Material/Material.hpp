@@ -20,8 +20,7 @@ public:
     Material(Material const& mat)
     {}
 
-    ~Material()
-    {}
+    virtual ~Material(){}
 
     Material& operator= (Material const& mat)
     {

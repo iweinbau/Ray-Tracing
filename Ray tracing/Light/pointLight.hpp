@@ -23,6 +23,8 @@ public:
     PointLight(PointLight const& l):
     Light(l)
     {}
+    
+    ~PointLight(){}
 
     PointLight& operator= (PointLight const& l){
         if(this == &l)

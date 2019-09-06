@@ -32,7 +32,9 @@ public:
     {}
 
     ~Mirror()
-    {}
+    {
+        delete reflection;
+    }
 
 
     Mirror& operator= (Mirror const& r)

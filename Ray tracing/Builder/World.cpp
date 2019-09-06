@@ -32,7 +32,17 @@
 
 //Constructor
 World::World(){}
-World::~World(){}
+World::~World(){
+    {
+        for(int i=0; i < lights.size(); i++) {
+            delete(lights[i]);
+        }
+        for(int i=0; i < objects.size(); i++) {
+            delete(objects[i]);
+        }
+        delete(camera);
+    }
+}
 
 void World::buildWorld(){
     
@@ -52,16 +62,7 @@ void World::buildWorld(){
     add_Light(light);
     
     ambientLight = AmbientLight(0.5,Vect3(1),1);
-
-    Reflective * reflective = new Reflective(Lambertian(0.25,Vect3(1,1,0.3)),
-                                     new Lambertian(0.6,Vect3(1,1,0.3)),
-                                     new Glossy(0.5,20,Vect3(1,1,0.3)),
-                                     new Glossy(0.9,100,Vect3(1,1,0.3)));
-//    Gl* reflective = new Disney();
     
-    Matte* Matte2 = new Matte(
-                              Lambertian(1,Vect3(0.0,0.3,0)),
-                              new Lambertian(0.5,Vect3(0,1,0)));
     Phong* mat3 = new Phong(
                               Lambertian(0.7,Vect3(0.3,0,0)),
                               new Lambertian(0.5,Vect3(0.8,0,0)),

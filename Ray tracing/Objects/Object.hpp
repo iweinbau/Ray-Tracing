@@ -16,8 +16,7 @@
 #include "../Utils/ray.hpp"
 #include "../Utils/Normal.hpp"
 #include "./Box.hpp"
-
-class Material;
+#include "../Material/Material.hpp"
 
 
 class Object{
@@ -27,6 +26,10 @@ public:
     Object(Material* material):
     shader_(material)
     {}
+    
+    virtual ~Object(){
+        //delete shader_;
+    }
 
     Object(Object const& obj):
     shader_(obj.shader_)

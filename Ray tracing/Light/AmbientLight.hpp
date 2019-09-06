@@ -25,6 +25,8 @@ public:
     AmbientLight(AmbientLight const& l):Light(l.color_,l.i_),factor(l.factor)
     {}
     
+    ~AmbientLight();
+    
     AmbientLight& operator= (AmbientLight const& l){
         if(this == &l)
             return (*this);

@@ -17,6 +17,10 @@ AreaLight::AreaLight(Object* object,Vect3 color,double i):Light(color,i),obj(obj
 
 AreaLight::AreaLight(AreaLight const& l):Light(l){}
 
+AreaLight::~AreaLight(){
+    delete obj;
+}
+
 Vect3 AreaLight::getDirection(Hitinfo& hitinfo){
     //get point on surface.
     samplePoint = obj->sample();

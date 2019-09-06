@@ -33,7 +33,9 @@ public:
     {}
 
     ~Reflective()
-    {}
+    {
+        delete glossy;
+    }
 
 
     Reflective& operator= (Reflective const& r)

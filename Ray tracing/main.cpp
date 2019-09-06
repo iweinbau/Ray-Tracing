@@ -137,5 +137,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Writing to image..."<<std::endl;
     save_to_file(_outFile, image_width, image_height, pixels);
     std::cout << "Done!"<<std::endl;
+    
+    delete[] pixels;
     return 0;
 }

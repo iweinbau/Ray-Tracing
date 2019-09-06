@@ -12,7 +12,12 @@
 Composite::Composite():Object(){}
 
 Composite::Composite(Material* shader):Object(shader){}
-Composite::~Composite(){};
+Composite::~Composite(){
+//    while(!objects.empty()) {
+//        delete objects.back();
+//        objects.pop_back();
+//    }
+};
 
 Box Composite::caluclateBoundingBox(){
     //find min and max values.

@@ -28,7 +28,9 @@ public:
     color_(l.color_),
     i_(l.i_)
     {}
-
+    
+    virtual ~Light(){}
+    
     Light& operator= (Light const& l){
         if(this == &l)
             return (*this);

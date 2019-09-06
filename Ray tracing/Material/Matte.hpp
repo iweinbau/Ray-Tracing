@@ -32,7 +32,9 @@ public:
     {}
 
     ~Matte()
-    {}
+    {
+        delete diffuse;
+    }
 
     virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
 
