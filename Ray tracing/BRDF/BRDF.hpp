@@ -25,7 +25,7 @@ public:
     BRDF(BRDF const& other)
     {}
 
-    ~BRDF()
+    virtual ~BRDF()
     {}
 
     virtual Vect3 f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo)
@@ -43,6 +43,8 @@ public:
         //Just return black
         return Vect3();
     }
+    
+    virtual BRDF<M>* clone() = 0;
     
     BRDF<M>& operator= (BRDF<M> const& brdf)
     {

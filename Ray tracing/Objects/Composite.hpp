@@ -18,7 +18,9 @@ class Composite: public Object{
 public:
     Composite();
     Composite(Material* shader);
+    Composite(Composite const& comp);
     ~Composite();
+    Object* clone();
     Box caluclateBoundingBox();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
     void add_object(Object* object);

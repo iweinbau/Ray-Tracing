@@ -27,6 +27,10 @@ public:
     Glossy(double factor,Vect3 color): ks(factor),e(0), cs(color)
     {}
     
+    Glossy* clone() {
+        return new Glossy(*this);
+    }
+    
     //specular BRDF
     Vect3 f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo){
         Vect3 r = wi.neg() + (Vect3(hitinfo.normal) * wi.dot(Vect3(hitinfo.normal)) * 2);

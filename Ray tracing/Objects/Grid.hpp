@@ -19,7 +19,9 @@ class Grid:public Composite{
 public:
     Grid();
     Grid(Mesh const& mesh,Material* material);
+    Grid(Grid const& grid);
     ~Grid();
+    Object* clone();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
     Box caluclateBoundingBox();
     void constructCells();

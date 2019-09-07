@@ -27,7 +27,9 @@ public:
 
     Sphere():Object()
     {}
-
+    
+    ~Sphere(){}
+    
     Sphere(Point3 position, double radius, Material* material):
     Object(material),radius_(radius),position(position)
     {}
@@ -37,7 +39,7 @@ public:
     {}
 
     Sphere(Sphere const& sphere):
-    Object(sphere.shader_),
+    Object(sphere),
     position(sphere.position),
     radius_(sphere.radius_)
     {}
@@ -51,6 +53,10 @@ public:
         position = sphere.position;
         radius_ = sphere.radius_;
         return (*this);
+    }
+    
+    Object* clone() {
+        return new Sphere(*this);
     }
 
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){

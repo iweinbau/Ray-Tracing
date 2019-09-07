@@ -15,6 +15,15 @@
 
 
 Grid::Grid():Composite(){}
+
+Object* Grid::clone() {
+    return new Grid(*this);
+}
+
+Grid::Grid(Grid const& grid):Composite(grid){
+    
+}
+
 Grid::Grid(Mesh const& mesh,Material* material):Composite(){
     for(int i= 0;i<mesh._indices.size();i=i+3){
         Triangle* tri;
@@ -24,20 +33,27 @@ Grid::Grid(Mesh const& mesh,Material* material):Composite(){
                                      Point3(mesh._positions[mesh._indices[i+2]]),
                                      Normal(mesh._normals[mesh._indices[i]]),
                                      Normal(mesh._normals[mesh._indices[i+1]]),
-                                     Normal(mesh._normals[mesh._indices[i+2]]),material);
+                                     Normal(mesh._normals[mesh._indices[i+2]]),material->clone());
         }else{
             tri = new Triangle(Point3(mesh._positions[mesh._indices[i]]),
-                               Point3(mesh._positions[mesh._indices[i+1]]),Point3(mesh._positions[mesh._indices[i+2]]),Normal(mesh._normals[mesh._indices[i]]),material);
+                               Point3(mesh._positions[mesh._indices[i+1]]),
+                               Point3(mesh._positions[mesh._indices[i+2]]),
+                               Normal(mesh._normals[mesh._indices[i]]),material->clone());
         }
-        
         add_object(tri);
     }
     constructCells();
+    delete material;
 }
 Grid::~Grid(){
+    shader_ = NULL;
     for (int i =0; i<cells.size(); i++) {
-        delete cells[i];
+        if(cells[i]) {
+            delete cells[i];
+            cells[i] = NULL;
+        }
     }
+    cells.erase(cells.cbegin(),cells.cend());
 }
 
 bool Grid::hit(Ray const& ray, Point3& intersection, double& t,Normal& normal){
@@ -309,10 +325,10 @@ void Grid::constructCells(){
                 for(int ix = ix_min; ix<=ix_max; ix++){
                     int i = ix + Mx * iy + Mx * My * iz;
                     if(cells[i]){
-                        cells[i]->add_object(obj);
+                        cells[i]->add_object(obj->clone());
                     }else{
                         Composite* composite = new Composite;
-                        composite->add_object(obj);
+                        composite->add_object(obj->clone());
                         cells[i]= composite;
                     }
                 }
@@ -320,7 +336,7 @@ void Grid::constructCells(){
         }
     }
     
-    //objects.erase(objects.cbegin(),objects.cend());
+    objects.erase(objects.cbegin(),objects.cend());
 }
 
 Box Grid::caluclateBoundingBox(){

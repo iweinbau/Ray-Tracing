@@ -36,11 +36,18 @@ World::~World(){
     {
         for(int i=0; i < lights.size(); i++) {
             delete(lights[i]);
+            lights[i] = NULL;
         }
+        lights.erase(lights.cbegin(),lights.cend());
+        
         for(int i=0; i < objects.size(); i++) {
             delete(objects[i]);
+            objects[i] = NULL;
         }
+        objects.erase(objects.cbegin(),objects.cend());
+        
         delete(camera);
+        camera = NULL;
     }
 }
 
@@ -52,14 +59,13 @@ void World::buildWorld(){
     Vect3 lookat(0,0,0);
     camera = new ThinLens(lookfrom, lookat, 90, 10, 1);
     
-    //World setup
-    //Directional* light = new Directional(Vect3(0, 1,0), Vect3(1),5);
+    // ONLY FOR indirect illumination.
     Rectangle* r = new Rectangle(Point3(-2.5,5,0),Vect3(5,0,0),Vect3(0,0,5),new Emissive(10,Vect3(1)));
-    AreaLight* light = new AreaLight(r,Vect3(1),10);
     r->setShadowCast(false);
-    //PointLight* light = new PointLight(Vect3(1, 1,1), Vect3(-2,0, 2),5);
 
-    add_Light(light);
+    // ONLY FOR direct illumination.
+    //AreaLight* light = new AreaLight(r,Vect3(1),10);
+    //add_Light(light);
     
     ambientLight = AmbientLight(0.5,Vect3(1),1);
     
@@ -74,18 +80,12 @@ void World::buildWorld(){
     s->scale(Vect3(3));
     s->translate(Vect3(0, 0, -2));
 
-//    Instance* s2 = new Instance(sphere,Matte2);
-//    s2->scale(Vect3(2,3,2));
-//    s2->translate(Vect3(-3, -2, -2));
-//
-//    Instance* s3 = new Instance(sphere,mat3);
-//    s3->scale(Vect3(2.5));
-//    s3->translate(Vect3(3,-2, -1));
-
-
     Matte* planem = new Matte(
                  Lambertian(0.25,Vect3(1)),
                  new Lambertian(0.5,Vect3(1)));
+    Matte* planet = new Matte(
+                              Lambertian(0.25,Vect3(1)),
+                              new Lambertian(0.5,Vect3(1)));
     Matte* planeb = new Matte(
                  Lambertian(0.25,Vect3(1)),
                  new Lambertian(0.5,Vect3(1)));
@@ -101,11 +101,8 @@ void World::buildWorld(){
     Plane* planeleft = new Plane(Point3(-5, 0, 0), Normal(1,0,0),planel);
     Plane* planeright = new Plane(Point3(5, 0, 0), Normal(-1,0,0),planer);
     Plane* planebottom = new Plane(Point3(0, -5, 0), Normal(0,1,0),planeb);
-    Plane* planetop =  new Plane(Point3(0, 5, 0), Normal(0,-1,0),planem);
+    Plane* planetop =  new Plane(Point3(0, 5, 0), Normal(0,-1,0),planet);
 
-
-    //add_object(s3);
-//    add_object(s2);
     add_object(s);
     add_object(r);
     add_object(planeback);
@@ -113,6 +110,4 @@ void World::buildWorld(){
     add_object(planeright);
     add_object(planebottom);
     add_object(planetop);
-
-    add_Light(light);
 }

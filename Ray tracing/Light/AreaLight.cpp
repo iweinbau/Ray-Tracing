@@ -19,6 +19,7 @@ AreaLight::AreaLight(AreaLight const& l):Light(l){}
 
 AreaLight::~AreaLight(){
     delete obj;
+    obj = NULL;
 }
 
 Vect3 AreaLight::getDirection(Hitinfo& hitinfo){

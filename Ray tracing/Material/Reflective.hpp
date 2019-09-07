@@ -23,9 +23,14 @@ public:
     {}
 
     Reflective(Reflective const& refl):
-    Phong(refl.ambient,refl.diffuse,refl.specular),
-    glossy(refl.glossy)
-    {}
+    Phong(refl.ambient,refl.diffuse,refl.specular)
+    {
+        if(refl.glossy){
+            glossy = refl.glossy->clone();
+        }else {
+            glossy = NULL;
+        }
+    }
 
     Reflective(Lambertian ambient, Lambertian* diffuse, Glossy* specular,Glossy* glossy):
     Phong(ambient,diffuse,specular),
@@ -35,6 +40,11 @@ public:
     ~Reflective()
     {
         delete glossy;
+        glossy = NULL;
+    }
+    
+    Material* clone() {
+        return new Reflective(*this);
     }
 
 
@@ -44,7 +54,14 @@ public:
             return (*this);
 
         Reflective::operator=(r);
-        glossy = r.glossy;
+        
+        if(glossy){
+            delete glossy;
+            glossy = NULL;
+        }
+        if(r.glossy){
+            glossy = r.glossy->clone();
+        }
         return (*this);
     }
 

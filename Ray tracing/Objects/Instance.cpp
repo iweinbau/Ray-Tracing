@@ -14,6 +14,15 @@ Instance::Instance(Object* obj,Material* mat):Object(mat),object(obj),transform(
 
 Instance::~Instance(){
     delete object;
+    object = NULL;
+}
+
+Instance::Instance(Instance const& i):Object(i){
+    
+}
+
+Object* Instance::clone() {
+    return new Instance(*this);
 }
 
 //Transformations

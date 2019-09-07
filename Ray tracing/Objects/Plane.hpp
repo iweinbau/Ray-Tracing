@@ -20,6 +20,8 @@ public:
     Plane():
     Object()
     {}
+    
+    ~Plane(){}
 
     Plane(Point3 position, Normal normal,Material* shader):
     Object(shader),
@@ -32,10 +34,14 @@ public:
     normal_(normal.normalize()){}
 
     Plane(Plane const& plane):
-    Object(plane.shader_),
+    Object(plane),
     position(plane.position),
     normal_(plane.normal_)
     {}
+    
+    Object* clone() {
+        return new Plane(*this);
+    }
 
     virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal){
         float t = (Vect3(position - ray.origin_)).dot(normal_) / (ray.direction_.dot(normal_));

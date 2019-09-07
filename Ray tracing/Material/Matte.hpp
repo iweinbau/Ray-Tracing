@@ -26,14 +26,23 @@ public:
     {}
 
     Matte(Matte const& matte):
-    Material(),
-    diffuse(matte.diffuse),
-    ambient(matte.ambient)
-    {}
+    Material(),ambient(matte.ambient)
+    {
+        if(matte.diffuse){
+            diffuse = matte.diffuse->clone();
+        }else {
+            diffuse = NULL;
+        }
+    }
 
     ~Matte()
     {
         delete diffuse;
+        diffuse = NULL;
+    }
+    
+    Material* clone() {
+        return new Matte(*this);
     }
 
     virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
@@ -78,8 +87,14 @@ public:
             return (*this);
 
         Material::operator=(matte);
-
-        diffuse = matte.diffuse;
+        
+        if(diffuse) {
+            delete diffuse;
+            diffuse = NULL;
+        }
+        if(matte.diffuse) {
+            diffuse = matte.diffuse->clone();
+        }
         ambient = matte.ambient;
 
         return (*this);

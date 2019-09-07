@@ -22,6 +22,10 @@ public:
     ~Emissive()
     {}
     
+    Material* clone() {
+        return new Emissive(*this);
+    }
+    
     Emissive& operator= (Emissive const& mat)
     {
         if(this == &mat)

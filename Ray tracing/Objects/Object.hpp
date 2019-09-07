@@ -28,17 +28,32 @@ public:
     {}
     
     virtual ~Object(){
-        //delete shader_;
+        if(shader_) {
+            delete shader_;
+            shader_ = NULL;
+        }
     }
+    
+    virtual Object* clone() =0;
 
-    Object(Object const& obj):
-    shader_(obj.shader_)
-    {}
+    Object(Object const& obj){
+        if(obj.shader_){
+            shader_ = obj.shader_->clone();
+        }else {
+            shader_ = NULL;
+        }
+    }
 
     Object& operator= (Object const& obj){
         if(this == &obj)
             return (*this);
-        shader_ = obj.shader_;
+        if(shader_){
+            delete shader_;
+            shader_ = NULL;
+        }
+        if(obj.shader_){
+            shader_ = obj.shader_->clone();
+        }
         return (*this);
     }
 
@@ -67,7 +82,7 @@ public:
 
 public:
     bool shadow_cast = true;
-    Material* shader_;
+    Material* shader_ = NULL;
 };
 
 #endif /* Object_h */

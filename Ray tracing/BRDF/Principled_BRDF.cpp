@@ -1,6 +1,7 @@
 #include "../Utils/Constants.hpp"
 #include "Principled_BRDF.hpp"
 #include "../Material/Disney.hpp"
+#include "BRDF.hpp"
 #include <random>
 #include "math.h"
 
@@ -11,6 +12,10 @@ PrincipledBRDF::PrincipledBRDF():BRDF()
 
 PrincipledBRDF::~PrincipledBRDF()
 {}
+
+PrincipledBRDF* PrincipledBRDF::clone() {
+    return new PrincipledBRDF(*this);
+}
 
 //http://simon-kallweit.me/rendercompo2015/report/
 double PrincipledBRDF::pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo){

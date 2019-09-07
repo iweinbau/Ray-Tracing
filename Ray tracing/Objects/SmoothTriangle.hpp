@@ -16,6 +16,10 @@ public:
     SmoothTriangle();
     SmoothTriangle(Point3 v0,Point3 v1, Point3 v2,Normal n0,Normal n1,Normal n2,Material* material);
     SmoothTriangle(Point3 v0,Point3 v1, Point3 v2,Normal n0,Normal n1,Normal n2);
+    SmoothTriangle(SmoothTriangle const& tri);
+    Object* clone() {
+        return new SmoothTriangle(*this);
+    }
     Normal virtual calculate_normal(double gamma, double beta);
 private:
     Normal n0;

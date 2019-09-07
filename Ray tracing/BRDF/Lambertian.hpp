@@ -28,6 +28,10 @@ public:
         return cd * kd;
 
     }
+    
+    Lambertian* clone () {
+        return new Lambertian(*this);
+    }
 
     // No sampling here just use the Bling-Phong light model
     Vect3 f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo){

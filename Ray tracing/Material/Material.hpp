@@ -21,6 +21,8 @@ public:
     {}
 
     virtual ~Material(){}
+    
+    virtual Material* clone() = 0;
 
     Material& operator= (Material const& mat)
     {
