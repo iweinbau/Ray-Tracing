@@ -59,18 +59,42 @@ void StormTrooper::buildWorld(){
     
     Grid* lights = new Grid(mesh2,new Emissive(3,Vect3(3.2, 0.13, 0.13)));
     
-    objLoader.loadMesh("./Objects/helmets.obj");
-    mesh = objLoader.getLoadedMesh();
-    Grid* helmets = new Grid(mesh,helmetsMat);
+    // Initialize Loader
+    objl::Loader helms;
+    // Load .obj File
+    bool loadout = helms.LoadFile("./Objects/helmets.obj");
     
-    objLoader.loadMesh("./Objects/soldiers.obj");
-    mesh = objLoader.getLoadedMesh();
-    Grid* soldier = new Grid(mesh,soldierMat);
+    if(loadout){
+        // Go through each loaded mesh and out its contents
+        for (int i = 0; i < helms.LoadedMeshes.size(); i++)
+        {
+            // Copy one of the loaded meshes to be our current mesh
+            objl::Mesh curMesh = helms.LoadedMeshes[i];
+            
+            Mesh mesh = Mesh(true,curMesh.MeshName,curMesh.get_positions(),curMesh.get_normals(),curMesh.get_uvs(),curMesh.Indices);
+            Grid* helmets = new Grid(mesh,helmetsMat);
+            add_object(helmets);
+        }
+    }
+    
+    // Initialize Loader
+    objl::Loader soldier;
+    // Load .obj File
+    loadout = soldier.LoadFile("./Objects/soldiers.obj");
+    
+    if(loadout){
+        // Go through each loaded mesh and out its contents
+        for (int i = 0; i < soldier.LoadedMeshes.size(); i++)
+        {
+            // Copy one of the loaded meshes to be our current mesh
+            objl::Mesh curMesh = soldier.LoadedMeshes[i];
+            
+            Mesh mesh = Mesh(true,curMesh.MeshName,curMesh.get_positions(),curMesh.get_normals(),curMesh.get_uvs(),curMesh.Indices);
+            Grid* soldier = new Grid(mesh,soldierMat);
+            add_object(soldier);
+        }
+    }
 
     add_object(box);
     add_object(lights);
-    add_object(helmets);
-    add_object(soldier);
-
-
 }

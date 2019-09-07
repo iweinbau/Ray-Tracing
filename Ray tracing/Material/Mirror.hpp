@@ -22,14 +22,9 @@ public:
     {}
 
     Mirror(Mirror const& mirror):
-    Phong(mirror.ambient,mirror.diffuse,mirror.specular)
-    {
-        if(mirror.reflection) {
-            reflection = mirror.reflection->clone();
-        }else {
-            reflection = NULL;
-        }
-    }
+    Phong(mirror.ambient,mirror.diffuse,mirror.specular),
+    reflection(mirror.reflection)
+    {}
 
     Mirror(Lambertian ambient, Lambertian* diffuse, Glossy* specular,Specular* reflection):
     Phong(ambient,diffuse,specular),
@@ -39,11 +34,6 @@ public:
     ~Mirror()
     {
         delete reflection;
-        reflection = NULL;
-    }
-    
-    Material* clone() {
-        return new Mirror(*this);
     }
 
 
@@ -53,14 +43,7 @@ public:
             return (*this);
 
         Phong::operator=(r);
-        
-        if(reflection){
-            delete reflection;
-            reflection = NULL;
-        }
-        if(r.reflection){
-            reflection = r.reflection->clone();
-        }
+        specular = r.specular;
         return (*this);
     }
 

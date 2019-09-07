@@ -31,23 +31,13 @@ public:
     {}
 
     Phong(Phong const& phong):
-    Matte(phong.ambient,phong.diffuse)
-    {
-        if(phong.specular) {
-            specular = phong.specular->clone();
-        }else {
-            specular = NULL;
-        }
-    }
+    Matte(phong.ambient,phong.diffuse),
+    specular(phong.specular)
+    {}
 
     ~Phong()
     {
         delete specular;
-        specular = NULL;
-    }
-    
-    Material* clone() {
-        return new Phong(*this);
     }
 
     virtual Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
@@ -115,15 +105,12 @@ public:
         if(this == &phong)
             return (*this);
 
-        Matte::operator=(phong);
-        
-        if(specular) {
-            delete specular;
-            specular = NULL;
-        }
-        if(phong.specular){
-            specular = phong.specular->clone();
-        }
+        Material::operator=(phong);
+
+        diffuse = phong.diffuse;
+        ambient = phong.ambient;
+        specular = phong.specular;
+
         return (*this);
     }
 

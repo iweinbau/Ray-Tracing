@@ -1,7 +1,6 @@
 #include "../Utils/Constants.hpp"
 #include "Principled_BRDF.hpp"
 #include "../Material/Disney.hpp"
-#include "BRDF.hpp"
 #include <random>
 #include "math.h"
 
@@ -12,10 +11,6 @@ PrincipledBRDF::PrincipledBRDF():BRDF()
 
 PrincipledBRDF::~PrincipledBRDF()
 {}
-
-PrincipledBRDF* PrincipledBRDF::clone() {
-    return new PrincipledBRDF(*this);
-}
 
 //http://simon-kallweit.me/rendercompo2015/report/
 double PrincipledBRDF::pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo){
@@ -64,15 +59,24 @@ Vect3 PrincipledBRDF::sample_f(Disney* mat,Hitinfo const& hitinfo, Vect3 const& 
         wi = wi.normalize();
     }else{
         //sample specular lobe.
-        float a = std::max(0.001, mat->roughness);
+        double a = std::max(0.001, mat->roughness);
+        double x = sampler.sample();
+        double y = sampler.sample();
         
-        Point3 p = sampler.sampleOnHemisphere(a*a);
+        double phi = x * 2.0 * PI;
         
-        Vect3 half = u * p.x_ + v * p.y_ + w * p.z_;
+        double cosTheta = sqrt((1.0 - y) / (1.0 + (a*a-1.0) *y));
+        double sinTheta = sqrt(1.0 - (cosTheta * cosTheta));
+        double sinPhi = sinf(phi);
+        double cosPhi = cosf(phi);
+        
+        Vect3 half = Vect3(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
+        half = u * half.x_ + v * half.y_ + w * half.z_;
         half = half.normalize();
         
         wi = half* 2.0* wo.dot(half) - wo; //reflection vector
         wi = wi.normalize();
+        
     }
     
     return wi;

@@ -13,8 +13,6 @@ public:
     PrincipledBRDF();
 
     ~PrincipledBRDF();
-    
-    PrincipledBRDF* clone();
 
     double pdf(Disney* mat,Hitinfo const& hitinfo, Vect3 const& wi, Vect3 const& wo);
 

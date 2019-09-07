@@ -15,15 +15,6 @@
 
 
 Grid::Grid():Composite(){}
-
-Object* Grid::clone() {
-    return new Grid(*this);
-}
-
-Grid::Grid(Grid const& grid):Composite(grid){
-    
-}
-
 Grid::Grid(Mesh const& mesh,Material* material):Composite(){
     for(int i= 0;i<mesh._indices.size();i=i+3){
         Triangle* tri;
@@ -33,27 +24,20 @@ Grid::Grid(Mesh const& mesh,Material* material):Composite(){
                                      Point3(mesh._positions[mesh._indices[i+2]]),
                                      Normal(mesh._normals[mesh._indices[i]]),
                                      Normal(mesh._normals[mesh._indices[i+1]]),
-                                     Normal(mesh._normals[mesh._indices[i+2]]),material->clone());
+                                     Normal(mesh._normals[mesh._indices[i+2]]),material);
         }else{
             tri = new Triangle(Point3(mesh._positions[mesh._indices[i]]),
-                               Point3(mesh._positions[mesh._indices[i+1]]),
-                               Point3(mesh._positions[mesh._indices[i+2]]),
-                               Normal(mesh._normals[mesh._indices[i]]),material->clone());
+                               Point3(mesh._positions[mesh._indices[i+1]]),Point3(mesh._positions[mesh._indices[i+2]]),Normal(mesh._normals[mesh._indices[i]]),material);
         }
+        
         add_object(tri);
     }
     constructCells();
-    delete material;
 }
 Grid::~Grid(){
-    shader_ = NULL;
     for (int i =0; i<cells.size(); i++) {
-        if(cells[i]) {
-            delete cells[i];
-            cells[i] = NULL;
-        }
+        delete cells[i];
     }
-    cells.erase(cells.cbegin(),cells.cend());
 }
 
 bool Grid::hit(Ray const& ray, Point3& intersection, double& t,Normal& normal){
@@ -336,7 +320,7 @@ void Grid::constructCells(){
         }
     }
     
-    objects.erase(objects.cbegin(),objects.cend());
+    //objects.erase(objects.cbegin(),objects.cend());
 }
 
 Box Grid::caluclateBoundingBox(){

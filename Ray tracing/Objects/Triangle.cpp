@@ -36,13 +36,6 @@ _v1(v1),
 _v2(v2),
 _normal((Vect3(v1-v0)).cross(v2-v0).normalize())
 {}
-
-Triangle::Triangle(Triangle const& tri):Object(tri),
-_v0(tri._v0),
-_v1(tri._v1),
-_v2(tri._v2),
-_normal(tri._normal){}
-
 Triangle::~Triangle(){}
 
 Normal Triangle::calculate_normal(double gamma, double beta){

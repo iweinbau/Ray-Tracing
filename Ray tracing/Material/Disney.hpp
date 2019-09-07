@@ -27,23 +27,13 @@ public:
     {}
 
     Disney(Disney const& d):
-    Material()
-    {
-        if(d.brdf) {
-            brdf = d.brdf->clone();
-        }else {
-            brdf = NULL;
-        }
-    }
+    Material(),
+    brdf(d.brdf)
+    {}
 
     ~Disney()
     {
         delete brdf;
-        brdf = NULL;
-    }
-    
-    Material* clone() {
-        return new Disney(*this);
     }
 
     Vect3 direct_shade(Hitinfo& hitinfo,World& world,int depth){
@@ -68,15 +58,9 @@ public:
             return (*this);
 
         Material::operator=(d);
-        
-        if(brdf){
-            delete brdf;
-            brdf = NULL;
-        }
-        if(d.brdf){
-            brdf = d.brdf->clone();
 
-        }
+        brdf = d.brdf;
+
         return (*this);
     }
   public:

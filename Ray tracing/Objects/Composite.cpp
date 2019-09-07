@@ -12,20 +12,12 @@
 Composite::Composite():Object(){}
 
 Composite::Composite(Material* shader):Object(shader){}
-Composite::Composite(Composite const& comp):Object(comp){}
-
 Composite::~Composite(){
-    shader_ = NULL;
-    for (int i =0; i<objects.size(); i++) {
-        delete objects[i];
-        objects[i] = NULL;
-    }
-    objects.erase(objects.cbegin(),objects.cend());
+//    while(!objects.empty()) {
+//        delete objects.back();
+//        objects.pop_back();
+//    }
 };
-
-Object* Composite::clone() {
-    return new Composite(*this);
-}
 
 Box Composite::caluclateBoundingBox(){
     //find min and max values.

@@ -26,12 +26,6 @@ Rectangle::Rectangle(Point3 p0, Vect3 v1, Vect3 v2,Material* mat):
 {}
 Rectangle::~Rectangle(){};
 
-Rectangle::Rectangle(Rectangle const& rect):Object(rect),
-p0(rect.p0),
-n(rect.n),
-a(rect.a),
-b(rect.b){}
-
 
 Box Rectangle::caluclateBoundingBox(){
     return Box(Point3(std::min(p0.x_, p0.x_ + a.x_ + b.x_) - kEpsilon,

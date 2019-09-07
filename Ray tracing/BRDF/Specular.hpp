@@ -24,10 +24,6 @@ public:
 
     Specular(double factor, Vect3 color): ks(factor),e(0),cs(color)
     {}
-    
-    Specular* clone() {
-        return new Specular(*this);
-    }
 
     //
     Vect3 f(Hitinfo const& hitinfo,Vect3& wi, Vect3 const& wo){
