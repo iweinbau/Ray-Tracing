@@ -325,10 +325,10 @@ void Grid::constructCells(){
                 for(int ix = ix_min; ix<=ix_max; ix++){
                     int i = ix + Mx * iy + Mx * My * iz;
                     if(cells[i]){
-                        cells[i]->add_object(obj->clone());
+                        cells[i]->add_object(obj);
                     }else{
                         Composite* composite = new Composite;
-                        composite->add_object(obj->clone());
+                        composite->add_object(obj);
                         cells[i]= composite;
                     }
                 }
