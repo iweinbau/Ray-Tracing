@@ -27,7 +27,7 @@ private:
     Box bbox;
     int Mx,My,Mz;
     int density=5;
-    std::vector<Composite*> cells;
+    std::vector<std::shared_ptr<Composite>> cells;
 };
 
 #endif /* Grid_hpp */

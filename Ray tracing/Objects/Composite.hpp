@@ -11,6 +11,7 @@
 
 #include "Object.hpp"
 #include <vector>
+#include <memory>
 
 class Normal;
 
@@ -21,12 +22,12 @@ public:
     ~Composite();
     Box caluclateBoundingBox();
     bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal);
-    void add_object(Object* object);
+    void add_object(std::shared_ptr<Object> const& object);
 public:
-    std::vector<Object*> objects;
+    std::vector<std::shared_ptr<Object>> objects;
 };
 
-inline void Composite::add_object(Object* object){
+inline void Composite::add_object(std::shared_ptr<Object> const& object){
     objects.push_back(object);
 }
 

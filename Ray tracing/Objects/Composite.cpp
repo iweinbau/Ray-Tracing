@@ -6,6 +6,7 @@
 //  Copyright © 2019 Iwein Bau. All rights reserved.
 //
 
+#include <memory>
 #include "Composite.hpp"
 #include "../Utils/Hitinfo.hpp"
 
@@ -14,11 +15,6 @@ Composite::Composite():Object(){}
 Composite::Composite(Material* shader):Object(shader){}
 Composite::~Composite(){
     shader_ = NULL;
-    for (int i=0; i<objects.size(); i++) {
-        if (objects[i])
-            delete objects[i];
-        objects[i] = NULL;
-    }
 };
 
 Box Composite::caluclateBoundingBox(){
@@ -26,7 +22,7 @@ Box Composite::caluclateBoundingBox(){
     double min_x = INFINITY,min_y=INFINITY,min_z =INFINITY;
     double max_x=-INFINITY,max_y=-INFINITY,max_z=-INFINITY;
     
-    for (Object* object : objects) {
+    for (std::shared_ptr<Object> object : objects) {
         Box bboxObject = object->caluclateBoundingBox();
         //construct the vertices of the untransfomed bounding box.
         Point3 v[8];
@@ -55,7 +51,7 @@ bool Composite::hit(Ray const& ray, Point3& intersection, double& tmin,Normal& n
     Point3 intersect;
     Normal n;
     bool hit = false;
-    for(Object* obj : objects){
+    for(std::shared_ptr<Object> obj : objects){
         if (obj->hit(ray, intersect, t,n)) {
             if (t < tmax) {
                 //we found a closer object.

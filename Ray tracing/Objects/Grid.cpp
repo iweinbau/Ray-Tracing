@@ -15,19 +15,21 @@
 
 
 Grid::Grid():Composite(){}
-Grid::Grid(Mesh const& mesh,Material* material):Composite(){
+Grid::Grid(Mesh const& mesh,Material* material):Composite(material){
     for(int i= 0;i<mesh._indices.size();i=i+3){
-        Triangle* tri;
+        std::shared_ptr<Object> tri;
         if(mesh.smoothShading){
-            tri = new SmoothTriangle(Point3(mesh._positions[mesh._indices[i]]),
+            tri = std::make_shared<SmoothTriangle>(Point3(mesh._positions[mesh._indices[i]]),
                                      Point3(mesh._positions[mesh._indices[i+1]]),
                                      Point3(mesh._positions[mesh._indices[i+2]]),
                                      Normal(mesh._normals[mesh._indices[i]]),
                                      Normal(mesh._normals[mesh._indices[i+1]]),
                                      Normal(mesh._normals[mesh._indices[i+2]]),material);
         }else{
-            tri = new Triangle(Point3(mesh._positions[mesh._indices[i]]),
-                               Point3(mesh._positions[mesh._indices[i+1]]),Point3(mesh._positions[mesh._indices[i+2]]),Normal(mesh._normals[mesh._indices[i]]),material);
+            tri = std::make_shared<Triangle>(Point3(mesh._positions[mesh._indices[i]]),
+                                    Point3(mesh._positions[mesh._indices[i+1]]),
+                                    Point3(mesh._positions[mesh._indices[i+2]]),
+                                    Normal(mesh._normals[mesh._indices[i]]),material);
         }
         
         add_object(tri);
@@ -35,19 +37,7 @@ Grid::Grid(Mesh const& mesh,Material* material):Composite(){
     constructCells();
 }
 Grid::~Grid(){
-    for (int i=0; i<objects.size(); i++) {
-        objects[i]->shader_ = NULL;
-        if (objects[i])
-            delete objects[i];
-        objects[i] = NULL;
-    }
-    for (int i =0; i< cells.size(); i++) {
-        if( cells[i]) {
-            cells[i]->objects.clear();
-            delete cells[i];
-        }
-        cells[i] = NULL;
-    }
+    shader_ = NULL;
 }
 
 bool Grid::hit(Ray const& ray, Point3& intersection, double& t,Normal& normal){
@@ -202,9 +192,8 @@ bool Grid::hit(Ray const& ray, Point3& intersection, double& t,Normal& normal){
     
     
     // traverse the grid
-    
     while (true) {
-        Object* object_ptr = cells[ix + Mx * iy + Mx * My * iz];
+        std::shared_ptr<Composite> object_ptr = cells[ix + Mx * iy + Mx * My * iz];
         
         if (tx_next < ty_next && tx_next < tz_next) {
             if (object_ptr && object_ptr->hit(ray,intersection, t, normal) && object_ptr->caluclateBoundingBox().inside(intersection)) {
@@ -253,7 +242,7 @@ void Grid::constructCells(){
     //find min and max values.
     double min_x = INFINITY,min_y=INFINITY,min_z =INFINITY;
     double max_x=-INFINITY,max_y=-INFINITY,max_z=-INFINITY;
-    for(Object* object : objects){
+    for(std::shared_ptr<Object> object : objects){
         Box bboxObject = object->caluclateBoundingBox();
         //construct the vertices of the untransfomed bounding box.
         Point3 v[8];
@@ -296,9 +285,9 @@ void Grid::constructCells(){
     
     //create array of the number of cells.
     for(int i =0; i<num_cels;i++)
-        cells.push_back(nullptr);
+        cells.push_back(std::make_shared<Composite>());
     
-    for(Object* obj : objects){
+    for(std::shared_ptr<Object> obj : objects){
         //find cells that overlap with bounding box.
         Box objBox = obj->caluclateBoundingBox();
         
@@ -321,16 +310,14 @@ void Grid::constructCells(){
                     if(cells[i]){
                         cells[i]->add_object(obj);
                     }else{
-                        Composite* composite = new Composite;
-                        composite->add_object(obj);
-                        cells[i]= composite;
+                        cells[i] = std::make_shared<Composite>();
+                        cells[i]->add_object(obj);
                     }
                 }
             }
         }
     }
-    
-    //objects.erase(objects.cbegin(),objects.cend());
+
 }
 
 Box Grid::caluclateBoundingBox(){
