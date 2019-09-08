@@ -13,10 +13,12 @@ Composite::Composite():Object(){}
 
 Composite::Composite(Material* shader):Object(shader){}
 Composite::~Composite(){
-//    while(!objects.empty()) {
-//        delete objects.back();
-//        objects.pop_back();
-//    }
+    shader_ = NULL;
+    for (int i=0; i<objects.size(); i++) {
+        if (objects[i])
+            delete objects[i];
+        objects[i] = NULL;
+    }
 };
 
 Box Composite::caluclateBoundingBox(){

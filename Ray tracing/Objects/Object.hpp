@@ -28,7 +28,9 @@ public:
     {}
     
     virtual ~Object(){
-        //delete shader_;
+        if (shader_)
+            delete shader_;
+        shader_ = NULL;
     }
 
     Object(Object const& obj):
@@ -67,7 +69,7 @@ public:
 
 public:
     bool shadow_cast = true;
-    Material* shader_;
+    Material* shader_ = NULL;
 };
 
 #endif /* Object_h */

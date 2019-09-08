@@ -34,7 +34,6 @@ public:
     Light& operator= (Light const& l){
         if(this == &l)
             return (*this);
-
         color_ = l.color_;
         i_ = l.i_;
         return (*this);

@@ -35,8 +35,18 @@ Grid::Grid(Mesh const& mesh,Material* material):Composite(){
     constructCells();
 }
 Grid::~Grid(){
-    for (int i =0; i<cells.size(); i++) {
-        delete cells[i];
+    for (int i=0; i<objects.size(); i++) {
+        objects[i]->shader_ = NULL;
+        if (objects[i])
+            delete objects[i];
+        objects[i] = NULL;
+    }
+    for (int i =0; i< cells.size(); i++) {
+        if( cells[i]) {
+            cells[i]->objects.clear();
+            delete cells[i];
+        }
+        cells[i] = NULL;
     }
 }
 
