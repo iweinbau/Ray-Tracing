@@ -17,20 +17,37 @@
 
 class Mesh {
 public:
-    // Constructor
+    /**
+     *  Default constructor, create empty mesh object.
+     */
     Mesh();
+    
+    /**
+     *  Constructor, create new mesh object from the given name, position, normals, uv, indices.
+     *  @param name The name of the mesh.
+     *  @param positions vector<Vect3> represent the positions of all vertices in 3D space.
+     *  @param normals vector<Vect3> represent the normals of all vertices in 3D space.
+     *  @param UVs vector<Vect2> represent the uv of all vertices.
+     *  @param indices vector<usigned int> represent the order of how vertices are connected.
+     *
+     */
     Mesh(bool smoothShading,std::string const& name,
                std::vector<Vect3> const& positions,
                std::vector<Vect3> const& normals,
                std::vector<Vect2> const& UVs,
                std::vector<unsigned int> const& indices);
 
-    // Destructor.
+    /**
+     *  Default destructor.
+     */
     ~Mesh(){
 
     }
 
 public:
+    /**
+     *  If mesh is smooth shaded? This will smooth surface normals.
+     */
     bool smoothShading;
     std::string _name;
     std::vector<Vect3> _positions;

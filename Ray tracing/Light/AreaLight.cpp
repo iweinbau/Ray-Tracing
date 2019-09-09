@@ -18,7 +18,7 @@ AreaLight::AreaLight(Object* object,Vect3 color,double i):Light(color,i),obj(obj
 AreaLight::AreaLight(AreaLight const& l):Light(l){}
 
 AreaLight::~AreaLight(){
-    // Do not delete object, this will be deleted in the world.
+    // Do not delete the object ptr, this will be deleted in the world class.
 }
 
 Vect3 AreaLight::getDirection(Hitinfo& hitinfo){

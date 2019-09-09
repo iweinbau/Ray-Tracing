@@ -1,4 +1,8 @@
 //
+//  Mesh loader base class for loading 3D models.
+//  Implement the loadMesh function for new file types.
+//  When mesh is loaded you can get it using getLoadedMesh().
+//
 //  MeshLoader.hpp
 //  OBJ-Loader
 //
@@ -15,24 +19,65 @@
 namespace MeshLoader {
     class MeshLoader {
     public:
+        /**
+         *  Constructor create new Mesh loader instance.
+         */
         MeshLoader(){};
+        
+        /**
+         *  Destructor.
+         */
         ~MeshLoader(){};
+        
+        /**
+         *  get the current loaded mesh, first you need to call loadMesh.
+         *  @return Mesh the loaded mesh.
+         */
         Mesh getLoadedMesh(){
             return _mesh;
         }
+        
+        /**
+         *  Load 3D model from file in to a Mesh object.
+         *  @param filePath the file path of the model you want to load.
+         *  @return bool true if object is loaded, false otherwise.
+         */
         virtual bool loadMesh(std::string filePath) = 0;
+        
     protected:
+        /**
+         *  Loaded mesh.
+         */
         Mesh _mesh;
     };
-
+    
+    /**
+     *  Implementation of MeshLoader, this can parse and load .obj files.
+     */
     class OBJLoader: public MeshLoader{
     public:
+        /**
+         *  Constructor create new Mesh loader instance.
+         */
         OBJLoader();
+        
+        /**
+         *  Destructor.
+         */
         ~OBJLoader();
+        
+        /**
+         *  Load 3D model from .obj file in to a Mesh object.
+         *  @param filePath the obj file path of the model you want to load.
+         *  @return bool true if object is loaded, false otherwise.
+         */
         bool loadMesh(std::string filePath);
-    private:
     };
 
+    /**
+     *  Helper data structure for loading 3D models. represent a single vertex
+     *  of the 3D model at a specific position with corresponding normal and uv.
+     */
     class Vertex{
     public:
         Vertex():

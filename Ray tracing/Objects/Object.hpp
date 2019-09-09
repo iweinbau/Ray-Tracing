@@ -65,6 +65,7 @@ public:
     }
     
     virtual Box caluclateBoundingBox() = 0;
+    
     virtual bool hit(Ray const& ray, Point3& intersection, double& tmin,Normal& normal) = 0;
 
 public:

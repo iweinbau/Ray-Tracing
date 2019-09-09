@@ -19,7 +19,14 @@ class Point3;
 
 class Sampler{
 public:
+    /**
+     *  Constructor create new instance of a Sampler.
+     */
     Sampler();
+    
+    /**
+     *  Destructor.
+     */
     ~Sampler();
     
     /**

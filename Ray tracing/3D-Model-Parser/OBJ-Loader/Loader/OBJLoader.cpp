@@ -26,6 +26,7 @@ namespace MeshLoader {
         // If the file is not an .obj file return false
         if (filePath.substr(filePath.size() - 4, 4) != ".obj"){
             std::cout << "No .obj file found at given file location: "<<filePath << std::endl;
+            std::cout << "Check file exstention!"<<filePath << std::endl;
 
         }
         //Open file stream
