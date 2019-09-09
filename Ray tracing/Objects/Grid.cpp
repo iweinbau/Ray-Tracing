@@ -15,7 +15,7 @@
 
 
 Grid::Grid():Composite(){}
-Grid::Grid(Mesh const& mesh,Material* material):Composite(material){
+Grid::Grid(Mesh const& mesh,Material* material):Composite(material),sharedMaterial(true){
     for(int i= 0;i<mesh._indices.size();i=i+3){
         std::shared_ptr<Object> tri;
         if(mesh.smoothShading){
@@ -37,7 +37,16 @@ Grid::Grid(Mesh const& mesh,Material* material):Composite(material){
     constructCells();
 }
 Grid::~Grid(){
-    shader_ = NULL;
+    // If grid represent a triangle mesh then all objects share the same material.
+    // then we set all shaders of the objects to NULL to prevent duplicated delete.
+    if(sharedMaterial){
+        // We delete this here, the destuctor of the super will set this to NULL.
+        delete shader_;
+        // Set material of objects to null -> they have a shared material
+        for(std::shared_ptr<Object> object : objects){
+            object->shader_ = NULL;
+        }
+    }
 }
 
 bool Grid::hit(Ray const& ray, Point3& intersection, double& t,Normal& normal){
@@ -285,7 +294,7 @@ void Grid::constructCells(){
     
     //create array of the number of cells.
     for(int i =0; i<num_cels;i++)
-        cells.push_back(std::make_shared<Composite>());
+        cells.push_back(NULL);
     
     for(std::shared_ptr<Object> obj : objects){
         //find cells that overlap with bounding box.

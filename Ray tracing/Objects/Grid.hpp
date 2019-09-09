@@ -24,6 +24,8 @@ public:
     Box caluclateBoundingBox();
     void constructCells();
 private:
+    //True if grid contains same material ptr for all objects.
+    bool sharedMaterial = false;
     Box bbox;
     int Mx,My,Mz;
     int density=5;

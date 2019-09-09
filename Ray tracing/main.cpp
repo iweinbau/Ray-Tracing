@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
     auto start = std::chrono::high_resolution_clock::now();
     auto end = std::chrono::high_resolution_clock::now();
 
-    TriangleWorld builder;
+    StormTrooper builder;
     builder.buildWorld();
 
     //get num thread from command line argument.
