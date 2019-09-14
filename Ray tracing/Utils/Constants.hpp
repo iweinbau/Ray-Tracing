@@ -9,6 +9,7 @@
 #ifndef Constants_h
 #define Constants_h
 
+#define OUTPUT_PIXEL
 #define PI 3.14159265
 #define kEpsilon 0.001
 #define NUM_SAMPLES 1

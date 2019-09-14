@@ -32,14 +32,21 @@ void save_to_file(std::string filename, int width, int height, Vect3 const* pixe
   std::vector<unsigned char> image;
   image.resize(width * height * 4);
   for (unsigned i = 0; i < height * width; i++) {
-      image[i * 4 +0] = pow(std::min(std::max(pixels[i].x_,0.0), 1.0),1.0/g)  * 255;
-    image[i * 4 +1] = pow(std::min(std::max(pixels[i].y_,0.0), 1.0),1.0/g)  * 255;
-    image[i * 4 +2] = pow(std::min(std::max(pixels[i].z_,0.0), 1.0),1.0/g)  * 255;
+      image[i * 4 +0] = pixels[i].x_;
+    image[i * 4 +1] = pixels[i].y_;
+    image[i * 4 +2] = pixels[i].z_;
     image[i * 4 +3] = 255;
   }
   lodepng::encode(filename.append(".png"),image,width,height);
 }
 
+Vect3 normalizeColor(Vect3 const& color) {
+    return Vect3(pow(std::min(std::max(color.x_,0.0), 1.0),1.0/g) * 255,
+                 pow(std::min(std::max(color.y_,0.0), 1.0),1.0/g) * 255,
+                 pow(std::min(std::max(color.z_,0.0), 1.0),1.0/g) * 255);
+}
+
+std::mutex mu;
 
 void mul_render(int x,int y,int width, int height,Camera* camera,World& world,Vect3* pixels,int width_offset=0, int height_offset=0){
     GlobalTracer tr;
@@ -50,7 +57,13 @@ void mul_render(int x,int y,int width, int height,Camera* camera,World& world,Ve
         Ray ray= camera->constructRay(x,y);
         color = color + tr.trace(ray,world,0);//+ t.trace(ray, world, 3);
     }
-    pixels[width*(y-height_offset)+(x-width_offset)] = color/(double)(NUM_SAMPLES);
+    const Vect3 finalColor = normalizeColor(color/(double)(NUM_SAMPLES));
+    pixels[width*(y-height_offset)+(x-width_offset)] = finalColor;
+#ifdef OUTPUT_PIXEL
+    mu.lock();
+    std::cout << "PIXEL " << x << " " << y << " " << finalColor.x_ << " " << finalColor.y_ << " " << finalColor.z_ << std::endl;
+    mu.unlock();
+#endif
 }
 
 int main(int argc, char* argv[]) {
