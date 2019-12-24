@@ -1,6 +1,6 @@
 
 <p align='center'>
-<img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/out_global_500.strormtrooper.png' width=800/>
+<img src='https://raw.githubusercontent.com/iweinbau/Ray-Tracing/image/out_global_500.strormtrooper.png' width=800/>
 <figcaption>Rendered Stoormtrooper (800x800 using 1000 samples per pixel), credits to <a href='https://www.blendswap.com/blends/view/76637'>Scottgram</a> providing this scene. This was rendered using indirect lighting and using the <a href='https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf'>Disney principled BRDF</a>
 </figcaption>
 </p>
@@ -34,8 +34,8 @@ Since most objects don't have a perfect reflective surface I've implemented glos
 Ambient occusion let us variate the ambient color an object receives by checking how much of the hemishere above a hit point is blocked. Each scene has an ambient light class that samples random directions on the hemisphere and checks if this direction is blocked.
 
 <p align='center'>
-<img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/ambient_occ_factor_0.png' width=400/>
-<img src='https://raw.githubusercontent.com/iweinbau/Basic-Ray-Tracing/image/ambient_occ_factor_05.png' width=400/>
+<img src='https://raw.githubusercontent.com/iweinbau/Ray-Tracing/image/ambient_occ_factor_0.png' width=400/>
+<img src='https://raw.githubusercontent.com/iweinbau/Ray-Tracing/image/ambient_occ_factor_05.png' width=400/>
 <figcaption>Fig.2 - render scene, left ambient occlusion with factor 0, Right left ambient occlusion with factor 0.5 (800x800-10 samples per pixel).</figcaption>
 </p>
 
