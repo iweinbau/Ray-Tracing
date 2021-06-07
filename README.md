@@ -21,8 +21,6 @@ The goal of this project is to get familiar with c++ and learn the basics of com
  - Area Lights/Soft shadows.
  - Global illumination.
 
-I'm still working and I'll add new features.
-
 ## Reflections
 ### Perfect reflections
 First kind of reflection is the perfect mirror. Perfect reflected rays are cast recursively in the world. This calculates the incoming light. 
