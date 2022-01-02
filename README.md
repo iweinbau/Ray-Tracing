@@ -1,7 +1,7 @@
 
 <p align='center'>
 <img src='https://raw.githubusercontent.com/iweinbau/Ray-Tracing/image/out_global_500.strormtrooper.png' width=800/>
-<figcaption>Rendered Stoormtrooper (800x800 using 1000 samples per pixel), credits to <a href='https://www.blendswap.com/blends/view/76637'>Scottgram</a> providing this scene. This was rendered using indirect lighting and using the <a href='https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf'>Disney principled BRDF</a>
+<figcaption>Rendered Stoormtrooper (800x800 using 1000 samples per pixel), credits to <a href='https://www.blendswap.com/blends/view/76637'>Scottgram</a> providing this scene. This was rendered using indirect lighting and using the <a href='https://blog.selfshadow.com/publications/s2012-shading-course/#course_content'>Disney principled BRDF</a>
 </figcaption>
 </p>
 
@@ -52,7 +52,7 @@ THis project contains several BRDFs which are used in the material class.
  - Lambertian BRDF
  - Specular BRDF:  Used for specular reflections
  - Glossy BRDF: Used for glossy reflections.
- - Disney BRDF: Implemented the [Disney BRDF](https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf) 
+ - Disney BRDF: Implemented the [Disney BRDF](https://blog.selfshadow.com/publications/s2012-shading-course/#course_content) 
 
 Each of this has 3 main functions. 
  1. `sample_f` which samples a reflected light vector in the corresponding lobe.
@@ -105,7 +105,7 @@ This material is an implementation of the Disney BRDF
  - **clearcoat**
  - **clearcoatGloss**
 
-For more information I refer to the [Disney BRDF paper](https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf).
+For more information I refer to the [Disney BRDF paper](https://blog.selfshadow.com/publications/s2012-shading-course/#course_content).
 
 ## Running the code
 I provided a simple make file that compiles the code to an executable.
